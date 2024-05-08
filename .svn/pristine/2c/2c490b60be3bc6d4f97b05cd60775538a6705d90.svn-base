@@ -1,0 +1,45 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class PastingProcessBC
+    {
+
+        public ResponsePastingProcess ScanBarcodeBC(RequestPastingProcess request)
+        {
+            ResponsePastingProcess response = new ResponsePastingProcess();
+            try
+            {
+                WMSDAL DAL = new WMSDAL();
+                return DAL.ScanBarcodeDAL(request);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return response;
+        }
+
+        public ResponsePastingProcess PastingInsertBC(RequestPastingProcess request)
+        {
+
+            ResponsePastingProcess response = new ResponsePastingProcess();
+            try
+            {
+                              
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.PastingProcessInsertDAL(request);
+                
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+    }
+}

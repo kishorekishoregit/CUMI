@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace JKWOODSBC
+{
+    public class EmployeeMasterBC
+    {
+        public ResponseEmployeeMaster FetchEmployeeMasterPageLoadBC()
+        {
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchEmployeeMasterPageLoadDAL();
+            return response;
+        }
+        public ResponseEmployeeMaster InsertEmployeeMasterBC(RequestEmployeeMaster request)
+        {
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertEmployeeMasterDAL(request);
+            }
+            return response;
+
+        }
+        public ResponseEmployeeMaster EditEmployeeMasterbyUnitCodeBC(RequestEmployeeMaster request)
+        {
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.EditEmployeeMasterbyUnitCodeDAL(request);
+            return response;
+
+        }
+        public ResponseEmployeeMaster UpdateEmployeeMasterBC(RequestEmployeeMaster request)
+        {
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.UpdateEmployeeMasterDAL(request);
+            }
+            return response;
+
+        }
+        public List<ErrorItem> Validate(RequestEmployeeMaster request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestEmployeeMaster.EMPLOYEECODE == "")
+                err.Add(new ErrorItem { DataItem = "Employee Code", ErrorNo = "SSB0009" });
+            if (request.requestEmployeeMaster.EMPLOYEENAME == "")
+                err.Add(new ErrorItem { DataItem = "Employee Name", ErrorNo = "SSB0009" });
+            if (request.requestEmployeeMaster.EMPLOYEESTATUS == "")
+                err.Add(new ErrorItem { DataItem = "Employee Status", ErrorNo = "SSB0010" });
+
+
+
+            return err;
+        }
+    }
+}

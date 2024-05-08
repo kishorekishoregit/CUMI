@@ -1,0 +1,737 @@
+﻿jQuery(function ($) {
+
+    function getmonth() {
+        var today = new Date();
+
+        var dd = today.getDate() > 9 ? today.getDate() : '0' + today.getDate();
+        var mm = today.getMonth(); //January is 0!
+        var months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        var yyyy = today.getFullYear();
+
+        var today = dd + '-' + months[mm] + '-' + yyyy;
+        $("#txtsrndate").val(today);
+    }
+
+
+    BindTable();
+
+    function BindTable() {
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        getmonth();
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'PageloadSRNBC',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result.split('|');
+                var Item = JSON.parse(pageload[0]);
+                var SRNDts = JSON.parse(pageload[1]);
+
+                $("#ddlitemcode").empty().append('<option value="">Select an Option</option>');
+                $.each(Item, function () {
+                    $("#ddlitemcode").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMCODE"]));
+                    $('#ddlitemcode').trigger("chosen:updated");
+                });
+
+
+
+                BindTab(SRNDts, '1');
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+    //-------------------------------------------------------------------------------------------------------Bind Table
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        // TABLE BIND     
+        if (type == '0') {
+            $('#dynamic-table').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table');
+
+            $('#dynamic-table').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+                // columns: cols1DATA,
+                columns: [
+
+                    { 'data': 'SRN No' },
+                    { 'data': 'SRN Date' },
+                    { 'data': 'Remarks' },
+                    {
+
+                        'data': 'View',
+                        'render': function (data, type, full, meta) {
+
+                            return '<button type="button" class="btn btn-success btn-fab searchdetails" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-search" aria-hidden="true"></i></button>'
+
+                        }
+                    },
+                    {
+
+                        'data': 'Edit',
+                        'render': function (data, type, full, meta) {
+
+                            return '<button type="button" class="btn btn-success btn-fab edit" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></button>'
+
+                        }
+                    },
+
+
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        title: 'SRN Details',
+                        text: '<i class="fa fa-copy bigger-110 pink"></i> <span class="hidden">Copy to clipboard</span>',
+                        titleAttr: 'Copy',
+                        footer: false
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        title: 'SRN Details',
+                        text: '<i class="fa fa-file-excel-o bigger-110 green"></i> <span class="hidden">Export to Excel</span>',
+                        titleAttr: 'Excel',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+
+                        text: '<i class="fa fa-file-pdf-o bigger-110 red"></i> <span class="hidden">Export to PDF</span>',
+                        titleAttr: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'SRN Details'
+
+
+                    }, {
+                        extend: 'print',
+                        title: 'SRN Details',
+                        text: '<i class="fa fa-print bigger-110 grey"></i> <span class="hidden">Print</span>',
+                        titleAttr: 'Print',
+                        footer: false
+                    }
+                ]
+            });
+
+            $("#dynamic-table").on("click", ".searchdetails", function () {
+                var $row = $(this).closest("tr");    // Find the row
+                var $text = $row.find(".sorting_1").text(); // Find the text
+                $('#modalview').modal('show');
+                callpopup($text);
+            });
+            $("#dynamic-table").on("click", ".edit", function () {
+                var $row = $(this).closest("tr");    // Find the row
+                var $text = $row.find(".sorting_1").text(); // Find the text              
+                searchbySrnNo($text);
+            });
+
+
+        }
+        else {
+            $('#dynamic-table tbody').remove();
+            $('#dynamic-table thead').remove();
+            $('#dynamic-table').dataTable({
+                "language": {
+                    "emptyTable": "SRN No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                            { sWidth: "10", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false }
+
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+
+        }
+        $(".loader").hide("slow");
+    }
+
+    $('#ddlitemcode').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'SRNItemnameFetch',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'ITEMCODE': OValue },
+            success: function (data) {
+
+                var Res = data.split('|');
+                var ITEMNAME = JSON.parse(Res[0]);
+
+                $('#txtitemname').val(ITEMNAME[0].ITEMNAME);
+                $('#txtuom').val(ITEMNAME[0].UOM);
+                $('#hduomcode').val(ITEMNAME[0].UOMCODE);
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+    $('#btnadd').click(function (event) {
+        $(".loader").show("slow");
+        var errormessage = "";
+        if ($('#ddlitemcode').val() == "") {
+            errormessage += "Please Select Item Code.\n";
+        }
+        if ($('#txtquantity').val() == "") {
+            errormessage += "Please Enter Quantity.\n";
+        }
+
+        if ($('#txtspecs').val() == "") {
+            errormessage += "Please Enter Specs.\n";
+        }
+        if ($('#txtproject').val() == "") {
+            errormessage += "Please Enter Gross Project.\n";
+        }
+
+        if ($('#txtqty').val() <= 0 && $('#txtqty').val() != '') {
+            errormessage += "Please Enter Valid Quantity.\n"
+        }
+
+        if (errormessage.length == 0) {
+            var action = $('#actiontypeaddd').html();
+            if (window.FormData !== undefined) {
+                var formData = new FormData();
+                formData.append('SRNNO', $('#txtsrnno').val());
+                formData.append('ITEMCODE', $('#ddlitemcode').val());
+                formData.append('ITEMNAME', $('#txtitemname').val());
+                formData.append('QTY', $('#txtquantity').val());
+                formData.append('UOM', $('#txtuom').val());
+                formData.append('UOMCODE', $('#hduomcode').val());
+                formData.append('SPECS', $('#txtspecs').val());
+                formData.append('PROJECT', $('#txtproject').val());
+                formData.append('action', action);
+                $.ajax({
+                    url: 'AddSRNItemDetails',
+                    type: "POST",
+                    contentType: false, // Not to set any content header  
+                    processData: false, // Not to process data  
+                    data: formData,
+                    success: function (result) {
+                        var results = result.split('|');
+                        if (results[0] == 'true') {
+                            if ($('#actiontypeaddd').html() == "Update")
+                                $('#actiontypeaddd').html("Add");
+
+                            BindChildTab(JSON.parse(results[1]), '1');
+                            reset();
+                        }
+                        else {
+
+                            sweetAlert("", results[1].replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+
+                        }
+                    },
+                    error: function (err) {
+                        //alert(err.statusText);
+                    }
+                });
+
+
+                // $(".loader").hide("slow");
+            }
+        } else {
+            sweetAlert("", errormessage.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+            $('#txtquantity').val("");
+            $('#txtuom').val("");
+            $('#txtspecs').val("");
+            $('#txtproject').val("");
+        }
+
+    });
+
+
+    $('#btnitemclear').click(function () {
+        reset();
+    });
+
+    function BindChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-tableChild > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-tableChild').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-tableChild').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bFilter": false,
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                    { 'data': 'ItemCode' },
+                    { 'data': 'ItemName' },
+                    { 'data': 'Quantity' },
+                    //{ 'data': 'UOM' },
+                     {
+
+                         'data': 'UOM',
+                         'render': function (data, type, full, meta) {
+
+                             var pakarr = data.split('+');
+
+                             return '<div>' + pakarr[1] + '<span style="visibility: hidden;">' + pakarr[0] + '</span></div>';
+
+                         }
+                     },
+                    { 'data': 'Specs' },
+                    { 'data': 'Project' },
+                    {
+
+                        'data': 'Remove',
+                        'render': function (data, type, full, meta) {
+
+                            return '<button type="button" class="btn btn-danger btn-fab remove" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-trash" aria-hidden="true"></i></button>'
+
+                        }
+                    },
+
+                     //{
+
+                     //    'data': 'Edit',
+                     //    'render': function (data, type, full, meta) {
+
+                     //        return '<button type="button" class="edit" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></"></i></button>'
+
+                     //    }
+                     //},
+
+                ],
+
+            });
+            $("#dynamic-tableChild").on("click", ".edit", function () {
+                var $row = $(this).closest("tr");    // Find the row
+                var $text = $row.find(".sorting_1").text(); // Find the text         
+                var Code = $(this).closest('tr').find('td:eq(0)').html();
+                var Name = $(this).closest('tr').find('td:eq(1)').html();
+                var Qty = $(this).closest('tr').find('td:eq(2)').html();
+                var UOM = $(this).closest('tr').find('td:eq(3)').html();
+
+                var Specs = $(this).closest('tr').find('td:eq(4)').html();
+                var Project = $(this).closest('tr').find('td:eq(5)').html();
+
+                $('#ddlitemcode').val(Code);
+                $('#ddlitemcode').prop('disabled', true);
+                $('#ddlitemcode').trigger("chosen:updated");
+
+                $('#txtitemname').val(Name);
+                $('#txtquantity').val(Qty);
+                $('#txtuom').val(UOM);
+                $('#txtspecs').val(Specs);
+                $('#txtproject').val(Project);
+                $('#actiontypeaddd').html("Update");
+
+            });
+        }
+        else {
+            $('#dynamic-tableChild tbody').remove();
+            $('#dynamic-tableChild thead').remove();
+            $('#dynamic-tableChild').dataTable({
+                "language": {
+                    "emptyTable": "GRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "100%", bSearchable: false, bSortable: false },
+                         { sWidth: "100%", bSearchable: false, bSortable: false },
+                          { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+
+
+    }
+
+    $("#dynamic-tableChild").on("click", ".remove", function () {
+        var Code = $(this).closest('tr').find('td:eq(0)').html();
+
+        $.ajax({
+            url: 'SRNDeleteRow',
+            dataType: "json",
+            type: "POST",
+            data: $.param({ 'Code': Code }),
+
+            success: function (result) {
+
+                BindChildTab(JSON.parse(result), '1');
+
+            }
+        });
+
+    });
+
+    function reset() {
+
+        $('#ddlitemcode').val("");
+        $('#ddlitemcode').prop('disabled', false);
+        $('#ddlitemcode').trigger("chosen:updated");
+
+        $('#txtitemname').val("");
+        $('#txtquantity').val("");
+        $('#txtuom').val("");
+        $('#txtspecs').val("");
+        $('#txtproject').val("");
+
+    }
+
+    $('#btnsubmit').click(function () {
+
+        if (window.FormData !== undefined) {
+            $('.loadingGIF').show()
+            var formData = new FormData();
+            formData.append('SRNNO', $('#txtsrnno').val());
+            formData.append('SRNDATE', $('#txtsrndate').val());
+            formData.append('REMARKS', $('#txtremarks').val());
+            formData.append('actiontype', $('#actiontype').text());
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'InsertSRNDetails',
+                dataType: "json",
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data  
+
+                data: formData,
+                success: function (data) {
+                    var Res = data.split('|');
+                    var result = Res[0];
+                    var msg = Res[1];
+                    if (result.toUpperCase() == "TRUE") {
+                        $("form").trigger("reset");
+                        $("#actiontype").text("Save")
+
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "success");
+                        Clear();
+                        $('.loadingGIF').hide();
+                    }
+                    else {
+                        $('.loadingGIF').hide();
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                    }
+                }
+            });
+        }
+
+    });
+
+
+    function Clear() {
+        $.ajax({
+            url: 'ClearSRNDetails',
+            type: "POST",
+            contentType: false, // Not to set any content header  
+            processData: false, // Not to process data  
+            success: function (result) {
+                location.reload();
+
+            },
+            error: function (err) {
+                //alert(err.statusText);
+            }
+        });
+    };
+
+    $('#btnclear').click(Clear);
+
+    function callpopup($text) {
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'SRNViewDts',
+            dataType: 'json',
+            type: 'POST',
+            data: { "SRNNO": $text },
+
+            success: function (data) {
+                debugger;
+                var Tables = data.split('|');
+                var SRNItemDetails = JSON.parse(Tables[0]);
+                debugger;
+                BindPopupTab(SRNItemDetails, '1');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            }
+        });
+        $(".loader").hide("slow");
+    }
+    function BindPopupTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecordUpload = ResData[0];
+        // TABLE BIND
+        var len = $('#dynamic-tableDetails tbody').children().length;
+        if (type == '0' || len != '0') {
+            $('#dynamic-tableDetails').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecordUpload) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecordUpload);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            //  var dyTable1 = $('#dynamic-tableUpload');
+
+            $('#dynamic-tableDetails').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+                columns: cols1DATA
+
+            });
+        }
+        else {
+            $('#dynamic-tableDetails tbody').remove();
+            $('#dynamic-tableDetails thead').remove();
+            $('#dynamic-tableDetails').dataTable({
+                "language": {
+                    "emptyTable": "No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "10%", bSearchable: false, bSortable: false },
+                          { sWidth: "10", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                             { sWidth: "10%", bSearchable: false, bSortable: false },
+                             { sWidth: "10%", bSearchable: false, bSortable: false },
+                             { sWidth: "10%", bSearchable: false, bSortable: false },
+                             { sWidth: "10%", bSearchable: false, bSortable: false }
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": false
+            });
+
+
+        }
+
+    }
+    function searchbySrnNo($text) {
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'SRNEditDts',
+            dataType: 'json',
+            type: 'POST',
+            data: { "SrnNo": $text },
+            success: function (result) {
+                debugger;
+                var Tables = result.split('|');
+                var SrnHeader = JSON.parse(Tables[0]);
+                var adddetails = JSON.parse(Tables[1]);
+                $('#txtsrnno').val(SrnHeader[0].SRNNO);
+                $('#txtsrndate').val(SrnHeader[0].SRNDATE);
+                $('#txtremarks').val(SrnHeader[0].REMARKS);
+
+                $('#txtsrnno').prop('disabled', true);
+                $('#actiontype').html("Update");
+                BindChildTab(adddetails, '1');
+            }
+        });
+        $(".loader").hide("slow");
+    }
+});

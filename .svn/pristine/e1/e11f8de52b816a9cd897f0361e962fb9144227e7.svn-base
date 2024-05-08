@@ -1,0 +1,155 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseStockAdjustment FetchStockAdjustDAL()
+        {
+            ResponseStockAdjustment response = new ResponseStockAdjustment();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[STOCKADJUSTMENT_PAGELOAD]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_ItemDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchStockAdjustDAL: " + "Method Name FetchStockAdjustDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            return response;
+        }
+        public ResponseStockAdjustment FetchItemDetailsbyItemcodeDAL(RequestStockAdjustment request)
+        {
+            ResponseStockAdjustment response = new ResponseStockAdjustment();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[STOCKADJUSTMENT_FETCHDETAILS]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.Reqstockadjustment.ITEMCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_LotDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchItemDetailsbyItemcodeDAL: " + "Method Name FetchItemDetailsbyItemcodeDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+            return response;
+        }
+        
+        public ResponseStockAdjustment InsertStockAdjustDAL(RequestStockAdjustment request)
+        {
+            ResponseStockAdjustment response = new ResponseStockAdjustment();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+
+                        foreach (StockAdjustmentDetailEntity det in request.requeststockadjustdetails)
+                        {
+
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[STOCKADJUSTMENT_UPDATE]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@ADJUSTQUANTITY", det.ADJUSTQUANTITY.Trim()));
+
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            DataSet ds = new DataSet();
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+
+                                    rowcount++;
+                                }
+
+                            }
+                        }
+
+                        if (request.requeststockadjustdetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                        }
+
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertStockAdjustDAL: " + "Method Name InsertStockAdjustDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+
+    }
+}

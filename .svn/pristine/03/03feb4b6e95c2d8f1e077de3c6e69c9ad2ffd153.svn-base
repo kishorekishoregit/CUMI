@@ -1,0 +1,873 @@
+﻿using Microsoft.CSharp.RuntimeBinder;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using JKWOODS.ErrorManager;
+using JKWOODSENTITY;
+using JKWOODSBC;
+using JKWOODS.Common;
+using System.Text;
+using System.Configuration;
+using System.Transactions;
+using ExcelDataReader;
+using System.Data.SqlClient;
+
+
+namespace JKWOODS.Controllers
+{
+
+    public class MastersController : Controller
+    {
+        private string LOCATIONLABEL = ConfigurationManager.AppSettings["LOCATIONLABEL"].ToString();
+
+        #region Employee Master ............................................................................
+        public ActionResult EmployeeMaster()
+        {
+            return View();
+        }
+
+        public ActionResult GetEmployeeMasterPageLoad()
+        {
+            RequestEmployeeMaster request = new RequestEmployeeMaster();
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            EmployeeMasterBC bc = new EmployeeMasterBC();
+            response = bc.FetchEmployeeMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Employeedetails);
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+
+        [HttpPost]
+        public ActionResult InsertEmployeeMaster(string actiontype, string Autoid)
+        {
+
+            RequestEmployeeMaster request = new RequestEmployeeMaster();
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            request.requestEmployeeMaster = new EmployeeMasterEntity();
+            request.requestEmployeeMaster.EMPLOYEECODE = Request.Form["txtemployeecode"];
+            request.requestEmployeeMaster.EMPLOYEENAME = Request.Form["txtemployeename"];
+            request.requestEmployeeMaster.EMPLOYEESTATUS = Request.Form["ddlStatus"];
+            request.requestEmployeeMaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            EmployeeMasterBC bc = new EmployeeMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertEmployeeMasterBC(request);
+            }
+            else
+            {
+                request.requestEmployeeMaster.AUTOID = Autoid;
+                response = bc.UpdateEmployeeMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        public ActionResult GetEmployeedetailllsID(string Autoid)
+        {
+
+            RequestEmployeeMaster request = new RequestEmployeeMaster();
+            ResponseEmployeeMaster response = new ResponseEmployeeMaster();
+            request.requestEmployeeMaster = new EmployeeMasterEntity();
+            request.requestEmployeeMaster.AUTOID = Autoid;
+            EmployeeMasterBC bc = new EmployeeMasterBC();
+            response = bc.EditEmployeeMasterbyUnitCodeBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Employeedetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        #endregion
+
+
+
+
+
+
+        #region Location Master ............................................................................
+        public ActionResult LocationMaster()
+        {
+            return View();
+        }
+
+        public ActionResult GetLocationMasterPageLoad()
+        {
+            RequestLocationMaster request = new RequestLocationMaster();
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            LocationMasterBC bc = new LocationMasterBC();
+            response = bc.FetchLocationMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_LocationDetails);
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+
+        [HttpPost]
+        public ActionResult InsertLocationMaster(string actiontype, string hdemp)
+        {
+
+            RequestLocationMaster request = new RequestLocationMaster();
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            request.requestLocationMaster = new LocationMasterEntity();
+            request.requestLocationMaster.LOCATIONCODE = Request.Form["LocationCode"];
+            request.requestLocationMaster.LOCATIONNAME = Request.Form["LocationName"];
+            request.requestLocationMaster.CAPACITY = Request.Form["Capacity"];
+            request.requestLocationMaster.RECORDSTATUS = Request.Form["RecordStatus"];
+            request.requestLocationMaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            LocationMasterBC bc = new LocationMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertLocationMasterBC(request);
+            }
+            else
+            {
+                request.requestLocationMaster.HDEMP = hdemp;
+                response = bc.UpdateLocationMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        public ActionResult GetLocationdetailsByID(string LOCATIONCODE)
+        {
+
+            RequestLocationMaster request = new RequestLocationMaster();
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            request.requestLocationMaster = new LocationMasterEntity();
+            request.requestLocationMaster.LOCATIONCODE = LOCATIONCODE;
+            LocationMasterBC bc = new LocationMasterBC();
+            response = bc.EditLocationMasterbyLocationCodeBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_LocationDetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetLocationCodeprint(string LOCATIONCODE)
+        {
+
+            RequestLocationMaster request = new RequestLocationMaster();
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            request.requestLocationMaster = new LocationMasterEntity();
+            //request.requestLocationMaster.LocationCode = locationcode;
+            LocationMasterBC bc = new LocationMasterBC();
+            response = bc.GetLocationCodeprintBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_LocationDetails);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult PrintBarcodeByLocation(string locationcode, string locationname, string locationdescription)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            string[] locationcodearr = locationcode.Split('^');
+            string[] locationnamearr = locationname.Split('^');
+            string[] locationdescriptionarr = locationdescription.Split('^');
+
+            for (int i = 0; i < locationcodearr.Length; i++)
+            {
+                String test = @"<div style='margin-top:2px;margin-left:30px;margin-right:0px;height:130px;width:300px;' id='$qrcode$'></div><div><span style='font-weight: 900;font-size: 12px;margin-left:10px;'>Location Code</span><span> : </span><span style='font-size: 12px;'>$LOCATIONCODE$</span></div><div><span style='font-weight: 900;font-size: 12px;margin-left:10px;'>Location Name</span><span> : </span><span style='font-size: 12px;'>$LOCATIONNAME$</span></div><div><span style='font-weight: 900;font-size: 12px;margin-left:10px;'>Capacity</span><span> : </span><span style='font-size: 12px;'>$CAPACITY$</span></div>";
+
+                byte[] byteArray = Encoding.ASCII.GetBytes(test);
+                MemoryStream stream = new MemoryStream(byteArray);
+                //StreamReader streamReader = new StreamReader(stream);
+                StreamReader streamReader = new StreamReader(LOCATIONLABEL);
+                string str_ = streamReader.ReadToEnd();
+                string str_2 = str_;
+                str_2 = str_2.Replace("$LOCATIONCODE$", locationcodearr[i]);
+                str_2 = str_2.Replace("$qrcode$", "locationid" + i);
+
+                stringBuilder.Append(str_2);
+            }
+            var data = stringBuilder.ToString();
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+
+
+        #region Rack Master ............................................................................
+        public ActionResult RackMaster()
+        {
+            return View();
+        }
+
+        public ActionResult GetRackMasterPageLoad()
+        {
+            RequestRackMaster request = new RequestRackMaster();
+            ResponseRackMaster response = new ResponseRackMaster();
+            RackMasterBC bc = new RackMasterBC();
+            response = bc.FetchRackMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Locationdetails)
+                + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RackMasterDetails);
+
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+
+        [HttpPost]
+        public ActionResult InsertRackMaster(string actiontype)
+        {
+
+            RequestRackMaster request = new RequestRackMaster();
+            ResponseRackMaster response = new ResponseRackMaster();
+            request.requestRackMaster = new RackMasterEntity();
+            request.requestRackMaster.RACKCODE = Request.Form["RackCode"];
+            request.requestRackMaster.RACKNAME = Request.Form["RackName"];
+            request.requestRackMaster.LOCATIONCODE = Request.Form["LocationName"];
+            request.requestRackMaster.RECORDSTATUS = Request.Form["RecordStatus"];
+            request.requestRackMaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            RackMasterBC bc = new RackMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertRackMasterBC(request);
+            }
+            else
+            {
+                response = bc.UpdateRackMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        public ActionResult GetRackdetailsByID(string rackcode)
+        {
+
+            RequestRackMaster request = new RequestRackMaster();
+            ResponseRackMaster response = new ResponseRackMaster();
+            request.requestRackMaster = new RackMasterEntity();
+            request.requestRackMaster.RACKCODE = rackcode;
+            RackMasterBC bc = new RackMasterBC();
+            response = bc.FetchRackMasterbyRackCodeBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RackMasterDetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        #endregion
+
+
+
+        #region Bin Master ............................................................................
+        public ActionResult BinMaster()
+        {
+            return View();
+        }
+
+        public ActionResult GetBinMasterPageLoad()
+        {
+            RequestBinMaster request = new RequestBinMaster();
+            ResponseBinMaster response = new ResponseBinMaster();
+            BinMasterBC bc = new BinMasterBC();
+            response = bc.FetchBinMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                       + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Locationdetails)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_BinMasterDetails)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Rackdetails);
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+
+
+        public ActionResult FetchRackBylocation(string locationcode)
+        {
+            ResponseBinMaster response = new ResponseBinMaster();
+            RequestBinMaster request = new RequestBinMaster();
+            request.requestBinMaster = new BinMasterEntity();
+            request.requestBinMaster.Locationcode = locationcode;
+            BinMasterBC bc = new BinMasterBC();
+            response = bc.FetchRackByLocationBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Rackdetails);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        [HttpPost]
+        public ActionResult InsertBinMaster(string actiontype)
+        {
+
+            RequestBinMaster request = new RequestBinMaster();
+            ResponseBinMaster response = new ResponseBinMaster();
+            request.requestBinMaster = new BinMasterEntity();
+            request.requestBinMaster.BinCode = Request.Form["BinCode"];
+            request.requestBinMaster.Binname = Request.Form["BinName"];
+            request.requestBinMaster.Locationcode = Request.Form["LocationName"];
+            request.requestBinMaster.Rackcode = Request.Form["Rackname"];
+            request.requestBinMaster.Recordstatus = Request.Form["RecordStatus"];
+            request.requestBinMaster.Usercode = Session["LoginEmployeeCode"].ToString();
+            BinMasterBC bc = new BinMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertBinMasterBC(request);
+            }
+            else
+            {
+                response = bc.UpdateBinMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        public ActionResult GetBindetailsByID(string Bincode)
+        {
+
+            RequestBinMaster request = new RequestBinMaster();
+            ResponseBinMaster response = new ResponseBinMaster();
+            request.requestBinMaster = new BinMasterEntity();
+            request.requestBinMaster.BinCode = Bincode;
+            BinMasterBC bc = new BinMasterBC();
+            response = bc.FetchBinMasterbyBinCodeBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_BinMasterDetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        #endregion
+
+
+
+        #region Customer Master ............................................................................
+        public ActionResult CustomerMaster()
+        {
+            return View();
+        }
+        public ActionResult GetCustomerMasterPageLoad()
+        {
+            RequestCustomerMaster request = new RequestCustomerMaster();
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            CustomerMasterBC bc = new CustomerMasterBC();
+            response = bc.FetchCustomerMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Customerdetails);
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+        [HttpPost]
+        public ActionResult InsertCustomerMaster(string actiontype, string hdcus)
+        {
+
+            RequestCustomerMaster request = new RequestCustomerMaster();
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            request.requestCustomerMaster = new CustomerMasterEntity();
+            request.requestCustomerMaster.CUSTOMERCODE = Request.Form["txtcustomercode"];
+            request.requestCustomerMaster.CUSTOMERNAME = Request.Form["txtcustomername"];
+            request.requestCustomerMaster.CUSTOMERADDRESS = Request.Form["txtcustomeraddress"];
+            request.requestCustomerMaster.CUSTOMERSTATUS = Request.Form["ddlStatus"];
+            request.requestCustomerMaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            CustomerMasterBC bc = new CustomerMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertCustomerMasterBC(request);
+            }
+            else
+            {
+                request.requestCustomerMaster.HDCUS = hdcus;
+                response = bc.UpdateCustomerMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetCustomerdetailllsID(string ID)
+        {
+
+            RequestCustomerMaster request = new RequestCustomerMaster();
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            request.requestCustomerMaster = new CustomerMasterEntity();
+            request.requestCustomerMaster.HDCUS = ID;
+            CustomerMasterBC bc = new CustomerMasterBC();
+            response = bc.EditCustomerMasterbyBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Customerdetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        #endregion
+
+        #region Supplier Master ............................................................................
+        public ActionResult SupplierMaster()
+        {
+            return View();
+        }
+        public ActionResult GetSupplierMasterPageLoad()
+        {
+            RequestSupplierMaster request = new RequestSupplierMaster();
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            SupplierMasterBC bc = new SupplierMasterBC();
+            response = bc.FetchSupplierMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Supplierdetails);
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+        [HttpPost]
+        public ActionResult InsertSupplierMaster(string actiontype, string hdsup)
+        {
+
+            RequestSupplierMaster request = new RequestSupplierMaster();
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            request.requestSupplierMaster = new SupplierMasterEntity();
+            request.requestSupplierMaster.SUPPLIERCODE = Request.Form["txtsuppliercode"];
+            request.requestSupplierMaster.SUPPLIERNAME = Request.Form["txtsuppliername"];
+            request.requestSupplierMaster.SUPPLIERADDRESS = Request.Form["txtsupplieraddress"];
+            request.requestSupplierMaster.SUPPLIERSTATUS = Request.Form["ddlStatus"];
+            request.requestSupplierMaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            SupplierMasterBC bc = new SupplierMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertSupplierMasterBC(request);
+            }
+            else
+            {
+                request.requestSupplierMaster.HDSUP = hdsup;
+                response = bc.UpdateSupplierMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetSupplierdetailllsID(string ID)
+        {
+
+            RequestSupplierMaster request = new RequestSupplierMaster();
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            request.requestSupplierMaster = new SupplierMasterEntity();
+            request.requestSupplierMaster.HDSUP = ID;
+            SupplierMasterBC bc = new SupplierMasterBC();
+            response = bc.EditSupplierMasterbyBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Supplierdetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        #endregion
+
+        #region Item Master ............................................................................
+        public ActionResult ItemMaster()
+        {
+            return View();
+        }
+        public ActionResult GetItemMasterPageLoad()
+        {
+            RequestItemMaster request = new RequestItemMaster();
+            ResponseItemMaster response = new ResponseItemMaster();
+            ItemMasterBC bc = new ItemMasterBC();
+            response = bc.FetchItemMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_ItemUom)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_ItemCategory)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_RecordStatus)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Itemdetails)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_ItemType);
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult InsertItemMaster(string actiontype, string Autoid)
+        {
+
+            RequestItemMaster request = new RequestItemMaster();
+            ResponseItemMaster response = new ResponseItemMaster();
+            request.requestItemMaster = new ItemMasterEntity();
+            request.requestItemMaster.ITEMCODE = Request.Form["txtitemcode"];
+            request.requestItemMaster.ITEMNAME = Request.Form["txtitemname"];
+            request.requestItemMaster.UOM = Request.Form["ddluom"];
+            request.requestItemMaster.CATEGORY = Request.Form["ddlcategory"];
+            request.requestItemMaster.ITEMTYPE = Request.Form["ddlitemtype"];
+            request.requestItemMaster.RECORDSTATUS = Request.Form["ddlStatus"];
+            request.requestItemMaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            ItemMasterBC bc = new ItemMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertItemMasterBC(request);
+            }
+            else
+            {
+                request.requestItemMaster.AUTOID = Autoid;
+                response = bc.UpdateItemMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetItemDetails(string Autoid)
+        {
+
+            RequestItemMaster request = new RequestItemMaster();
+            ResponseItemMaster response = new ResponseItemMaster();
+            request.requestItemMaster = new ItemMasterEntity();
+            request.requestItemMaster.AUTOID = Autoid;
+            ItemMasterBC bc = new ItemMasterBC();
+            response = bc.EditItemMasterbyItemcodeBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.JS_Itemdetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult Downloads(string file)
+        {
+            string filename = Path.GetFileName(file);
+            string fullPath = Path.Combine(Server.MapPath("~/Downloads"), filename);
+
+
+            return File(fullPath, "application/octet-stream", filename);
+
+
+        }
+        public ActionResult ItemMastersUploads()
+        {
+            string results = "";
+
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+
+                    HttpFileCollectionBase files = Request.Files;
+
+                    var postedFile = System.Web.HttpContext.Current.Request.Files["CsvDoc"];
+
+                    string path = Path.GetFileName(postedFile.FileName);
+
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        HttpPostedFileBase file = files[i];
+                        if (file.FileName == postedFile.FileName)
+                        {
+                            if (file != null && file.ContentLength > 0)
+                            {
+                                Stream stream = file.InputStream;
+                                IExcelDataReader reader = null;
+                                if (file.FileName.EndsWith(".xls"))
+                                {
+                                    reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                                }
+                                else if (file.FileName.EndsWith(".xlsx"))
+                                {
+                                    reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                                }
+                                var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                                {
+                                    ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                                    {
+                                        UseHeaderRow = true
+                                    }
+                                });
+                                DataTable dataTable = result.Tables[0];
+
+                                reader.Close();
+
+                                results = Utility.DataTableToJSONWithJavaScriptSerializer(dataTable);
+
+                                if (dataTable.Rows.Count > 0)
+                                {
+
+                                    DataTable dt = new DataTable();
+
+                                    string check = string.Empty;
+
+                                    int rowcount = 0;
+                                    int rowcount1 = 0;
+                                    string employeecodes = "";
+                                    try
+                                    {
+                                        using (TransactionScope scope = new TransactionScope())
+                                        {
+                                            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["SANGSINBREAK"].ConnectionString);
+                                            {
+                                                using (DataSet ds = new DataSet())
+                                                {
+                                                    foreach (DataRow req in dataTable.Rows)
+                                                    {
+                                                        SqlCommand cmd = new SqlCommand("[MASTERS].[ITEMMASTER_INSERT]", con);
+                                                        cmd.CommandType = CommandType.StoredProcedure;
+
+
+                                                        cmd.Parameters.AddWithValue("@ITEMCODE", string.IsNullOrEmpty(req["Item Code"].ToString()) ? string.Empty : req["Item Code"].ToString());
+                                                        cmd.Parameters.AddWithValue("@ITEMNAME", string.IsNullOrEmpty(req["Item Name"].ToString()) ? string.Empty : req["Item Name"].ToString());
+                                                        cmd.Parameters.Add(new SqlParameter("@UOM", "MDSUB_002_0001"));
+                                                        // cmd.Parameters.AddWithValue("@CATEGORY", string.IsNullOrEmpty(req["Category"].ToString()) ? string.Empty : req["Category"].ToString());
+                                                        if (req["Category"].ToString() == "POST LAM BOARDS")
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@CATEGORY", "MDSUB_003_0001"));
+                                                        }
+                                                        else if (req["Category"].ToString() == "RAW BOARDS")
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@CATEGORY", "MDSUB_003_0002"));
+                                                        }
+                                                        else if (req["Category"].ToString() == "RAW BOARDS")
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@CATEGORY", "MDSUB_003_0002"));
+                                                        }
+                                                        else if (req["Category"].ToString() == "LAMINATE")
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@CATEGORY", "MDSUB_003_0003"));
+                                                        }
+                                                        else 
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@CATEGORY", "MDSUB_003_0004"));
+                                                        }
+                                                        if (req["ItemType"].ToString() == "SINGLE")
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@ITEMTYPE", "MDSUB_004_0001"));
+                                                        }
+                                                        else
+                                                        {
+                                                            cmd.Parameters.Add(new SqlParameter("@ITEMTYPE", "MDSUB_004_0002"));
+                                                        }
+                                                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", "MDSUB_001_0001"));
+                                                        cmd.Parameters.Add(new SqlParameter("@USERCODE", Session["LoginEmployeeCode"].ToString()));
+
+                                                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                                                        //DataSet ds2 = new DataSet();
+                                                        da.Fill(ds);
+
+                                                        rowcount++;
+
+                                                    }
+
+                                                    if (dataTable.Rows.Count == rowcount)
+                                                    {
+                                                        results = "Successfully uploaded!!!";
+                                                        scope.Complete();
+                                                        results = "true";
+
+                                                    }
+                                                    else
+                                                    {
+                                                        results = "Already uploaded";
+                                                    }
+
+
+                                                }
+
+
+                                            }
+
+
+                                        }
+
+
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                                        string responselog = "";
+                                        results = "false";
+
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    results = "false" + "|" + "Uploaded Excel File is Empty. ";
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            results = "False" + "|" + "Uploaded InValid Excel File. ";
+                        }
+
+                    }
+
+
+                }
+
+                catch (Exception ex)
+                {
+
+                    results = "False" + "|" + "Error occurred. Error details: ";
+
+                }
+            }
+
+            JsonResult json = Json(results, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        #endregion
+
+
+        #region Process Master ............................................................................
+        public ActionResult ProcessMaster()
+        {
+            return View();
+        }
+        public ActionResult GetProcessMasterPageLoad()
+        {
+            RequestProcessMaster request = new RequestProcessMaster();
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            ProcessMasterBC bc = new ProcessMasterBC();
+            response = bc.FetchProcessMasterPageLoadBC();
+
+            string resulttable = Utility.DataTableToJSONWithJavaScriptSerializer(response.Recordstatus)
+                         + "|" + Utility.DataTableToJSONWithJavaScriptSerializer(response.Processdetails);
+
+            var data = resulttable;
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+
+        }
+        [HttpPost]
+        public ActionResult InsertProcessMaster(string actiontype, string AUTOID)
+        {
+
+            RequestProcessMaster request = new RequestProcessMaster();
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            request.requestprocessmaster = new ProcessMasterEntity();
+            request.requestprocessmaster.PROCESSNAME = Request.Form["txtprocessname"];
+            request.requestprocessmaster.STATUS = Request.Form["ddlStatus"];
+            request.requestprocessmaster.USERCODE = Session["LoginEmployeeCode"].ToString();
+            ProcessMasterBC bc = new ProcessMasterBC();
+            string value = "Update";
+            if (value != actiontype)
+            {
+                response = bc.InsertProcessMasterBC(request);
+            }
+            else
+            {
+                request.requestprocessmaster.AUTOID = AUTOID;
+                response = bc.UpdateProcessMasterBC(request);
+            }
+
+            ManageError Err = new ManageError();
+
+            string resultjson = Err.GenerateErrorMessages(response.ErrorContainer);
+            resultjson = response.result + "|" + resultjson;
+
+            JsonResult json = Json(resultjson, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+        public ActionResult GetProcessdetailllsID(string Autoid)
+        {
+
+            RequestProcessMaster request = new RequestProcessMaster();
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            request.requestprocessmaster = new ProcessMasterEntity();
+            request.requestprocessmaster.AUTOID = Autoid;
+            ProcessMasterBC bc = new ProcessMasterBC();
+            response = bc.EditProcessMasterbyUnitCodeBC(request);
+
+            var data = Utility.DataTableToJSONWithJavaScriptSerializer(response.Processdetails);
+            JsonResult json = Json(data, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+        #endregion
+
+
+    }
+}

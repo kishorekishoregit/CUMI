@@ -1,0 +1,78 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class ItemMasterBC
+    {
+        public ResponseItemMaster FetchItemMasterPageLoadBC()
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchItemMasterPageLoadDAL();
+            return response;
+        }
+        public ResponseItemMaster InsertItemMasterBC(RequestItemMaster request)
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertItemMasterDAL(request);
+            }
+            return response;
+
+        }
+        public ResponseItemMaster EditItemMasterbyItemcodeBC(RequestItemMaster request)
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.EditItemMasterbyItemcodeDAL(request);
+            return response;
+
+        }
+        public ResponseItemMaster UpdateItemMasterBC(RequestItemMaster request)
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.UpdateItemMasterDAL(request);
+            }
+            return response;
+
+        }
+
+
+
+        public List<ErrorItem> Validate(RequestItemMaster request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestItemMaster.ITEMCODE == "")
+                err.Add(new ErrorItem { DataItem = "Item Code", ErrorNo = "SSB0009" });
+            if (request.requestItemMaster.ITEMNAME == "")
+                err.Add(new ErrorItem { DataItem = "Item Name", ErrorNo = "SSB0009" });
+            if (request.requestItemMaster.UOM == "")
+                err.Add(new ErrorItem { DataItem = "Uom", ErrorNo = "SSB0010" });
+            if (request.requestItemMaster.CATEGORY == "")
+                err.Add(new ErrorItem { DataItem = "Category", ErrorNo = "SSB0010" });
+            if (request.requestItemMaster.ITEMTYPE == "")
+                err.Add(new ErrorItem { DataItem = "ItemType", ErrorNo = "SSB0010" });
+            if (request.requestItemMaster.SUBCATEGORY == "")
+                err.Add(new ErrorItem { DataItem = "Sub category", ErrorNo = "SSB0010" });
+            if (request.requestItemMaster.EXIPRYDATE == "")
+                err.Add(new ErrorItem { DataItem = "Expiry Date", ErrorNo = "SSB0010" });   
+            if (request.requestItemMaster.RECORDSTATUS == "")
+                err.Add(new ErrorItem { DataItem = "Status", ErrorNo = "SSB0010" });
+            
+            return err;
+        }
+
+    }
+}

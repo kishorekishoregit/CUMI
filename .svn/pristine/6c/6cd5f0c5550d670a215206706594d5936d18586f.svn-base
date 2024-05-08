@@ -1,0 +1,26 @@
+﻿<style>
+    .inline {
+        display: inline-block;
+    }
+</style><div style="page-break-after:always;padding-left:15px;padding-right:5px; vertical-align:bottom;">
+    <table style='width: 100%;height:90%;margin-top:25px;'>
+        <tr style="height:30px;">
+            <!--<td colspan='3' style='vertical-align:middle;font-size:13px;'>
+                Batch No.<span style='font-size:10px;'>
+                </span>
+            </td>-->
+            <td colspan='2' style='vertical-align:middle;font-size:14px;'><span style='font-size:13px;'>$MATCODE$</span></td>
+            <td rowspan='3' align='center' style='width:0.7in !important;padding:7px;'><div id='$qrcode$'></div></td>
+        </tr>
+        <tr style="height:30px;">
+            <!--<td colspan='3' style='vertical-align:middle; height:0.1in;max-height:0.1in;font-size:13px;'>Part Name<span style='font-size:10px;'></span></td>-->
+            <td colspan='2' style='vertical-align:middle; height:0.1in;max-height:0.1in;font-size:14px;'><span style='font-size:13px;'>$MATNAME$</span></td>
+        </tr>
+        <tr style="height:30px;">
+            <!--<td colspan='3' style='vertical-align:middle; height:0.1in;max-height:0.1in;font-size:13px;'>MRP <span style='font-size:10px;'></span></td>-->
+            <td colspan='2' style='vertical-align:middle; height:0.1in;max-height:0.1in;font-size:14px;'><span style='font-size:13px;'>$GRNNO$</span></td>
+        </tr>
+
+    </table>
+</div>
+    <!--<div style="margin-top:2px;margin-left:30px;margin-right:0px;height:80px;width:80px;" id="$qrcode$"></div><div style="margin-top: 10px;"><span style="font-weight: 900;font-size: 12px;margin-left:10px;">Material Code</span><span> : </span><span style="font-size: 12px;">$MATCODE$</span></div><div><span style="font-weight: 900;font-size: 12px;margin-left:10px;">Material Name</span><span> : </span><span style="font-size: 12px;">$MATNAME$</span></div><div><span style="font-weight: 900;font-size: 12px;margin-left:10px;">GRN No.</span><span>       : </span><span style="font-size: 12px;">$GRNNO$</span></div>-->

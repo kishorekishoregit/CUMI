@@ -1,0 +1,364 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using System.Transactions;
+using System.Data.SqlClient;
+using System.Data;
+using System.Web.Script.Serialization;
+using System.Globalization;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseDispatchplanEntry PageloadDispatchPlanDAL()
+        {
+
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[DISPATCHPLANENTRY_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Customerdetails = ds.Tables[0];
+                            response.JS_Itemdetails = ds.Tables[1];
+                            response.DispatchPlanDetails = ds.Tables[2];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("PageloadDispatchPlanDAL: " + "Method Name PageloadDispatchplanDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+        public ResponseDispatchplanEntry DPNItemnameFetchDAL(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].DPNENTRY_ITEMNAMEFETCH", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqDispatchPlanEntry.ITEMCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Itemdetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("DPNItemnameFetchDAL: " + "Method Name DPNItemnameFetchDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+                return response;
+
+              }
+        public ResponseDispatchplanEntry DispatchplanInsertDAL(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int rowcount = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[DISPATCHPLANENTRY_HEADERINSERT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@DISPATCHPLANNO", request.ReqDispatchPlanEntry.DISPATCHNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@DISPATCHPLANDATE", request.ReqDispatchPlanEntry.DISPATCHDATE == "" ? null : Convert.ToDateTime(request.ReqDispatchPlanEntry.DISPATCHDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                        cmd.Parameters.Add(new SqlParameter("@CUSTOMER", request.ReqDispatchPlanEntry.CUSTOMER.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@REFERENCENO", request.ReqDispatchPlanEntry.REFERENCENO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@REMARKS", request.ReqDispatchPlanEntry.REMARKS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.ReqDispatchPlanEntry.USERCODE.Trim()));
+
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                            {
+                                foreach (DisaptchPlanDetailEntity det in request.requestDispatchPlanEntrydetails)
+                                {
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[DISPATCHPLANENTRY_DETAILSINSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@DISPATCHPLANNO", request.ReqDispatchPlanEntry.DISPATCHNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+                                    
+                                    cmd1.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY));
+                                   
+                                    
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestDispatchPlanEntrydetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("DispatchplanInsertDAL: " + "Method Name DispatchplanInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+        public ResponseDispatchplanEntry DPNEditDtsDAL(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[DISPATCHENTRY_DISPATCHNOEDIT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@DPNO", request.ReqDispatchPlanEntry.DISPATCHNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.DispatchPlanHeader = ds.Tables[0];
+                            response.DispatchPlanDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("DPNEditDtsDAL: " + "Method Name DPNEditDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+        public ResponseDispatchplanEntry DispatchPlanUpdateDAL(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                int totalcount = 0;
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int barcode = 0;
+                        int rowcount = 0, rowcount1 = 0, totalqty = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[DISPATCHPLANENTRY_HEADERUPDATE]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@DISPATCHPLANNO", request.ReqDispatchPlanEntry.DISPATCHNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@DISPATCHPLANDATE", request.ReqDispatchPlanEntry.DISPATCHDATE == "" ? null : Convert.ToDateTime(request.ReqDispatchPlanEntry.DISPATCHDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                        cmd.Parameters.Add(new SqlParameter("@CUSTOMER", request.ReqDispatchPlanEntry.CUSTOMER.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@REFERENCENO", request.ReqDispatchPlanEntry.REFERENCENO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@REMARKS", request.ReqDispatchPlanEntry.REMARKS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.ReqDispatchPlanEntry.USERCODE.Trim()));
+
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                            {
+                                foreach (DisaptchPlanDetailEntity det in request.requestDispatchPlanEntrydetails)
+                                {
+                                    totalqty += Convert.ToInt32(det.QUANTITY);
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[DISPATCHPLANENTRY_DETAILSINSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@DISPATCHPLANNO", request.ReqDispatchPlanEntry.DISPATCHNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+
+                                    cmd1.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY));
+                                   
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestDispatchPlanEntrydetails.Count == rowcount)
+                        {
+                            totalcount++;
+                        }
+                        if (request.requestDispatchPlanEntrydetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("DispatchPlanUpdateDAL: " + "Method Name DispatchPlanUpdateDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+
+
+
+
+        public ResponseDispatchplanEntry DPNViewDtsDAL(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[DPNENTRY_VIEW]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@DPNO", request.ReqDispatchPlanEntry.DISPATCHNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.DispatchPlanDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("DPNViewDtsDAL: " + "Method Name DPNViewDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+                  
+                }
+            }
+      
+
+

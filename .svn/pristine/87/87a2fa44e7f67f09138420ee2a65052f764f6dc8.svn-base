@@ -1,0 +1,133 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseGRNUpload PageloadGRNUploadDAL()
+        {
+            ResponseGRNUpload response = new ResponseGRNUpload();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[GRNENTRY_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Supplierdetails = ds.Tables[0];
+                           
+                           // response.GRNDetails = ds.Tables[2];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("PageloadGRNUploadDAL: " + "Method Name PageloadGRNUploadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            
+            return response;
+        }
+        public ResponseGRNUpload GRNUploadInsertDAL(RequestGRNUpload request)
+        {
+            ResponseGRNUpload response = new ResponseGRNUpload();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int rowcount = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[GRNENTRY_HEADERINSERT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@GRNNO", request.ReqGRNUpload.GRNNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@GRNDATE", request.ReqGRNUpload.GRNDATE == "" ? null : Convert.ToDateTime(request.ReqGRNUpload.GRNDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIER", request.ReqGRNUpload.SUPPLIER.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@REFERENCENO", request.ReqGRNUpload.REFERENCENO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.ReqGRNUpload.USERCODE.Trim()));
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                            {
+                                foreach (GRNUploadDetailEntity det in request.requestGRNUploaddetails)
+                                {
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[GRNENTRY_DETAILSINSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@GRNNO", request.ReqGRNUpload.GRNNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY));
+                                    cmd1.Parameters.Add(new SqlParameter("@NETWEIGHT", det.NETWEIGHT.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@GROSSWEIGHT", det.GROSSWEIGHT.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@PRICE", det.PRICE.Trim()));
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestGRNUploaddetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("GRNUploadInsertDAL: " + "Method Name GRNUploadInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            
+            return response;
+
+        }
+
+    }
+}

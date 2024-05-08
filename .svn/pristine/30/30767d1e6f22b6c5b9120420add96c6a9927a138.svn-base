@@ -1,0 +1,546 @@
+﻿jQuery(function ($) {
+
+    ////-------------------------------------------------------------------------------------------Bind Pageload 
+    //Grid Bind Value
+    BindTable();
+
+    function BindTable() {
+
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetRackMasterPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result.split('|');
+                var recordstatus = JSON.parse(pageload[0]);
+                var locationcode = JSON.parse(pageload[1]);
+                var resJ = JSON.parse(pageload[2]);
+
+                var exampleRecord = resJ[0];
+
+                $("#LocationName").empty().append('<option value="">Select an Option</option>');
+                $.each(locationcode, function () {
+                    $("#LocationName").append($("<option></option>").val(this["LOCATIONCODE"]).html(this["LOCATIONNAME"]));
+                    $('#LocationName').trigger("chosen:updated");
+                });
+
+                $("#RecordStatus").empty().append('<option value="">Select an Option</option>');
+                $.each(recordstatus, function () {
+                    $("#RecordStatus").append($("<option></option>").val(this["METASUBCODE"]).html(this["METADATADESCRIPTION"]));
+                    $('#RecordStatus').trigger("chosen:updated");
+                });
+
+                BindTab(resJ, '1');
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+    //-------------------------------------------------------------------------------------------Bind Table
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        // TABLE BIND     
+        if (type == '0') {
+            $('#dynamic-table').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table');
+
+            $('#dynamic-table').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bSort": false,
+                "ascrollX": "100%",
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center',
+                }],
+
+                columnDefs: cols1,
+                columns: [
+
+                   { 'data': 'Rack Code' },
+                   { 'data': 'Rack Name' },
+                   { 'data': 'Location Code' },
+                    { 'data': 'Location Name' },
+                    { 'data':'Status'},
+                   {
+
+                       'data': 'Edit',
+                       'render': function (data, type, full, meta) {
+
+                           return '<button type="button" class="btn btn-success btn-fab editdetails" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></button>'
+
+                       }
+                   },
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Rack Master',
+                        text: '<img src="../../Images/excel.png" style="height: 25px;">',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+
+                        text: '<img src="../../Images/pdf.png" style="height: 25px;">',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'Rack Master'
+
+
+                    }, {
+                        extend: 'print',
+                        title: 'Rack Master',
+                        text: '<img src="../../Images/print.png" style="height: 25px;">',
+                        footer: false
+                    }
+                ]
+            });
+        }
+        else {
+            $('#dynamic-table tbody').remove();
+            $('#dynamic-table thead').remove();
+            $('#dynamic-table').dataTable({
+                "language": {
+                    "emptyTable": "Rack Master No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "10%", bSearchable: false, bSortable: false },
+                          { sWidth: "10", bSearchable: false, bSortable: false },
+                              { sWidth: "10%", bSearchable: false, bSortable: false },
+                                { sWidth: "10%", bSearchable: false, bSortable: false }
+
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+
+        }
+        $(".loader").hide("slow");
+    }
+
+
+    $('#btnsubmit').click(function () {
+
+
+        if (window.FormData !== undefined) {
+            $('.loadingGIF').show();
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'InsertRackMaster',
+                dataType: "json",
+                type: "POST",
+                data: $("#validation-form").serialize() + '&' + $.param({ 'actiontype': $("#actiontype").text() }),
+                //  data:formData,
+                success: function (data) {
+                    var Res = data.split('|');
+                    var result = Res[0];
+                    var msg = Res[1];
+                    if (result.toUpperCase() == "TRUE") {
+                        $("form").trigger("reset");
+                        $("#actiontype").text("Save");
+                        bootbox.alert({
+                            message: '<span class="text-success"><i class="ace-icon fa fa-check-circle fa-4x"></i><br>' + msg + '</span>',
+                            size: 'small',
+                            callback: function () {
+                                location.reload();
+                            }
+                        });
+                        $('.loadingGIF').hide();
+                    }
+                    else {
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + msg + '</span>',
+                            size: 'small'
+                        });
+                        $('.loadingGIF').hide();
+                    }
+                }
+            });
+        }
+
+    });
+
+
+
+
+    //-------------------------------------------------------------------------------------------Table Selected Index Change
+    //on Click table Row
+    //$(document).ready(function () {
+    
+
+    $("#dynamic-table").on("click", ".editdetails", function () {
+
+        var rackcode = $(this).closest('tr').find('td:eq(0)').html();
+        GetRackDetailsByID(rackcode)
+    });
+
+    // });
+    //-------------------------------------------------------------------------------------------Assign values table into TextBox (Controls)   
+    //get the Role Creation Details by ID
+    function GetRackDetailsByID(rackcode) {
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetRackdetailsByID',
+            dataType: 'json',
+            type: 'POST',
+            data: { "RACKCODE": rackcode },
+
+            success: function (data) {
+                var resJ = JSON.parse(data);
+                $.each(resJ, function (i, item) {
+
+                    $("#RackCode").val(resJ[i].RACKCODE);
+                    $("#RackName").val(resJ[i].RACKNAME);
+                    $('#LocationName').val(resJ[i].LOCATIONCODE)
+                    $('#LocationName').trigger("chosen:updated");
+                    $('#RecordStatus').val(resJ[i].RECORDSTATUS)
+                    $('#RecordStatus').trigger("chosen:updated");
+                });
+                $("#RackCode").prop('readonly', true);
+                $("#actiontype").text("Update");
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+            }
+
+        });
+        $(".loader").hide("slow");
+    }
+    //-------------------------------------------------------------------------------------------Search
+    $('#btnsearch').click(function () {
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetRackMasterSearch',
+            dataType: 'json',
+            type: 'POST',
+            data: $("#validation-form").serialize(),
+            success: function (data) {
+
+                BindTab(JSON.parse(data), '0');
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("Status: " + textStatus); alert("Error: " + errorThrown);
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+    //-------------------------------------------------------------------------------------------Clear
+    $('#btnclear').click(function () {
+        //$('.help-block').closest('.form-group').removeClass('has-error');//.addClass('has-info');
+        //$('.help-block').remove();
+        //$("form").trigger("reset");
+        //$("#actiontype").text("Save");     
+
+        //$("#shiftcode").prop('readonly', false);
+        location.reload();
+        //$('input[type=search]').val('');
+    });
+    $('#btnprintbtn').click(function () {
+        var $row = $(this).closest("tr");    // Find the row
+        var $text = $row.find(".sorting_1").text(); // Find the text
+        $('#printmodalview').modal('show');
+        callprintpopup($text);
+    });
+    function callprintpopup($text) {
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetRackprint',
+            dataType: 'json',
+            type: 'POST',
+
+            success: function (data) {
+                debugger;
+                var Tables = data.split('|');
+                var DetailsTable = JSON.parse(Tables[0]);
+                debugger;
+                BindprintpopupTab(DetailsTable, '1');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+    function BindprintpopupTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecordUpload = ResData[0];
+        // TABLE BIND
+        var len = $('#dynamic-printtableDetails tbody').children().length;
+        if (type == '0' || len != '0') {
+            $('#dynamic-printtableDetails').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecordUpload) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecordUpload);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            //  var dyTable1 = $('#dynamic-tableUpload');
+
+            $('#dynamic-printtableDetails').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bPaginate": false,
+                "ascrollX": "100%",
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+
+                }],
+
+                columnDefs: cols1,
+                columns: [
+
+                 { 'data': 'Select' },
+                 //{
+                 //    'data': 'RACKCODE', "visible": true,
+                 //    'render': function (data, type, full, meta) {
+                 //        var pakarr = data.split('-');
+
+                 //        return '<div>' + pakarr[1] + '<span style="visibility: hidden;">' + pakarr[0] + '</span></div>';
+
+                 //    }
+                 //},
+                 { 'data': 'RACKCODE' },
+                 { 'data': 'RACKNAME' },
+                 { 'data': 'RACKDESCRIPTION' },
+                ],
+
+            });
+        }
+        else {
+            $('#dynamic-printtableDetails tbody').remove();
+            $('#dynamic-printtableDetails thead').remove();
+            $('#dynamic-printtableDetails').dataTable({
+                "language": {
+                    "emptyTable": "No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "10%", bSearchable: false, bSortable: false },
+                          { sWidth: "10", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                             { sWidth: "10%", bSearchable: false, bSortable: false }
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "bPaginate": false,
+                "searching": true
+            });
+
+
+        }
+
+    }
+
+    $('#checkall').change(function () {
+        if ($(this).is(":checked")) {
+            $('.isselect').attr("checked", true);
+        } else {
+            $('.isselect').attr("checked", false);
+        }
+
+    });
+    $("#btnprint").click(function () {
+        var rackcode = "", rackname = "", rackdescription = "", loccode = "";
+        jQuery("table.checkprint tbody > tr").each(function () {
+
+            if (jQuery('td:eq(0)', this).children('input.checkbox').is(':checked')) {
+                rackcode += jQuery('td:eq(1)', this).html() + "^";
+                loccode += jQuery('td:eq(1) > div > span', this).html() + "^";
+                rackname += jQuery('td:eq(2)', this).text() + "^";
+                rackdescription += jQuery('td:eq(3)', this).text() + "^";
+            }
+
+        });
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'PrintBarcodeByRack',
+            dataType: 'json',
+            type: 'POST',
+            data: {
+                "rackcode": rackcode = rackcode.substring(0, rackcode.length - 1),
+                "rackname": rackname = rackname.substring(0, rackname.length - 1),
+                "rackdescription": rackdescription = rackdescription.substring(0, rackdescription.length - 1)
+            },
+
+            success: function (data) {
+                var result = data.split("|");
+                var tb = (result[0]);
+                $("#printable").html(tb);
+
+                var rackcodearr = rackcode.split("^");
+                var loccodearr = loccode.split("^");
+                var COUNT = 0;
+                for (var i = 0; i < rackcodearr.length; i++) {
+                    //var ID = rackcodearr[i] + ';' + loccodearr[i];
+                    var ID = rackcodearr[i];
+
+                    QRCODEPRINT(COUNT, ID);
+                    COUNT++;
+
+                }
+
+                setTimeout(function () {
+                    printableinner();
+                }, 20);
+
+            }
+        });
+        $(".loader").hide("slow");
+
+    });
+
+    function QRCODEPRINT(COUNT, ID) {
+        //   $("#qrcode").empty();
+
+        var qrcode = new QRCode(document.getElementById("rackid" + COUNT), {
+            width: 120,
+            height: 120
+        });
+        function makeCode() {
+            var elText = ID;
+            qrcode.makeCode(elText);
+        }
+        makeCode();
+    }
+
+    function printableinner() {
+
+        var disp_setting = "toolbar=no,location=no,";
+        disp_setting += "directories=no,menubar=no,";
+        disp_setting += "scrollbars=yes";
+        var content_vlue = document.getElementById("printable").innerHTML;
+        var docprint = window.open("", "", disp_setting);
+        docprint.document.open();
+        docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+        docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+        docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+        docprint.document.write('<head>');
+        docprint.document.write('<style type="text/css">body{ border:0px solid #000;margin:0px;font-family:verdana,Arial;color:#000;font-family:Verdana, Geneva, sans-serif; font-size:8px;}a{color:#000;text-decoration:none;}*{font-size:8px;} small{font-size:30% !important;}table {border-collapse: collapse;}table, td, th {border: 1px solid black;padding:0.5rem 2px;}@page {size: 4in 2in;margin: 1mm;}div#printable {width: 4in;height: 2in;} .qr-panel img{width:50px;}</style> ');
+        docprint.document.write('</head><body onLoad="self.print()">');
+        docprint.document.write(content_vlue);
+        docprint.document.close();
+        docprint.focus();
+
+    }
+
+});

@@ -1,0 +1,113 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseMaterialUpload PageloadMaterialRequestDAL()
+        {
+            ResponseMaterialUpload response = new ResponseMaterialUpload();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[MATERIALREQUEST_PAGELOAD]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Batchnodts = ds.Tables[0];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("PageloadMaterialRequestDAL: " + "Method Name PageloadMaterialRequestDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+            return response;
+        }
+        public ResponseMaterialUpload MaterialUploadInsertDAL(RequestMaterialUpload request)
+        {
+            ResponseMaterialUpload response = new ResponseMaterialUpload();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int rowcount = 0;
+
+                                foreach (MaterialRequestUploaddetailsEntity det in request.requestmaterialuploaddetails)
+                                {
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[MATERIALREQUESTUPLOAD_INSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@BATCHNO", request.ReqMaterialUpload.BATCHNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.PARTCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@USERCODE", request.ReqMaterialUpload.USERCODE.Trim()));
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+
+                        
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestmaterialuploaddetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("MaterialUploadInsertDAL: " + "Method Name MaterialUploadInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+            return response;
+
+        }
+
+    }
+}

@@ -1,0 +1,756 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SSB0000" xml:space="preserve">
+    <value>"{A}"</value>
+  </data>
+  <data name="SSB0001" xml:space="preserve">
+    <value>User "{A}" Locked.</value>
+  </data>
+  <data name="SSB0002" xml:space="preserve">
+    <value>Username and Password Incorrect.</value>
+  </data>
+  <data name="SSB0003" xml:space="preserve">
+    <value>The "{A}" can contain only alphabets.</value>
+  </data>
+  <data name="SSB0004" xml:space="preserve">
+    <value>The "{A}" can contain only text, no special characters are allowed</value>
+  </data>
+  <data name="SSB0005" xml:space="preserve">
+    <value>The "{A}" can contain only numbers, no special characters and alphabets are allowed.</value>
+  </data>
+  <data name="SSB0006" xml:space="preserve">
+    <value>The "{A}" can contain only date and time.</value>
+  </data>
+  <data name="SSB0007" xml:space="preserve">
+    <value>The "{A}" already exist.</value>
+  </data>
+  <data name="SSB0008" xml:space="preserve">
+    <value>This Specific Record has been updated by someone, Please ensure and update again.</value>
+  </data>
+  <data name="SSB0009" xml:space="preserve">
+    <value>"{A}" Cannot be Left Empty.</value>
+  </data>
+  <data name="SSB0010" xml:space="preserve">
+    <value>Please Select "{A}".</value>
+  </data>
+  <data name="SSB0011" xml:space="preserve">
+    <value>Username "{A}" has been saved Successfully.</value>
+  </data>
+  <data name="SSB0012" xml:space="preserve">
+    <value>Employee Code "{A}" Insertion Failed.</value>
+  </data>
+  <data name="SSB0013" xml:space="preserve">
+    <value>Username "{A}" Updated Successfully.</value>
+  </data>
+  <data name="SSB0014" xml:space="preserve">
+    <value>Username "{A}" Updation Failed.</value>
+  </data>
+  <data name="SSB0015" xml:space="preserve">
+    <value>Username "{A}" Already exists.</value>
+  </data>
+  <data name="SSB0016" xml:space="preserve">
+    <value>User "{A}" Mapped Successfully.</value>
+  </data>
+  <data name="SSB0017" xml:space="preserve">
+    <value>User "{A}" Mapped Failed.</value>
+  </data>
+  <data name="SSB0018" xml:space="preserve">
+    <value>User "{A}"Updated Successfully.</value>
+  </data>
+  <data name="SSB0019" xml:space="preserve">
+    <value>"{A}" User updation failed.</value>
+  </data>
+  <data name="SSB0020" xml:space="preserve">
+    <value>"{A}" User already exists.</value>
+  </data>
+  <data name="SSB0201" xml:space="preserve">
+    <value>Loading Type "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0202" xml:space="preserve">
+    <value>Loading Type  "{A}" Insertion Failed.</value>
+  </data>
+  <data name="SSB0203" xml:space="preserve">
+    <value>Loading Type "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0204" xml:space="preserve">
+    <value>Loading Type "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0205" xml:space="preserve">
+    <value>Loading Type "{A}" already exists.</value>
+  </data>
+  <data name="SSB0206" xml:space="preserve">
+    <value>RackCode "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0207" xml:space="preserve">
+    <value>Rack Code "{A}" Insertion Failed.</value>
+  </data>
+  <data name="SSB0208" xml:space="preserve">
+    <value>Rack Code "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0209" xml:space="preserve">
+    <value>Rack Code "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0210" xml:space="preserve">
+    <value>Rack Code "{A}" already exists.</value>
+  </data>
+  <data name="SSB0211" xml:space="preserve">
+    <value>State "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0212" xml:space="preserve">
+    <value>Bin Code "{A}" Insertion Failed.</value>
+  </data>
+  <data name="SSB0213" xml:space="preserve">
+    <value>State "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0214" xml:space="preserve">
+    <value>State"{A}" updation failed.</value>
+  </data>
+  <data name="SSB0215" xml:space="preserve">
+    <value>State "{A}" already exists.</value>
+  </data>
+  <data name="SSB0021" xml:space="preserve">
+    <value>Customer Name"{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0022" xml:space="preserve">
+    <value>Customer  Name"{A}" already exists.</value>
+  </data>
+  <data name="SSB0023" xml:space="preserve">
+    <value>Customer  Name"{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0024" xml:space="preserve">
+    <value>Customer  Name"{A}" updation failed.</value>
+  </data>
+  <data name="SSB0025" xml:space="preserve">
+    <value>Rack Color "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0026" xml:space="preserve">
+    <value>Rack Color "{A}" already exists.</value>
+  </data>
+  <data name="SSB0027" xml:space="preserve">
+    <value>Rack Color "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0028" xml:space="preserve">
+    <value>Supplier Code "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0101" xml:space="preserve">
+    <value>Item Code "{A}" has been saved Successfully.</value>
+  </data>
+  <data name="SSB0102" xml:space="preserve">
+    <value>Item Code "{A}" Insertion Failed.</value>
+  </data>
+  <data name="SSB0103" xml:space="preserve">
+    <value>Item Code "{A}" Updated Successfully.</value>
+  </data>
+  <data name="SSB0104" xml:space="preserve">
+    <value>Item Code "{A}" Updation Failed.</value>
+  </data>
+  <data name="SSB0105" xml:space="preserve">
+    <value>Item Code "{A}" Already exists.</value>
+  </data>
+  <data name="SSB0106" xml:space="preserve">
+    <value>Employee Name "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0107" xml:space="preserve">
+    <value>Employee Name  "{A}" Alredy Exists.</value>
+  </data>
+  <data name="SSB0108" xml:space="preserve">
+    <value>Employee Name  "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0109" xml:space="preserve">
+    <value>Employee Name  "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0111" xml:space="preserve">
+    <value>Lot No "{A}" has been Saved.</value>
+  </data>
+  <data name="SSB0112" xml:space="preserve">
+    <value>Lot No "{A}" has been Rejected.</value>
+  </data>
+  <data name="SSB0113" xml:space="preserve">
+    <value>Lot No "{A}" already exists.</value>
+  </data>
+  <data name="SSB0401" xml:space="preserve">
+    <value>Rack Type "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0402" xml:space="preserve">
+    <value>Job Process "{A}" Insertion Failed.</value>
+  </data>
+  <data name="SSB0403" xml:space="preserve">
+    <value>Rack Type  "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0404" xml:space="preserve">
+    <value>Job Process "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0405" xml:space="preserve">
+    <value>Rack Type "{A}" already exists.</value>
+  </data>
+  <data name="SSB0600" xml:space="preserve">
+    <value>Order Number "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0601" xml:space="preserve">
+    <value>Order Number "{A}" already exists.</value>
+  </data>
+  <data name="SSB0602" xml:space="preserve">
+    <value>Forming Plan  "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0603" xml:space="preserve">
+    <value>Forming Plan  "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0301" xml:space="preserve">
+    <value>Zone "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0302" xml:space="preserve">
+    <value>Zone "{A}" already exists.</value>
+  </data>
+  <data name="SSB0303" xml:space="preserve">
+    <value>Zone "{A}" Updated successfully.</value>
+  </data>
+  <data name="SSB0304" xml:space="preserve">
+    <value>Zone "{A}" Updation failed.</value>
+  </data>
+  <data name="SSB0029" xml:space="preserve">
+    <value>Fabrication No. "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0030" xml:space="preserve">
+    <value>Fabrication No."{A}" already exists.</value>
+  </data>
+  <data name="SSB0031" xml:space="preserve">
+    <value>Fabrication No. "{A}" Updated successfully.</value>
+  </data>
+  <data name="SSB0032" xml:space="preserve">
+    <value>Fabrication No. "{A}" Updation failed.</value>
+  </data>
+  <data name="SSB0604" xml:space="preserve">
+    <value>City "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0605" xml:space="preserve">
+    <value>City  "{A}" Already Exist.</value>
+  </data>
+  <data name="SSB0606" xml:space="preserve">
+    <value>City  "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0607" xml:space="preserve">
+    <value>City   "{A}" updation failed.</value>
+  </data>
+  <data name="SSB0608" xml:space="preserve">
+    <value>Transporter Name "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0609" xml:space="preserve">
+    <value>Transporter Name "{A}" already exists.</value>
+  </data>
+  <data name="SSB0610" xml:space="preserve">
+    <value>Transporter Name  "{A}" updated successfully.</value>
+  </data>
+  <data name="SSB0611" xml:space="preserve">
+    <value>Transporter Name  "{A}" updation failed..</value>
+  </data>
+  <data name="SSB070" xml:space="preserve">
+    <value>Invoice "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0701" xml:space="preserve">
+    <value>Rack Supplier "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0702" xml:space="preserve">
+    <value>Rack Supplier"{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0703" xml:space="preserve">
+    <value>Rack Supplier "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0704" xml:space="preserve">
+    <value>Invoice "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0037" xml:space="preserve">
+    <value>Production Plan Uploaded Successfully</value>
+  </data>
+  <data name="SSB0705" xml:space="preserve">
+    <value>OrderNumer "{A}"  Cancel Successfully.</value>
+  </data>
+  <data name="SSB0612" xml:space="preserve">
+    <value>Invoice has been Uploaded Successfully</value>
+  </data>
+  <data name="SSB0038" xml:space="preserve">
+    <value>Batchno "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0706" xml:space="preserve">
+    <value>Destination "{A}" has been created successfully</value>
+  </data>
+  <data name="SSB0707" xml:space="preserve">
+    <value>Destination "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0708" xml:space="preserve">
+    <value>Destination  "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0709" xml:space="preserve">
+    <value> CutBoardInWard Invoice "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0710" xml:space="preserve">
+    <value>PO No is Already Processed</value>
+  </data>
+  <data name="SSB0711" xml:space="preserve">
+    <value>Production No is Already Processed</value>
+  </data>
+  <data name="SSB0712" xml:space="preserve">
+    <value>PO No has be deleted succufully</value>
+  </data>
+  <data name="SSB0713" xml:space="preserve">
+    <value>Tool Invoice "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0714" xml:space="preserve">
+    <value>Tool Invoice "{A}" has been Insertion Failed.</value>
+  </data>
+  <data name="SSB0715" xml:space="preserve">
+    <value>Tool Invoice "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0716" xml:space="preserve">
+    <value>Tool Invoice "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0717" xml:space="preserve">
+    <value>Tool Invoice "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0718" xml:space="preserve">
+    <value>Serial No  "{A}" Already Exists</value>
+  </data>
+  <data name="SSB0719" xml:space="preserve">
+    <value>Plant Code "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0720" xml:space="preserve">
+    <value>Plant Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0721" xml:space="preserve">
+    <value>Plant Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0722" xml:space="preserve">
+    <value>Plant Code "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0726" xml:space="preserve">
+    <value>Rack Type And  Rack Color "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0727" xml:space="preserve">
+    <value>Rack Type And Rack Color "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0728" xml:space="preserve">
+    <value>LR No "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0729" xml:space="preserve">
+    <value>Customer Name  "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0730" xml:space="preserve">
+    <value>Customer Name  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0731" xml:space="preserve">
+    <value>Customer Name "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0732" xml:space="preserve">
+    <value>LR No "{A}""{A}" Already Exists.</value>
+  </data>
+  <data name="SSB0733" xml:space="preserve">
+    <value>Transit Time  "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0734" xml:space="preserve">
+    <value>Transit Time  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0735" xml:space="preserve">
+    <value>Transit Time "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0736" xml:space="preserve">
+    <value>Transit Time "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0737" xml:space="preserve">
+    <value>Customer Delivery  "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0738" xml:space="preserve">
+    <value>Customer Delivery "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0739" xml:space="preserve">
+    <value>Order Number "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0740" xml:space="preserve">
+    <value>Customer Name "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0741" xml:space="preserve">
+    <value>Customer Name "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0742" xml:space="preserve">
+    <value>Customer Address Update  "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0743" xml:space="preserve">
+    <value>Customer Address Update "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0744" xml:space="preserve">
+    <value>Customer Address Update "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0745" xml:space="preserve">
+    <value>Customer Address Update "{A}" has been Updated Failed.</value>
+  </data>
+  <data name="SSB0746" xml:space="preserve">
+    <value>Order Number "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0747" xml:space="preserve">
+    <value>Order Number  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0748" xml:space="preserve">
+    <value>Scrapout Quantity  "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0749" xml:space="preserve">
+    <value>LR Number "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0750" xml:space="preserve">
+    <value>LR Number  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0751" xml:space="preserve">
+    <value>Customer Name "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0752" xml:space="preserve">
+    <value>Transporter Invoice No  "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB0753" xml:space="preserve">
+    <value>Transporter Invoice No  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0754" xml:space="preserve">
+    <value>Rack PickUp Entry "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0755" xml:space="preserve">
+    <value>Rack PickUp Entry  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0756" xml:space="preserve">
+    <value>Receipt At Plant "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0757" xml:space="preserve">
+    <value>Receipt At Plant  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB01110" xml:space="preserve">
+    <value>Plant Code "{A}" has been saved Successfully.</value>
+  </data>
+  <data name="SSB01111" xml:space="preserve">
+    <value>Plant Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB01112" xml:space="preserve">
+    <value>Plant Code  "{A}" Updated Successfully.</value>
+  </data>
+  <data name="SSB01113" xml:space="preserve">
+    <value>Plant Code "{A}" Updation Failed.</value>
+  </data>
+  <data name="SSB00001" xml:space="preserve">
+    <value>Warehouse Code "{A}" has been Created Successfully.</value>
+  </data>
+  <data name="SSB00002" xml:space="preserve">
+    <value>Warehouse Code "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB00003" xml:space="preserve">
+    <value>Warehouse Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB00004" xml:space="preserve">
+    <value>Warehouse Code  "{A}" Updation Failed..</value>
+  </data>
+  <data name="SSB000051" xml:space="preserve">
+    <value>Location Code "{A}" has been Created Successfully.</value>
+  </data>
+  <data name="SSB000052" xml:space="preserve">
+    <value>Location Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB000053" xml:space="preserve">
+    <value>Location Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB000054" xml:space="preserve">
+    <value>Location Code  "{A}" Updation Failed..</value>
+  </data>
+  <data name="SSB000055" xml:space="preserve">
+    <value>FG Item Code "{A}" has been Created Successfully.</value>
+  </data>
+  <data name="SSB000056" xml:space="preserve">
+    <value>FG Item Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB000057" xml:space="preserve">
+    <value>FG Item Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB000058" xml:space="preserve">
+    <value>FG Item Code  "{A}" Updation Failed..</value>
+  </data>
+  <data name="SSB000059" xml:space="preserve">
+    <value>RM Item Code "{A}" has been Created Successfully.</value>
+  </data>
+  <data name="SSB000060" xml:space="preserve">
+    <value>RM Item Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB000061" xml:space="preserve">
+    <value>RM Item Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB000062" xml:space="preserve">
+    <value>RM Item Code  "{A}" Updation Failed.</value>
+  </data>
+  <data name="SSB000063" xml:space="preserve">
+    <value>Mould Item Code "{A}" has been Created Successfully.</value>
+  </data>
+  <data name="SSB000064" xml:space="preserve">
+    <value>Mould Item Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB000065" xml:space="preserve">
+    <value>Mould Item Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB000066" xml:space="preserve">
+    <value>Mould Item Code  "{A}" Updation Failed.</value>
+  </data>
+  <data name="SSB000067" xml:space="preserve">
+    <value>Child Item Code "{A}" has been created successfully.</value>
+  </data>
+  <data name="SSB000068" xml:space="preserve">
+    <value>Child Item Code  "{A}" Already Exists.</value>
+  </data>
+  <data name="SSB000069" xml:space="preserve">
+    <value>Child Item Code "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB000070" xml:space="preserve">
+    <value>Child Item Code  "{A}" updation failed..</value>
+  </data>
+  <data name="SSB000071" xml:space="preserve">
+    <value> Mould Item Code  "{A}"InterLinked successfully.</value>
+  </data>
+  <data name="SSB000072" xml:space="preserve">
+    <value>Mould Item Code "{A}" InterLinked Exists.</value>
+  </data>
+  <data name="SSB000073" xml:space="preserve">
+    <value>Mould Item Code "{A}" InterLinked Successfully.</value>
+  </data>
+  <data name="SSB000074" xml:space="preserve">
+    <value>Mould Item Code  "{A}" InterLinked Failed.</value>
+  </data>
+  <data name="CUMI001" xml:space="preserve">
+    <value>Production OrderNo "{A}" has been saved successfully.</value>
+  </data>
+  <data name="CUMI002" xml:space="preserve">
+    <value>Production OrderNo  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0758" xml:space="preserve">
+    <value>Plant Name  "{A}" Already Exists.</value>
+  </data>
+  <data name="CUMI003" xml:space="preserve">
+    <value>RDC Number "{A}" has been saved successfully.</value>
+  </data>
+  <data name="CUMI004" xml:space="preserve">
+    <value>RDC Number "{A}"  Already Exists.</value>
+  </data>
+  <data name="CUMI005" xml:space="preserve">
+    <value>Production OrderNo "{A}"  Scanned</value>
+  </data>
+  <data name="CUMI006" xml:space="preserve">
+    <value>Scan Valid Production OrderNo</value>
+  </data>
+  <data name="CUMI007" xml:space="preserve">
+    <value>"{A}" Production OrderNo Already Exists</value>
+  </data>
+  <data name="CUMI0010" xml:space="preserve">
+    <value>"{A}" RDC Number Already Exists</value>
+  </data>
+  <data name="CUMI008" xml:space="preserve">
+    <value>RDC Number  "{A}"  Scanned</value>
+  </data>
+  <data name="CUMI009" xml:space="preserve">
+    <value>Scan Valid RDC Number</value>
+  </data>
+  <data name="SSB0759" xml:space="preserve">
+    <value>GRN Entry "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0760" xml:space="preserve">
+    <value>GRN Entry  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0761" xml:space="preserve">
+    <value>GRN Entry  "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0762" xml:space="preserve">
+    <value>GRN Entry  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0763" xml:space="preserve">
+    <value>RM Production Order"{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0764" xml:space="preserve">
+    <value>RM Production Order  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0765" xml:space="preserve">
+    <value>RM Production Order  "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0766" xml:space="preserve">
+    <value>RM Production Order "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0767" xml:space="preserve">
+    <value>Mould Receipt-RDC "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0768" xml:space="preserve">
+    <value>Mould Receipt-RDC  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0769" xml:space="preserve">
+    <value>RDC Picklist Assign "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0770" xml:space="preserve">
+    <value>RDC Picklist Assign  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0771" xml:space="preserve">
+    <value>BOM Master "{A}" has been saved successfully.</value>
+  </data>
+  <data name="SSB0772" xml:space="preserve">
+    <value>BOM Master  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0773" xml:space="preserve">
+    <value>BOM Master  "{A}" has been Updated Successfully.</value>
+  </data>
+  <data name="SSB0774" xml:space="preserve">
+    <value>BOM Master  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0775" xml:space="preserve">
+    <value>Mould Shot Count "{A}" Entered Successfully.</value>
+  </data>
+  <data name="SSB0776" xml:space="preserve">
+    <value>Mould Shot Count "{A}" Updated Successfully.</value>
+  </data>
+  <data name="SSB0777" xml:space="preserve">
+    <value>Mould Shot Count "{A}" Entry Failed.</value>
+  </data>
+  <data name="SSB0778" xml:space="preserve">
+    <value>Mould Shot Count "{A}" Updation Failed.</value>
+  </data>
+  <data name="SSB0779" xml:space="preserve">
+    <value>Production Order FileUpload "{A}" Uploaded Successfully.</value>
+  </data>
+  <data name="SSB0780" xml:space="preserve">
+    <value>Production Order FileUpload "{A}" Uploaded Failed.</value>
+  </data>
+  <data name="SSB0781" xml:space="preserve">
+    <value>Supplier Master "{A}"has been saved successfully.</value>
+  </data>
+  <data name="SSB0782" xml:space="preserve">
+    <value>Supplier Master  "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0783" xml:space="preserve">
+    <value>Supplier Master  "{A}"  Updated successfully.</value>
+  </data>
+  <data name="SSB0784" xml:space="preserve">
+    <value>Supplier Master  "{A}"  Updated Failed.</value>
+  </data>
+  <data name="SSB0785" xml:space="preserve">
+    <value>Mould RFID Assigment "{A}"has been saved successfully.</value>
+  </data>
+  <data name="SSB0786" xml:space="preserve">
+    <value>Mould RFID Assigment "{A}"  Already Exists.</value>
+  </data>
+  <data name="SSB0787" xml:space="preserve">
+    <value>Mould RFID Assigment "{A}"  Updated successfully.</value>
+  </data>
+  <data name="SSB0788" xml:space="preserve">
+    <value>Mould RFID Assigment "{A}"  Updated Failed.</value>
+  </data>
+</root>

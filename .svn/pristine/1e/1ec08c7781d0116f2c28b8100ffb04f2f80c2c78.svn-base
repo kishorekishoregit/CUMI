@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class LocationMasterEntity
+    {
+        public string HDEMP { get; set; }
+        public string LOCATIONCODE { get; set; }
+        public string LOCATIONNAME { get; set; }
+        public string CAPACITY { get; set; }
+        public string RECORDSTATUS { get; set; }
+        public string USERCODE { get; set; }
+    }
+
+    public class RequestLocationMaster
+    {
+        public LocationMasterEntity requestLocationMaster { get; set; }
+    }
+
+    public class ResponseLocationMaster
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable JS_RecordStatus { get; set; }
+
+        public DataTable JS_LocationDetails { get; set; }
+
+    }
+}

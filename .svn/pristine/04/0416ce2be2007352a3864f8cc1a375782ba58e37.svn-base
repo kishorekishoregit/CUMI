@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class RackMasterEntity
+    {
+        public string RACKCODE { get; set; }
+        public string RACKNAME { get; set; }
+        public string LOCATIONCODE { get; set; }
+        public string USERCODE { get; set; }
+        public string RECORDSTATUS { get; set; }
+    }
+
+    public class RequestRackMaster
+    {
+
+        public RackMasterEntity requestRackMaster { get; set; }
+    }
+
+
+    public class ResponseRackMaster
+    {
+
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+
+        public DataTable JS_RackMasterDetails { get; set; }
+
+        public DataTable JS_RecordStatus { get; set; }
+
+        public DataTable JS_Locationdetails { get; set; }
+    }
+}

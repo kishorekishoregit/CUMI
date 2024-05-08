@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4A02B535-AE90-4606-8BD4-3E9D2E02A787}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CUMIDAC</RootNamespace>
+    <AssemblyName>CUMIDAC</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CUMIENTITY">
+      <HintPath>..\CUMIENTITY\bin\Debug\CUMIENTITY.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOMMasterDAC.cs" />
+    <Compile Include="ChildPartMasterDAL.cs" />
+    <Compile Include="CityMasterDAL.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="FGPlantMasterDAL.cs" />
+    <Compile Include="GRNEntryDAC.cs" />
+    <Compile Include="LoadingTypeMasterDAL.cs" />
+    <Compile Include="LocationWiseMoldStockReportDAL.cs" />
+    <Compile Include="LogCreation.cs" />
+    <Compile Include="LoginDAL.cs" />
+    <Compile Include="MoldInwardOrInterlinkingReportDAC.cs" />
+    <Compile Include="MoldIssueConfirmationDAC.cs" />
+    <Compile Include="MoldNearbyExpiryExpiredReportDAC.cs" />
+    <Compile Include="MoldPicklistReportDAC.cs" />
+    <Compile Include="MoldPressCountFileUploadDAC.cs" />
+    <Compile Include="MoldPutawayReportDAL.cs" />
+    <Compile Include="MoldReceipt_RDCDAC.cs" />
+    <Compile Include="MoldReconditionReportDAC.cs" />
+    <Compile Include="MoldRFIDAssignmentDAL.cs" />
+    <Compile Include="MoldScrapReportDAC.cs" />
+    <Compile Include="MoldShotCountDAL.cs" />
+    <Compile Include="MoldStatusReportDAL.cs" />
+    <Compile Include="PhysicalStockReportDAC.cs" />
+    <Compile Include="PlantMasterDAL.cs" />
+    <Compile Include="ProductionOrderAssignDAL.cs" />
+    <Compile Include="ProductionOrderFileUploadDAC.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RDCPicklistAssignDAL.cs" />
+    <Compile Include="RDCPicklistFileUploadDAC.cs" />
+    <Compile Include="RMInwardReportDAC.cs" />
+    <Compile Include="RMMasterDAL.cs" />
+    <Compile Include="RMMoldPutawayReportDAL.cs" />
+    <Compile Include="RMPicklistReportDAC.cs" />
+    <Compile Include="RMProductionOrderDAC.cs" />
+    <Compile Include="ShotCountReportDAL.cs" />
+    <Compile Include="SupplierMasterDAC.cs" />
+    <Compile Include="UserAuthenticationDAL.cs" />
+    <Compile Include="UserCreationDAL.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="WarehouseLocationDAL.cs" />
+    <Compile Include="WarehouseMasterDAL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MoldMasterDAL.cs" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

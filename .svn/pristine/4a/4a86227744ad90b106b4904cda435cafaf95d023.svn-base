@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class RemixQualityEntity
+    {
+        public string LOTNO { get; set; }
+        public string LOTSERIALNO { get; set; }
+        public string USERCODE { get; set; }
+    }
+    public class RequestRemixQuality
+    {
+        public RemixQualityEntity requestRemixQuality { get; set; }
+    }
+    public class ResponseRemixQuality
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_RemixQualitypageload { get; set; }
+        public DataTable JS_RemixQualitydetails { get; set; }
+
+    }
+}

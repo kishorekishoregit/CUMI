@@ -1,0 +1,99 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class RMLabelPrintEntity
+    {
+        public string GRNNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string SERIALNO { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string GRNDATE { get; set; }
+        public string ISIMPORT { get; set; }
+        public List<RmLablePrintDetailEntity> requestrmlabelprintdetails { get; set; }
+
+    }
+
+    public class RmLablePrintDetailEntity
+    {
+
+        public string GRNNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string SERIALNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string GRNDATE { get; set; }
+        public string ACTUAL { get; set; }
+        public string BARCODE { get; set; }
+
+    }
+
+    public class RMLotDetailsEntity
+    {
+        public string Inspectionno { get; set; }
+        public string ModalGRNNO { get; set; }
+        public string ModalMaterialCode { get; set; }
+        public string Barcode { get; set; }
+        public string ModalLotQuantity { get; set; }
+    }
+    public class RMLotPopupEntity
+    {
+        public string Inspectionno { get; set; }
+        public string ModalGRNNO { get; set; }
+        public string ModalMaterialCode { get; set; }
+        public string Barcode { get; set; }
+        public string ModalLotQuantity { get; set; }
+    }
+
+        public class RequestRMLabelPrint
+    {
+
+        //public RMLabelPrintEntity requestrmlabelprint { get; set; }
+        //public List<RMLabelPrintEntity> requestrmlabelprintHeader { get; set; }
+        //public List<RmLablePrintDetailEntity> requestrmlabelprintdetails { get; set; }
+                
+        public RMLabelPrintEntity ReqtrmlabelprintHeader { get; set; }
+        public RmLablePrintDetailEntity Reqrmlabelprintdetails { get; set; }
+        public List<RMLabelPrintEntity> requestrmlabelprintHeader { get; set; }
+        public List<RmLablePrintDetailEntity> requestrmlabelprintdetails { get; set; }
+        public RMLotDetailsEntity Reqrmlotdetails { get; set; }
+        public List<RMLotDetailsEntity> requestrmlotdetails { get; set; }
+        public RMLotPopupEntity RMLotDtls { get; set; }
+        public List<RMLotPopupEntity> requestrmlotpopupdetails { get; set; }
+    }
+
+
+
+
+    public class ResponseRMLabelPrint
+    {
+
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable JS_GRNDetails { get; set; }
+
+        public DataTable JS_LOTDetails { get; set; }
+
+        public DataTable JS_HiddenDetails { get; set; }
+
+        public DataTable JS_RMLablePrintDetails { get; set; }
+
+        public DataTable JS_RMLablePrintTempDetails { get; set; }
+
+        public DataTable JS_RecordStatus { get; set; }
+
+
+    }
+}

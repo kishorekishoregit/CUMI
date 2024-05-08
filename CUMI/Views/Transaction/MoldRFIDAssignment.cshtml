@@ -1,0 +1,232 @@
+﻿@{
+    ViewBag.Title = "MoldRFIDAssignment";
+}
+<div class="row">
+    <div id="fuelux-wizard-container" class="no-steps-container">
+
+        <div class="card bd-0">
+
+            <div class="card-body bd bd-t-0">
+                <form class="form-horizontal clearfix" id="Employee-form" name="myform" action="@Url.Content("~/Transaction/MoldRFIDAssignment")" method="post">
+                    <div class="card-header tx-medium bd-0 tx-white bg-indigo">
+                        Mould RFID Assignment
+                    </div><!-- card-header -->
+                    <div class="row row-sm" style=" margin-top: 25px;">
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Plant<span class="tx-danger">*</span>:</label>
+                            @*<label class="control-label col-lg-5 no-padding-right" for="ddlplant">Plant:<span class="tx-danger">*</span></label>*@
+                            @*<div class="col-lg-7">*@
+                            <div class="clearfix">
+                                <input id="ddlplant" class="form-control" placeholder="Choose one" list="ddlplantlst" name="ddlplant" data-toggle="tooltip" data-placement="top" autocomplete="off" maxlength="50" required tabindex="1" autofocus>
+                                <datalist id="ddlplantlst" style="background-color:aqua"></datalist>
+                                <input type="hidden" id="hdautoid">
+
+                                <div id="slErrorContainer9"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Location: <span class="tx-danger"></span></label>
+                            <input id="txtlocation" class="form-control" name="txtlocation" placeholder="Location" type="text" maxlength="100" readonly tabindex="2">
+                        </div>
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Mould Item Code <span class="tx-danger">*</span>:</label>
+                            @*<label class="control-label col-lg-8 no-padding-right" for="ddlplant">Mould Item Code<span class="text-danger">*</span>:</label>*@
+                            <div class="clearfix">
+                                <input id="ddlmold" class="form-control" list="ddlmoldlst" name="ddlmold" placeholder="Choose Mould Item Code" data-toggle="tooltip" data-placement="top" maxlength="50" tabindex="4" required autofocus>
+                                <datalist id="ddlmoldlst" style="background-color:aqua"></datalist>
+                                <input type="hidden" id="hdautoid">
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Mould Item Description<span class="text-danger"></span>:</label>
+                            <input id="txtmoulditemdescription" class="form-control" name="txtmoulditemdescription" placeholder="Mould Item Description" type="text" maxlength="100" tabindex="2" readonly>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row row-sm" style=" margin-top: 25px;">
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Variant Code<span class="text-danger"></span>:</label>
+                            <input id="txtvarientcode" class="form-control" name="txtvarientcode" placeholder="Variant Code" type="text" maxlength="100" tabindex="2" readonly>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">UOM<span class="text-danger"></span>:</label>
+                            <input id="txtuom" class="form-control" name="v" placeholder="UOM" type="text" maxlength="100" tabindex="2" readonly>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Supplier ID<span class="tx-danger">*</span>:</label>
+                            <input id="txtsupplierid" class="form-control" name="txtsupplierid" placeholder="Supplier ID" type="text" required="" maxlength="100" tabindex="14">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">PO Number<span class="tx-danger">*</span>:</label>
+                            <input id="txtponumber" class="form-control" name="txtponumber" placeholder="PO Number" type="text" required="" maxlength="100" tabindex="13">
+                        </div>
+                        
+                    </div>
+
+                    <div class="row row-sm" style=" margin-top: 25px;">
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Batch Number<span class="tx-danger">*</span>:</label>
+                            <input id="txtbatchnumber" class="form-control" name="txtbatchnumber" placeholder="Batch Number" type="text" required="" maxlength="100" tabindex="14">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Mould Open Count<span class="tx-danger">*</span>:</label>
+                            <input id="txtmoldopencount" class="form-control" name="txtmoldopencount" min="0" placeholder="Mould Open Count" type="number" required="" oninput="validity.valid||(value='');" maxlength="100" tabindex="13">
+                        </div>
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Previous MR Count<span class="tx-danger">*</span>:</label>
+                            <input id="txtpreviousmrcount" class="form-control" name="txtpreviousmrcount" placeholder="Previous MR Count" min="0" oninput="validity.valid||(value='');" type="number" required="" maxlength="100" tabindex="14">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Previous MR Date<span class="tx-danger">*</span>:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>
+                                    </div>
+                                </div>
+
+                                <input type="text" class="form-control fc-datepicker" placeholder="DD/MM/YYYY" id="txtpreviousmrdate" required>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row row-sm" style=" margin-top: 25px;">
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Mould Press Count<span class="tx-danger">*</span>:</label>
+                            <input id="txtmrcount" class="form-control" name="txtmrcount" placeholder="Mould Press Count" type="number" required="" min="0" oninput="validity.valid||(value='');" maxlength="100" tabindex="17">
+                        </div>
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">MR Alert Count<span class="tx-danger">*</span>:</label>
+                            <input id="txtmralertcount" class="form-control" name="txtmralertcount" placeholder="MR Alert Count" type="number" required="" min="0" oninput="validity.valid||(value='');" maxlength="100" tabindex="17">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Mould Life Count<span class="tx-danger">*</span>:</label>
+                            <input id="txtmoldlifecount" class="form-control" name="txtmoldlifecount" placeholder="Mold Life Count" min="0" oninput="validity.valid||(value='');" type="number" required="" maxlength="100" tabindex="18">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">RFID Number <span class="text-danger">*</span>:</label>
+                            <input id="txtrfidnumber" class="form-control" name="txtrfidnumber" placeholder="RFID Number" type="text" required="" autocomplete="off" maxlength="100" tabindex="2">
+                        </div>
+                    </div>
+                    <div class="row row-sm" style=" margin-top: 25px;">
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <div id="slWrapper3" class="parsley-select">
+                                <label class="control-label" for="ddlstatus">Record Status<span class="text-danger" tabindex="7">*</span>:</label>
+                                <select class="form-control select2" id="ddlstatus" data-parsley-class-handler="#slWrapper3" data-parsley-errors-container="#slErrorContainer3" name="ddlstatus" required>
+                                </select>
+                            </div>
+                            <div id="slErrorContainer3"></div>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Remarks <span class="tx-danger"></span></label>
+                            <input id="txtremarks" class="form-control" name="txtremarks" placeholder="Enter Remarks" type="text" autocomplete="off" maxlength="100" tabindex="2">
+                        </div>
+                    </div>
+
+                    <div class="wizard-actions" style="text-align: center !important; margin-top: 50px; margin-bottom: 20px;">
+
+                        <button class="btn btn-az-primary" id="btnsubmit" type="submit" title="Save" tabindex="7">
+                            <span id="actiontype">Save</span>
+                            <i class="typcn typcn-bookmark icon-on-left"></i>
+                        </button>
+                        <a class="btn btn-danger btn-sm" id="btnclear" title="Clear" tabindex="8">
+                            <span id="actiontype">Clear</span>
+                            <i class="typcn typcn-social-at-circular icon-on-left"></i>
+                        </a>
+
+
+                    </div>
+
+                    <div class="card-header tx-medium bd-0 tx-white bg-indigo" style="border-radius: 5px;">
+                        Mould RFID Assignment Details
+                    </div><!-- card-header -->
+
+                    <div id="dynamic-table_wrapper" class="dataTables_wrapper no-footer" style="margin-top: 20px;">
+                        <table id="dynamic-table" class="table table-striped table-bordered table-hover checkupload">
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div><!-- card-body -->
+
+
+</div>
+
+@section Scripts
+{
+
+    <script>
+        var highlightedDays = ['2018-5-10', '2018-5-11', '2018-5-12', '2018-5-13', '2018-5-14', '2018-5-15', '2018-5-16'];
+        var date = new Date();
+        $('.fc-datepicker').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dateFormat: 'dd/mm/yy',
+            beforeShowDay: function (date) {
+                var m = date.getMonth(),
+                    d = date.getDate(),
+                    y = date.getFullYear();
+                var currentDate = new Date(y, m, d);
+                var today = new Date(); // Get today's date
+                today.setHours(0, 0, 0, 0); // Set hours to 0 for accurate comparison
+                // Check if the current date is in the future
+                if (currentDate > today) {
+                    return [false];
+                }
+                for (var i = 0; i < highlightedDays.length; i++) {
+                    if ($.inArray(d + '/' + (m + 1) + '/' + y, highlightedDays) != -1) {
+                        return [true, 'ui-date-highlighted', ''];
+                    }
+                }
+                return [true];
+            }
+        });
+
+        $('.fc-datepicker').on('change', function () {
+            var inputValue = $(this).val();
+            var isValidDate = isValidDateFormat(inputValue);
+            if (!isValidDate) {
+                bootbox.alert({
+                    message: '<span class="text-danger"><i class="icon icon ion-ios-close-circle-outline tx-50 tx-danger"style="margin-left: 100px;font-size: 50px;"></i><br>' + "Date should be in dd/MM/yyyy." + '</span>',
+                    size: 'small'
+
+                });
+                $('.loadingGIF').hide();
+                $(this).val('');
+            }
+        });
+
+        function isValidDateFormat(dateString) {
+            // Regular expression to match dd/mm/yyyy format
+            var regex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+            return regex.test(dateString);
+        }
+    </script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.js")"></script>
+    <script src="@Url.Content("~/FuctionScripts/MoldRFIDAssignment.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/app-calendar.js")"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    @*<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>*@
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+}
+

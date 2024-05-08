@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+   public class InvoiceCreationEntity
+    {
+        public string INVOICENO { get; set; }
+        public string INVOICEDATE { get; set; }
+        public string SUPPLIER { get; set; }
+        public string REFERENCENO { get; set; }
+        public string REMARKS { get; set; }
+        public string USERCODE { get; set; }
+        public string ITEMCODE { get; set; }
+    }
+
+   public class InvoiceCreationDetailEntity
+   {
+
+       public string ITEMCODE { get; set; }
+       public string ITEMNAME { get; set; }
+       public string QUANTITY { get; set; }
+
+   }
+
+   public class RequestInvoiceCreation
+   {
+       public InvoiceCreationEntity ReqINVOICEEntry { get; set; }
+       public List<InvoiceCreationDetailEntity> requestINVOICEdetails { get; set; }
+   }
+   public class ResponseInvoiceCreation
+   {
+       public DataTable JS_Supplierdetails { get; set; }
+       public DataTable RecordStatus { get; set; }
+       public DataTable JS_Itemdetails { get; set; }
+       public DataTable InvoiceHeader { get; set; }
+       public DataTable InvoiceDetails { get; set; }
+       public bool result { get; set; }
+       public List<ErrorItem> ErrorContainer { get; set; }
+   }
+}

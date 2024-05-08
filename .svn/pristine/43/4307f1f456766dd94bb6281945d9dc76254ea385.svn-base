@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class SupplierMasterEntity
+    {
+        public string HDSUP { get; set; }
+        public string SUPPLIERCODE { get; set; }
+        public string SUPPLIERNAME { get; set; }
+        public string SUPPLIERADDRESS { get; set; }
+        public string SUPPLIERSTATUS { get; set; }
+        public string USERCODE { get; set; }
+    }
+    public class RequestSupplierMaster
+    {
+        public SupplierMasterEntity requestSupplierMaster { get; set; }
+    }
+
+    public class ResponseSupplierMaster
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_RecordStatus { get; set; }
+        public DataTable JS_Supplierdetails { get; set; }
+    }
+}

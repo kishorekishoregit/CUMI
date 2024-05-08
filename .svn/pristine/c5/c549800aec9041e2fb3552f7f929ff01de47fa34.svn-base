@@ -1,0 +1,5 @@
+﻿@{
+    ViewBag.Title = "REInspection";
+}
+
+<h2>REInspection</h2>

@@ -1,0 +1,202 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        
+        public ResponseItemMaster FetchItemMasterPageLoadDAL()
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[ITEMMASTER_PAGELOAD]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_ItemUom = ds.Tables[0];
+                            response.JS_ItemCategory = ds.Tables[1];
+                            response.JS_RecordStatus = ds.Tables[2];
+                            response.JS_Itemdetails = ds.Tables[3];
+                            response.JS_ItemType = ds.Tables[4];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchEmployeeMasterPageLoadDAL: " + "Method Name FetchEmployeeMasterPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+        public ResponseItemMaster InsertItemMasterDAL(RequestItemMaster request)
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[ITEMMASTER_INSERT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.requestItemMaster.ITEMCODE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMNAME", request.requestItemMaster.ITEMNAME.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@UOM", request.requestItemMaster.UOM.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@CATEGORY", request.requestItemMaster.CATEGORY.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMTYPE", request.requestItemMaster.ITEMTYPE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestItemMaster.RECORDSTATUS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestItemMaster.USERCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_Itemdetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestItemMaster.ITEMCODE });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertEmployeeMasterDAL: " + "Method Name InsertEmployeeMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            
+            return response;
+
+        }
+        public ResponseItemMaster EditItemMasterbyItemcodeDAL(RequestItemMaster request)
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[ITEMMASTER_EDIT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@AUTOID", request.requestItemMaster.AUTOID.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Itemdetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("EditEmployeeMasterbyUnitCodeDAL: " + "Method Name EditEmployeeMasterbyUnitCodeDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            
+            return response;
+
+        }
+        public ResponseItemMaster UpdateItemMasterDAL(RequestItemMaster request)
+        {
+            ResponseItemMaster response = new ResponseItemMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[ITEMMASTER_UPDATE]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.requestItemMaster.ITEMCODE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMNAME", request.requestItemMaster.ITEMNAME.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@UOM", request.requestItemMaster.UOM.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@CATEGORY", request.requestItemMaster.CATEGORY.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMTYPE", request.requestItemMaster.ITEMTYPE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@AUTOID", request.requestItemMaster.AUTOID.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestItemMaster.RECORDSTATUS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestItemMaster.USERCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_Itemdetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestItemMaster.ITEMCODE });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertEmployeeMasterDAL: " + "Method Name InsertEmployeeMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            
+            return response;
+
+        }
+
+
+    }
+}

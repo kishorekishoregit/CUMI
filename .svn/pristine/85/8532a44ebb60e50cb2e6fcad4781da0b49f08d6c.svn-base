@@ -1,0 +1,295 @@
+﻿jQuery(function ($) {
+
+    BindTable('1');
+
+    function BindTable(type) {
+
+        var table = document.getElementById("dynamic-table-print");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table-print');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetStaockAdjustPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result;
+                var itemcode = JSON.parse(pageload);
+               
+                //$("#ddlitemcode").empty().append('<option value="">Select an Option</option>');
+                //$.each(itemcode, function () {
+                //    $("#ddlitemcode").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMCODE"]));
+                //    $('#ddlitemcode').trigger("chosen:updated");
+                //});
+
+                $("#ddlitemcode").empty().append('<option value="">Select</option>');
+                $.each(itemcode, function () {
+                    $("#ListddlItem").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMNAME"]));
+                    $('#ListddlItem').trigger("chosen:updated");
+                });
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+
+    $('#ddlitemcode').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+        //var OText = optionselected.find("option:selected").text();
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'FetchDetailsByItemCode',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'ITEMCODE': OValue },
+
+            success: function (data) {
+
+                var Res = data;
+                var lotno = JSON.parse(Res);
+                             
+                BindTab(lotno, '1');
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        // TABLE BIND     
+        if (type == '0') {
+            $('#dynamic-table-print').dataTable().fnDestroy();
+            $('#dynamic-table-print').DataTable().destroy(); $('#dynamic-table-print').html('');
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table-print');
+
+            $('#dynamic-table-print').dataTable({
+                 data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bSort": false,
+                "bInfo": false,
+                "bFilter": true,
+                //stateSave: true,
+                "bDestroy": true,
+                "aColumns": [
+                    finalcolsresult,
+                    { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+                columns: [
+
+                    { 'data': 'ITEMCODE' },
+                    { 'data': 'ITEMNAME' },
+                    { 'data': 'LOTNO' },
+                    { 'data': 'BARCODE' },
+                    { 'data': 'QUANTITY' },
+                    { 'data': 'ADJUSTQUANTITY' },
+                   
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+
+                    {
+                        extend: 'excelHtml5',
+                        title: 'StockAdjustment Excel',
+                        text: '<img src="../../Images/excel.png" style="height: 25px;">',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<img src="../../Images/pdf.png" style="height: 25px;">',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'StockAdjustment Pdf'
+
+                    }, {
+                        extend: 'print',
+                        title: 'StockAdjustment Print',
+                        text: '<img src="../../Images/print.png" style="height: 25px;">',
+                        footer: false
+                    }
+                ]
+
+            });
+                   
+        }
+        else {
+            $('#dynamic-table-print tbody').remove();
+            $('#dynamic-table-print thead').remove();
+            $('#dynamic-table-print').dataTable({
+                "language": {
+                    "emptyTable": "StockAdjustment No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false }
+
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+        }
+        $(".loader").hide("slow");
+    }
+
+    $('#btnsubmit').click(function () {
+        
+            UpdateStock();
+    });
+
+    function UpdateStock() {
+        if ($("#ddlitemcode").val() == "") {
+            bootbox.alert({
+                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + "Please Select ItemCode" + '</span>',
+                size: 'small'
+            });
+        }
+        else {
+            $('.loadingGIF').show();
+            //    debugger;
+
+            var itemcode1 = "", itemname1 = "", lotno1 = "", barcode1 = "", quantity1 = "", adqty1 = "";
+
+            jQuery("table.table tbody > tr").each(function () {
+
+                itemcode1 += jQuery('td:eq(0)', this).text() + "^";
+                itemname1 += jQuery('td:eq(1)', this).text() + "^";
+                lotno1 += jQuery('td:eq(2)', this).text() + "^";
+                barcode1 += jQuery('td:eq(3)', this).text() + "^";
+                quantity1 += jQuery('td:eq(4)', this).text() + "^";
+                adqty1 += jQuery('td:eq(5) input', this).val() + "^";
+
+            });
+
+            $.ajax({
+                url: 'InsertStaockAdjust',
+                dataType: "json",
+                type: "POST",
+                data:
+                    $.param({ 'ITEMCODE': itemcode1 })
+                    + '&' + $.param({ 'ITEMNAME': itemname1 })
+                    + '&' + $.param({ 'LOTNO': lotno1 })
+                    + '&' + $.param({ 'BARCODE': barcode1 })
+                    + '&' + $.param({ 'QUANTITY': quantity1 })
+                    + '&' + $.param({ 'ADJUSTQUANTITY': adqty1 }),
+
+                success: function (Result) {
+
+                    var results = Result.split('|');
+                    var output = results[1].substr(1);
+
+                    if (results[0] == 'True') {
+                        $("form").trigger("reset");
+
+                        bootbox.alert({
+                            message: '<span class="text-success"><i class="ace-icon fa fa-check-circle fa-4x"></i><br>' + "Updated Successfully" + '</span>',
+                            size: 'small',
+                            callback: function () {
+                                location.reload();
+                            }
+                        });
+                        $('.loadingGIF').hide();
+                    }
+                    else {
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + "Already Exisit" + '</span>',
+                            size: 'small'
+                        });
+                        $('.loadingGIF').hide();
+                    }
+                }
+            });
+        }
+
+
+    
+
+
+    }
+
+
+    function Clear() {
+        location.reload();
+    };
+
+    $('#btnclear').click(Clear);
+
+
+
+});

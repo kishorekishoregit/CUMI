@@ -1,0 +1,247 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseFGLabelPrint FetchFGLabelPrintPageLoad()
+        {
+
+            ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FGBARCODEPAGELOAD_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_PRNDetails = ds.Tables[0];
+                            response.JS_LOTDetails = ds.Tables[1];
+                            response.JS_FGLablePrintDetails = ds.Tables[2];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchFGLabelPrintPageLoad: " + "Method Name FetchFGLabelPrintPageLoad" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+
+        }
+        public ResponseFGLabelPrint InsertTableFGLabelPrintDAL(RequestFGLabelPrint request)
+        {
+
+            ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+
+                        foreach (FGLablePrintDetailEntity det in request.requestfglabelprintdetails)
+                        {
+
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FGBARCODE_INSERT]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@PRNNO", det.PRNNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE));
+                            cmd.Parameters.Add(new SqlParameter("@LOTSERIALNO", det.SERIALNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", det.NETWEIGHT.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY));
+
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            DataSet ds = new DataSet();
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+
+                                    rowcount++;
+                                }
+
+                            }
+                        }
+
+                        if (request.requestfglabelprintdetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                        }
+
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertTableFGLabelPrintDAL: " + "Method Name InsertTableFGLabelPrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+        public ResponseFGLabelPrint FetchFGLabelPrintGetHiddenValuebyPrnnoDAL(RequestFGLabelPrint request)
+        {
+
+
+            ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHFGLABELPRINT_HIDDENVALUE]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRNNO", request.ReqtfglabelprintHeader.PRNNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqtfglabelprintHeader.ITEMCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_HiddenDetails = ds.Tables[0];
+                            response.JS_PRNDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMLabelPrintGetHiddenValuebyLotnoDAL: " + "Method Name FetchRMLabelPrintGetHiddenValuebyLotnoDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+        }
+        public ResponseFGLabelPrint FetchFGLabelPrintLotNobyPrnNoDAL(RequestFGLabelPrint request)
+        {
+            ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHFGLABELPRINTJPRNNO]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRNNO", request.ReqtfglabelprintHeader.PRNNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_LOTDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchFGLabelPrintLotNobyPrnNoDAL: " + "Method Name FetchFGLabelPrintLotNobyPrnNoDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+        }
+
+        public ResponseFGLabelPrint FetchFGLabelPrintGetHiddenValuebyLotnoDAL(RequestFGLabelPrint request)
+        {
+
+
+            ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHFGLABELPRINT_HIDDENVALUELOTNO]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRNNO", request.ReqtfglabelprintHeader.PRNNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqtfglabelprintHeader.ITEMCODE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@LOTNO", request.ReqtfglabelprintHeader.LOTNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_HiddenDetails = ds.Tables[0];
+                       
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMLabelPrintGetHiddenValuebyLotnoDAL: " + "Method Name FetchRMLabelPrintGetHiddenValuebyLotnoDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+        }
+
+
+    }
+}

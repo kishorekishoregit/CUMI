@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class RMPicklistprintEntity
+    {
+        public string picklistno { get; set; }
+       
+    }
+    public class RequestRMPicklistprint
+    {
+        public RMPicklistprintEntity requestRMPicklistprint { get; set; }
+    }
+    public class ResponseRMPicklistprint
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_Picklistno { get; set; }
+        public DataTable JS_RMPicklist { get; set; }
+        public DataTable JS_RMPicklistdetails { get; set; }
+      
+    }
+}

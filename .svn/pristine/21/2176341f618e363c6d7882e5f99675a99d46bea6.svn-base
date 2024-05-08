@@ -1,0 +1,876 @@
+﻿jQuery(function ($) {
+    var printload = '';
+    BindTable();
+
+
+    function BindTable() {
+
+        var table = document.getElementById("dynamic-table-print");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table-print');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetREMIXBarcodeLabelPrintPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result.split('|');
+
+                var jobprocess = JSON.parse(pageload[0]);
+                var jobprocessdet = JSON.parse(pageload[1]);
+                var resJ = JSON.parse(pageload[2]);
+
+
+                $("#ddljoborderno").empty().append('<option value="">Select an Option</option>');
+                $.each(jobprocess, function () {
+                    $("#ddljoborderno").append($("<option></option>").val(this["JOBPROCESSNO"]).html(this["JOBPROCESSNO"]));
+                    $('#ddljoborderno').trigger("chosen:updated");
+                });
+                $("#ddlitemcode").empty().append('<option value="">Select an Option</option>');
+                $.each(jobprocessdet, function () {
+                    $("#ddlitemcode").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMCODE"]));
+                    $('#ddlitemcode').trigger("chosen:updated");
+                });
+
+
+
+                BindTab(resJ, '1');
+            }
+        });
+        $(".loader").hide("slow");
+    }
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        // TABLE BIND     
+        if (type == '0') {
+            $('#dynamic-table-print').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table-print');
+
+            $('#dynamic-table-print').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bSort": false,
+                "info": false,
+                "ascrollX": "100%",
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                   // 'searchable': true,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                }],
+
+                columnDefs: cols1,
+                columns: [
+
+                   { 'data': 'Job Process No' },
+                   { 'data': 'Item Code' },
+                   { 'data': 'Lot Serial No' },
+                   { 'data': 'Quantity' },
+                    { 'data': 'NetWeight' },
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        title: 'RMLabel Print',
+                        text: '<i class="fa fa-copy bigger-110 pink"></i> <span class="hidden">Copy to clipboard</span>',
+                        titleAttr: 'Copy',
+                        footer: false
+                    },
+
+                    {
+                        extend: 'excelHtml5',
+                        title: 'RMLabel Print',
+                        text: '<i class="fa fa-file-excel-o bigger-110 green"></i> <span class="hidden">Export to Excel</span>',
+                        titleAttr: 'Excel',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+
+                        text: '<i class="fa fa-file-pdf-o bigger-110 red"></i> <span class="hidden">Export to PDF</span>',
+                        titleAttr: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'RMLabel Print',
+
+
+                    }, {
+                        extend: 'print',
+                        title: 'RMLabel Print',
+                        text: '<i class="fa fa-print bigger-110 grey"></i> <span class="hidden">Print</span>',
+                        titleAttr: 'Print',
+                        footer: false
+                    }
+                ]
+            });
+        }
+        else {
+            $('#dynamic-table tbody').remove();
+            $('#dynamic-table thead').remove();
+            $('#dynamic-table-print').dataTable({
+                "language": {
+                    "emptyTable": "RMLabelPrint No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "10%", bSearchable: false, bSortable: false },
+                          { sWidth: "10", bSearchable: false, bSortable: false },
+                              { sWidth: "10%", bSearchable: false, bSortable: false },
+                                { sWidth: "10%", bSearchable: false, bSortable: false },
+                                { sWidth: "10%", bSearchable: false, bSortable: false },
+                                  { sWidth: "10%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+
+        }
+        $(".loader").hide("slow");
+    }
+    $('#btnadd').click(function (event) {
+        var errormessage = "";
+        if ($('#ddljoborderno').val() == "") {
+            errormessage += "Please Select GRN No.</br>";
+        }
+        if ($('#ddlitemcode').val() == "") {
+            errormessage += "Please Select LOT No.</br>";
+        }
+        if ($('#txtquantity').val() <= 0 && $('#txtqty').val() != '') {
+            errormessage += "Please Enter Quantity.</br>"
+        }
+        if (errormessage.length == 0) {
+
+            if ($('#txtquantity').val() == "1") {
+
+                var action = $('#actiontypeadd').html();
+
+                $(".loader").show("slow");
+
+                if (window.FormData !== undefined) {
+
+                    var formData = new FormData();
+                    formData.append('JOBPROCESSNO', $('#ddljoborderno').val());
+                    formData.append('ItemCode', $('#ddlitemcode').val());
+                    formData.append('Quantity', $('#txtquantity').val());
+                    formData.append('NetWeight', $('#hdnnetweight').val());
+                    formData.append('action', action);
+                    $.ajax({
+                        url: 'AddInventoryDetail',
+                        type: "POST",
+                        contentType: false, // Not to set any content header  
+                        processData: false, // Not to process data  
+                        data: formData,
+                        success: function (result) {
+                            var results = result.split('|');
+                            printload = JSON.parse(results[1]);
+                            if (results[0] == 'true') {
+
+                                BindChildTab(printload, '1');
+                                reset();
+                            }
+                            else {
+                                bootbox.alert({
+                                    message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + results[1] + '</span>',
+                                    size: 'small'
+                                });
+                            }
+                        },
+                        error: function (err) {
+                            //alert(err.statusText);
+                        }
+                    });
+
+
+
+                }
+
+            } else {
+                var $row = $(this).closest("tr");
+                var $JOBPROCESSNO = $("#ddljoborderno").val();
+                var $ItemCode = $("#ddlitemcode").val();
+                var $netweight = $("#hdnnetweight").val();
+                var $quantity = $("#txtquantity").val()
+
+                $('#modalview').modal('show');
+                callpopup($JOBPROCESSNO, $ItemCode, $quantity,$netweight);
+            }
+
+
+
+        }
+
+
+        else {
+            bootbox.alert({
+                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + errormessage + '</span>',
+                size: 'small'
+            });
+        }
+    });
+    function callpopup($JOBPROCESSNO, $ItemCode, $quantity, $netweight) {
+        $("#txtsitemcode").val($ItemCode);
+        $("#txtsjoborderno").val($JOBPROCESSNO);
+        $('#txtsquantity').val($quantity);
+        $("#txtsnetweight").val($netweight);
+
+    }
+    $('#btnpopupadd').click(function (event) {
+        var errormessage = "";
+        if ($('#txtsactualweight').val() <= 0 && $('#txtsactualweight').val() != '') {
+            errormessage += "Please Enter Actual Weight.</br>"
+        }
+        if (errormessage.length == 0) {
+
+            var action = $('#actiontypepopupaddd').html();
+
+            $(".loader").show("slow");
+
+            if (window.FormData !== undefined) {
+                var s = $('#txtsactualweight').val();
+                var formData = new FormData();
+                formData.append('jobprocessno', $('#ddljoborderno').val());
+                formData.append('ItemCode', $('#ddlitemcode').val());
+                formData.append('Quantity', $('#txtquantity').val());
+                formData.append('actual', $('#txtsactualweight').val());
+                formData.append('NetWeight', $('#txtsnetweight').val());
+                formData.append('action', action);
+                $.ajax({
+                    url: 'AddPopupInventoryDetail',
+                    type: "POST",
+                    contentType: false, // Not to set any content header  
+                    processData: false, // Not to process data  
+                    data: formData,
+                    success: function (result) {
+                        var results = result.split('|');
+                        printload = JSON.parse(results[1]);
+                        if (results[0] == 'true') {
+
+                            BindPopupChildTab(printload, '1');
+                            $('#txtsactualweight').val('');
+                        }
+                        else {
+                            bootbox.alert({
+                                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + results[1] + '</span>',
+                                size: 'small'
+                            });
+                        }
+                    },
+                   
+                    error: function (err) {
+                        //alert(err.statusText);
+                    }
+                });
+                //$('#ddlgrnno').prop('disabled', true);
+
+
+
+            }
+
+
+
+
+
+        }
+
+
+        else {
+            bootbox.alert({
+                message: '<span class="text-success"><i class="ace-icon fa fa-check-circle fa-4x"></i><br>' + errormessage.replace(/<Br \/>/g, "\n") + '</span>',
+                size: 'small',
+                callback: function () {
+                    location.reload();
+                }
+            });
+            // sweetAlert("", errormessage.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+            $('.loadingGIF').hide();
+        }
+    });
+
+    $('#btnpopupok').click(function (event) {
+
+        if (window.FormData !== undefined) {
+            var s = $('#txtsactualweight').val();
+            var formData = new FormData();
+            formData.append('Quantity', $('#txtquantity').val());
+
+            $(".loader").show("slow");
+
+
+            $.ajax({
+                url: 'OkInventoryDetail',
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data 
+                data: formData,
+                success: function (result) {
+                    var results = result.split('|');
+                    printload = JSON.parse(results[1]);
+                    if (results[0] == 'true') {
+                        BindChildTab(printload, '1');
+                         $('#txtsjoborderno').val('');
+                        $('#txtsquantity').val('');
+                        $('#txtsitemcode').val('');
+                        $('#txtsnetweight').val('');
+                        $('#txtsactualweight').val('');
+                        $('#modalview').modal('hide');
+                        location.reload();
+                    }
+                    else {
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + results[1] + '</span>',
+                            size: 'small'
+                        });
+                    }
+                },
+                error: function (err) {
+                    //alert(err.statusText);
+                }
+            });
+
+
+
+        }
+
+
+    });
+    function BindChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-table-details > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-table-details').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-table-details').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bSort": false,
+                "bInfo": false,
+                "bFilter": false,
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                   { 'data': 'JOBPROCESSNO' },
+                   { 'data': 'ITEMCODE' },
+                   { 'data': 'SERIALNO' },
+                   { 'data': 'QUANTITY' },
+                    { 'data': 'NETWEIGHT' },
+
+                ],
+
+            });
+
+        }
+        else {
+            $('#dynamic-table-details tbody').remove();
+            $('#dynamic-table-details thead').remove();
+            $('#dynamic-table-details').dataTable({
+                "language": {
+                    "emptyTable": "GRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "100%", bSearchable: false, bSortable: false },
+                         { sWidth: "100%", bSearchable: false, bSortable: false },
+                          { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+
+
+    }
+    function BindPopupChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-popuptableDetails > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-popuptableDetails').dataTable().fnDestroy();
+            $('#dynamic-popuptableDetails').DataTable().destroy(); $('dynamic-popuptableDetails').html('');
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-popuptableDetails').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bSort": false,
+                "bInfo": false,
+                "bFilter": false,
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                   { 'data': 'JOBPROCESSNO' },
+                   { 'data': 'ITEMCODE' },
+                   { 'data': 'SERIALNO' },
+                   { 'data': 'QUANTITY' },
+                   { 'data': 'ACTUAL' },
+                    { 'data': 'NETWEIGHT' },
+                   
+
+                ],
+
+            });
+
+        }
+        else {
+            $('#dynamic-popuptableDetails tbody').remove();
+            $('#dynamic-popuptableDetails thead').remove();
+            $('#dynamic-popuptableDetails').dataTable({
+                "language": {
+                    "emptyTable": "GRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "100%", bSearchable: false, bSortable: false },
+                         { sWidth: "100%", bSearchable: false, bSortable: false },
+                          { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+
+
+    }
+    function reset() {
+
+        $('#ddljoborderno').val("");
+        $('#ddljoborderno').prop('disabled', false);
+        $('#ddljoborderno').trigger("chosen:updated");
+        $('#hdnitemcode').val("");
+        $('#hdnitemname').val("");
+        $('#ddlitemcode').val("");
+        $('#ddlitemcode').trigger("chosen:updated");
+        $('#txtquantity').val("");
+        $('#hdnnetweight').val("");
+        $('#hdngrossweight').val("");
+
+
+    }
+
+
+    $("#btnprint").click(function () {
+
+       // alert((dynamic-table-details).fnGetData('td:eq(0)').length);
+        var numCols = $('#dynamic-table-details').DataTable().columns().nodes().length;
+        //alert(numCols);
+        var jobprocessno = "", itemcode = "", itemname = "", serialno = "", quantity = "", actual = "", netweight="";
+        var intcount = 0;
+      
+        if (numCols == 6) {
+            jQuery("table.detailstable tbody > tr").each(function () {
+
+                intcount++;
+                jobprocessno += jQuery('td:eq(0)', this).text() + "^";
+                itemcode += jQuery('td:eq(1)', this).text() + "^";
+                serialno += jQuery('td:eq(2)', this).text() + "^";
+                quantity += jQuery('td:eq(3)', this).text() + "^";
+
+                netweight += jQuery('td:eq(5)', this).text() + "^";
+                actual += jQuery('td:eq(4)', this).text() + "^";
+
+            });
+            jobprocessno = jobprocessno.substring(0, jobprocessno.length - 1);
+            itemcode = itemcode.substring(0, itemcode.length - 1);
+            serialno = serialno.substring(0, serialno.length - 1);
+            quantity = quantity.substring(0, quantity.length - 1);
+            actual = actual.substring(0, actual.length - 1);
+            netweight = netweight.substring(0, netweight.length - 1);
+        }
+        else
+
+        {
+            jQuery("table.detailstable tbody > tr").each(function () {
+
+                intcount++;
+                jobprocessno += jQuery('td:eq(0)', this).text() + "^";
+                itemcode += jQuery('td:eq(1)', this).text() + "^";
+                serialno += jQuery('td:eq(2)', this).text() + "^";
+                quantity += jQuery('td:eq(3)', this).text() + "^";
+
+                netweight += jQuery('td:eq(4)', this).text() + "^";
+              
+
+            });
+            jobprocessno = jobprocessno.substring(0, jobprocessno.length - 1);
+            itemcode = itemcode.substring(0, itemcode.length - 1);
+            serialno = serialno.substring(0, serialno.length - 1);
+            quantity = quantity.substring(0, quantity.length - 1);
+           
+            netweight = netweight.substring(0, netweight.length - 1);
+        }
+
+        var errormessage = "";
+        if (window.FormData !== undefined) {
+            $('.loadingGIF').show();
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'InsertREMIXLabelPrintDetails',
+                dataType: "json",
+                type: "POST",
+
+                //data: $("#validation-form").serialize() + '&' + $.param({ 'actiontype': $("#actiontype").text() }),
+
+                data: $.param({ 'jobprocessno': jobprocessno })
+                + '&' + $.param({ 'itemcode': itemcode })
+                 + '&' + $.param({ 'serialno': serialno })
+                 + '&' + $.param({ 'quantity': quantity })
+                  + '&' + $.param({ 'netweight': netweight })
+                + '&' + $.param({ 'actual': actual }),
+                //  data:formData,
+                success: function (resultjson) {
+                    var Res = resultjson.split('|');
+                    var result = Res[0];
+                    var printdata = Res[1];
+                    var barcodes = Res[2];
+                    if (result.toUpperCase() == "TRUE") {
+                        
+
+                        //BindTab(Res, '1');
+                        $("form").trigger("reset");
+
+
+                        $("#printable").html(printdata);
+
+                        //var barcodearr = barcodes.split("^");
+                        //var COUNT = 0;
+                        //for (var i = 0; i < barcodearr.length; i++) {
+                        //    //var ID = DetailsTable[i].BARCODE;
+                        //    var ID = barcodearr[i];
+                        //    QRCODEPRINT(COUNT, ID);
+                        //    COUNT++;
+
+                        //}
+                        
+                        setTimeout(function () {
+                            printableinner();
+                        }, 20);
+
+                        $('.loadingGIF').hide();
+                        location.reload();
+                        //sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "success");
+                        //setTimeout(function () {
+                        //    reset();
+                        //}, 2000);
+                        
+
+                    }
+                    else {
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                        $('.loadingGIF').hide();
+                    }
+                }
+            });
+        }
+
+
+
+    });
+
+    function QRCODEPRINT(COUNT, ID) {
+        $("#qrcode").empty();
+
+        var qrcode = new QRCode(document.getElementById("qrcode" + COUNT), {
+            width: 120,
+            height: 120
+        });
+        function makeCode() {
+            var elText = ID;
+            qrcode.makeCode(elText);
+        }
+        makeCode();
+    }
+
+    function printableinner() {
+
+        var disp_setting = "toolbar=no,location=no,";
+        disp_setting += "directories=no,menubar=no,";
+        disp_setting += "scrollbars=yes";
+        var content_vlue = document.getElementById("printable").innerHTML;
+        var docprint = window.open("", "", disp_setting);
+        docprint.document.open();
+        docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+        docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+        docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+        docprint.document.write('<head>');
+        docprint.document.write('<style type="text/css">body{ border:0px solid #000;margin:0px;font-family:verdana,Arial;color:#000;font-family:Verdana, Geneva, sans-serif; font-size:8px;}a{color:#000;text-decoration:none;}*{font-size:8px;} small{font-size:30% !important;}table {border-collapse: collapse;}table, td, th {border: 1px solid black;padding:0.5rem 2px;}@page {size: 4in 2in;margin: 1mm;}div#printable {width: 4in;height: 2in;} .qr-panel img{width:50px;}</style> ');
+        docprint.document.write('</head><body onLoad="self.print()">');
+        docprint.document.write(content_vlue);
+        docprint.document.close();
+        docprint.focus();
+
+    }
+    function Clear() {
+        location.reload();
+    };
+
+    $('#btnclear').click(function () {
+        Clear();
+    });
+    $('#ddlitemcode').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+        //var OText = optionselected.find("option:selected").text();
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'FetchREMIXLabelPrintGetHiddenValue',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'joborderNo': OValue },
+            data: $.param({ 'joborderNo': $("#ddljoborderno").val() })
+            + '&' + $.param({ 'itemcode': $("#ddlitemcode").val() }),
+             
+
+            success: function (data) {
+
+                var Res = JSON.parse(data);
+
+
+                $("#hdnitemcode").val(Res[0].ITEMCODE);
+                $("#hdnitemname").val(Res[0].ITEMNAME);
+                $('#hdnnetweight').val(Res[0].NETWEIGHT);
+                $('#hdngrossweight').val(Res[0].GROSSWEIGHT);
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+    $('#ddljoborderno').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+        //var OText = optionselected.find("option:selected").text();
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'FetchREMIXLabelPrintGetLotNoByNO',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'joborderNo': OValue },
+            success: function (data) {
+
+                var Res = data.split('|');
+                var lotno = JSON.parse(Res[0]);
+
+                $("#ddlitemcode").empty().append('<option value="">Select an Option</option>');
+                $.each(lotno, function () {
+                    $("#ddlitemcode").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMCODE"]));
+                    $('#ddlitemcode').trigger("chosen:updated");
+                });
+
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+
+});

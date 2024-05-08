@@ -1,0 +1,64 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class RMPicklistPrintBC
+    {
+        public ResponseRMPicklistprint RMPicklistprintPageLoadBC()
+        {
+            ResponseRMPicklistprint response = new ResponseRMPicklistprint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.RMPicklistprintPageLoadDAL();
+            return response;
+        }
+
+        public ResponseRMPicklistprint FetchRMPicklistprintdetailsBC(RequestRMPicklistprint request)
+        {
+            ResponseRMPicklistprint response = new ResponseRMPicklistprint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchRMPicklistprintdetailsDAL(request);
+            return response;
+
+        }
+
+        public ResponseRMLabelPrint FetchRMLabelPrintGetHdnValueByLotNoBC(RequestRMLabelPrint request)
+        {
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchRMLabelPrintGetHiddenValuebyLotnoDAL(request);
+            return response;
+
+        }
+
+        public ResponseRMLabelPrint InsertTempTableRMLabelPrintBC(RequestRMLabelPrint request)
+        {
+
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();         
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertTempTableRMLabelPrintDAL(request);        
+            return response;
+
+        }
+
+
+        //public List<ErrorItem> Validate(RequestRMLabelPrint request)
+        //{
+        //    List<ErrorItem> err = new List<ErrorItem>();
+        //    if (request.ReqtrmlabelprintHeader.GRNNO == "")
+        //        err.Add(new ErrorItem { DataItem = "Rack Code", ErrorNo = "SSB0010" });
+        //    if (request.ReqtrmlabelprintHeader.LOTNO == "")
+        //        err.Add(new ErrorItem { DataItem = "Rack Name", ErrorNo = "SSB0010" });
+        //    if (request.ReqtrmlabelprintHeader.QUANTITY == "")
+        //        err.Add(new ErrorItem { DataItem = "Location Name", ErrorNo = "SSB0009" });
+
+
+
+        //    return err;
+        //}
+    }
+}

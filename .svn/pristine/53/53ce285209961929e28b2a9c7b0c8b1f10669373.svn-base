@@ -1,0 +1,66 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+
+namespace JKWOODSBC
+{
+   public class ProcessMasterBC
+    {
+        public ResponseProcessMaster FetchProcessMasterPageLoadBC()
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchProcessMasterPageloadDAL();
+            return response;
+        }
+        public ResponseProcessMaster InsertProcessMasterBC(RequestProcessMaster request)
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertProcessMasterDAL(request);
+            }
+            return response;
+        }
+        public ResponseProcessMaster EditProcessMasterbyUnitCodeBC(RequestProcessMaster request)
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.EditProcessMasterDAL(request);
+            return response;
+
+        }
+        public ResponseProcessMaster UpdateProcessMasterBC(RequestProcessMaster request)
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.UpdateProcessMasterDAL(request);
+            }
+            return response;
+
+        }
+        public List<ErrorItem> Validate(RequestProcessMaster request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestprocessmaster.PROCESSNAME == "")
+                err.Add(new ErrorItem { DataItem = "Process Name", ErrorNo = "SSB0009" });
+            if (request.requestprocessmaster.STATUS == "")
+                err.Add(new ErrorItem { DataItem = "Status", ErrorNo = "SSB0010" });
+
+
+
+            return err;
+        }
+    }
+}

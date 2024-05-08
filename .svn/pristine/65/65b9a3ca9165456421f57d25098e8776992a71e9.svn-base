@@ -1,0 +1,27 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class RMQualityBC
+    {
+        public ResponseRMQuality FetchRMQualityPageLoadBC()
+        {
+            ResponseRMQuality response = new ResponseRMQuality();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchRMQualityPageLoadDAL();
+            return response;
+        }
+        public ResponseRMQuality InsertRMQualityBC(RequestRMQuality request)
+        {
+            ResponseRMQuality response = new ResponseRMQuality();
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertRMQualityDAL(request);
+            return response;
+        }
+    }
+}

@@ -1,0 +1,184 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponsePastingProcess ScanBarcodeDAL(RequestPastingProcess request)
+        {
+            ResponsePastingProcess response = new ResponsePastingProcess();
+            try
+            {
+                SqlConnection con = new SqlConnection(connectionstring);
+                SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PASTINGPROCESS_FETCH]", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@BARCODE", request.ReqPastingProcess.BARCODE);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                if (ds != null)
+                {
+                    response.JS_barcodedetails = ds.Tables[1];
+                    response.result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return response;
+        }
+
+        //public ResponsePastingProcess PastingProcessInsertDAL(RequestPastingProcess request)
+        //{
+        //    ResponsePastingProcess response = new ResponsePastingProcess();
+        //    response.ErrorContainer = new List<ErrorItem>();
+        //    try
+        //    {
+        //        DataSet ds = new DataSet();
+
+        //        using (TransactionScope scope = new TransactionScope())
+        //        {
+        //            using (SqlConnection con = new SqlConnection(connectionstring))
+        //            {
+        //                con.Open();
+        //                int rowcount = 0;
+                          
+        //                        foreach (PastingProcessDetailsEntity det in request.requestPastingProcessdetails)
+        //                        {
+
+        //                            SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[PASTING_DETAILSINSERT]", con);
+        //                            cmd1.CommandType = CommandType.StoredProcedure;
+        //                            cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+        //                            cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+        //                            cmd1.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE));
+        //                            SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+        //                            oda1.Fill(ds);
+        //                            if (ds != null)
+        //                            {
+        //                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+        //                                {
+        //                                    response.JS_Labelprintingbarcode = ds.Tables[1];
+        //                                    rowcount++;
+        //                                }
+        //                            }
+        //                        }
+
+
+        //                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestPastingProcessdetails.Count == rowcount)
+        //                {
+        //                    scope.Complete();
+        //                    response.result = true;
+        //                    response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+        //                }
+        //                else
+        //                {
+        //                    response.result = false;
+        //                    response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+        //                }
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+        //        string responselog = createlog("INVOICEInsertDAL: " + "Method Name INVOICEInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+        //        response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+        //        response.result = false;
+
+        //    }
+
+
+        //    return response;
+
+        //}
+
+
+
+
+        public ResponsePastingProcess PastingProcessInsertDAL(RequestPastingProcess request)
+        {
+            ResponsePastingProcess response = new ResponsePastingProcess();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+                DataSet ds1 = new DataSet();
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int rowcount = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PASTING_HEADERINSERT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            
+                                                        
+
+                                foreach (PastingProcessDetailsEntity det in request.requestPastingProcessdetails)
+                                {
+
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[PASTING_DETAILSINSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE));
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds1);
+                                    if (ds1 != null)
+                                    {
+                                        if (ds1.Tables[1].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            response.JS_Labelprintingbarcode = ds1.Tables[0];
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestPastingProcessdetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("INVOICEInsertDAL: " + "Method Name INVOICEInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+    }
+}

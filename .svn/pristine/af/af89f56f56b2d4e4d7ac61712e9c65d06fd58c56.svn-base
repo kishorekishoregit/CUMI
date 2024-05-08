@@ -1,0 +1,306 @@
+﻿jQuery(function ($) {
+
+    function getmonth() {
+        var today = new Date();
+
+        var dd = today.getDate() > 9 ? today.getDate() : '0' + today.getDate();
+        var mm = today.getMonth(); //January is 0!
+        var months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        var yyyy = today.getFullYear();
+
+        var today = dd + '-' + months[mm] + '-' + yyyy;
+        $("#txtgrndate").val(today);
+    }
+
+    BindTable();
+
+    function BindTable() {
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        getmonth();
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GRNUploadPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+               // var pageload = Result.split('|');
+                var pageload = Result;
+                var Supplier = JSON.parse(pageload);
+               // var Item = JSON.parse(pageload[1]);
+               // var GRNDts = JSON.parse(pageload[2]);
+
+                $("#ddlsupplier").empty().append('<option value="">Select an Option</option>');
+                $.each(Supplier, function () {
+                    $("#ddlsupplier").append($("<option></option>").val(this["SUPPLIERCODE"]).html(this["SUPPLIERNAME"]));
+                    $('#ddlsupplier').trigger("chosen:updated");
+                });
+               
+                            
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+
+
+    $("#btnupload").click(function () {
+
+    var fileUpload = document.getElementById("hf");
+    if (fileUpload.value != null) {
+        var uploadFile = new FormData();
+        var files = $("#hf").get(0).files;
+        // Add the uploaded file content to the form data collection
+        if (files.length > 0) {
+            uploadFile.append("CsvDoc", files[0]);
+            $('.loadingGIF').show();
+            $.ajax({
+                url: 'EarningUploads',
+                contentType: false,
+                processData: false,
+                data: uploadFile,
+                type: 'POST',
+                success: function (result) {
+                    var results = result.split('|');
+                    if (results[0] == 'True') {
+                        if ($('#actiontypeaddd').html() == "Update")
+                            $('#actiontypeaddd').html("Add");
+
+                        BindChildTab(JSON.parse(results[1]), '1');
+                        reset();
+                    }
+                    else {
+                        sweetAlert("", results[1].replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                    }
+                   
+                }
+            });
+        }
+        else {
+            $('.loadingGIF').hide();
+            sweetAlert('error-message', "Please Choose File.");
+        }
+    } else {
+        $('.loadingGIF').hide();
+        sweetAlert('error-message', "Please Choose File.");
+    }
+});
+
+
+
+    function BindChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-tableChild > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-tableChild').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-tableChild').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bFilter": false,
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                    { 'data': 'SNO' },
+                    { 'data': 'ITEMCODE' },
+                    { 'data': 'ITEMNAME' },
+                    { 'data': 'LOTNO' },
+                    { 'data': 'QUANTITY' },
+                    { 'data': 'NETWEIGHT' },
+                    { 'data': 'GROSSWEIGHT' },
+                    //{
+
+                    //    'data': 'Remove',
+                    //    'render': function (data, type, full, meta) {
+
+                    //        return '<button type="button" class="remove" data-toggle="tooltip" data-placement="top" title="Remove"><i class="fa fa-remove"></i></button>'
+
+                    //    }
+                    //},
+                     //{
+
+                     //    'data': 'Edit',
+                     //    'render': function (data, type, full, meta) {
+
+                     //        return '<button type="button" class="edit" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></"></i></button>'
+
+                     //    }
+                     //},
+
+                ],
+
+            });
+            //$("#dynamic-tableChild").on("click", ".edit", function () {
+            //    var $row = $(this).closest("tr");    // Find the row
+            //    var $text = $row.find(".sorting_1").text(); // Find the text         
+            //    var Code = $(this).closest('tr').find('td:eq(0)').html();
+            //    var Name = $(this).closest('tr').find('td:eq(1)').html();
+            //    var Qty = $(this).closest('tr').find('td:eq(2)').html();
+            //    var LotNo = $(this).closest('tr').find('td:eq(3)').html();
+            //    var NetWeight = $(this).closest('tr').find('td:eq(4)').html();
+            //    var GrossWeight = $(this).closest('tr').find('td:eq(5)').html();
+            //    var Price = $(this).closest('tr').find('td:eq(6)').html();
+
+            //    $('#ddlitemcode').val(Code);
+            //    $('#ddlitemcode').prop('disabled', true);
+            //    $('#ddlitemcode').trigger("chosen:updated");
+
+            //    $('#txtitemname').val(Name);
+            //    $('#txtquantity').val(Qty);
+            //    $('#txtlotno').val(LotNo);
+            //    $('#txtnetweight').val(NetWeight);
+            //    $('#txtgrossweight').val(GrossWeight);
+            //    $('#txtprice').val(Price);
+            //    $('#actiontypeaddd').html("Update");
+
+            //});
+        }
+        else {
+            $('#dynamic-tableChild tbody').remove();
+            $('#dynamic-tableChild thead').remove();
+            $('#dynamic-tableChild').dataTable({
+                "language": {
+                    "emptyTable": "GRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "100%", bSearchable: false, bSortable: false },
+                         { sWidth: "100%", bSearchable: false, bSortable: false },
+                          { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+        
+    }
+
+
+
+
+    $('#btnsubmit').click(function () {
+
+        if (window.FormData !== undefined) {
+            $('.loadingGIF').show()
+            var formData = new FormData();
+            formData.append('GRNNO', $('#txtgrnno').val());
+            formData.append('GRNDATE', $('#txtgrndate').val());
+            formData.append('SUPPLIER', $('#ddlsupplier').val());
+            formData.append('REFERENCENO', $('#txtreferenceno').val());
+            formData.append('actiontype', $('#actiontype').text());
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'InsertGRNUploadDetails',
+                dataType: "json",
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data  
+
+                data: formData,
+                success: function (data) {
+                    var Res = data.split('|');
+                    var result = Res[0];
+                    var msg = Res[1];
+                    if (result.toUpperCase() == "TRUE") {
+                        $("form").trigger("reset");
+                        $("#actiontype").text("Save")
+
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "success");
+                        Clear();
+                        $('.loadingGIF').hide();
+                    }
+                    else {
+                        $('.loadingGIF').hide();
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                    }
+                }
+            });
+        }
+
+    });
+
+    function Clear() {
+        location.reload();
+      
+    };
+    $('#btnclear').click(Clear);
+
+});

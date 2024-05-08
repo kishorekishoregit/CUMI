@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class MaterialRequestUploadEntity
+    {
+        public string BATCHNO { get; set; }
+        public string SNO { get; set; }
+        public string PARTCODE { get; set; }
+        public string QUANTITY { get; set; }
+        public string USERCODE { get; set; }
+        public List<MaterialRequestUploaddetailsEntity> requestmaterialuploaddetails { get; set; }
+    }
+    public class MaterialRequestUploaddetailsEntity
+    {
+       // public string BATCHNO { get; set; }
+        public string SNO { get; set; }
+        public string PARTCODE { get; set; }
+        public string QUANTITY { get; set; }
+    }
+    public class RequestMaterialUpload
+    {
+        public MaterialRequestUploadEntity ReqMaterialUpload { get; set; }
+        public MaterialRequestUploaddetailsEntity ReqmaterialUploaddetails { get; set; }
+        public List<MaterialRequestUploaddetailsEntity> requestmaterialuploaddetails { get; set; }
+        public List<MaterialRequestUploaddetailsEntity> requestmaterialuploadinvdts { get; set; }
+    }
+    public class ResponseMaterialUpload
+    {
+        public DataTable JS_MaterialUploaddetails { get; set; }
+        public DataTable JS_Batchnodts { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> error { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+
+}

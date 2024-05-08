@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace JKWOODSBC
+{
+   
+    public class ProductionPlanUploadBC
+    {
+        public ResponseProductionPlanUpload ProductionPlanUploadInsertBC(RequestProductionPlanUpload request)
+        {
+            ResponseProductionPlanUpload response = new ResponseProductionPlanUpload();
+            try
+            {
+                response.ErrorContainer = ValidateProductionPlanInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.ProductionPlanUploadInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+        }
+        public List<ErrorItem> ValidateProductionPlanInsert(RequestProductionPlanUpload request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestProductionPlanUploadetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+            return err;
+        }
+    }
+}

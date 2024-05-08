@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace JKWOODSBC
+{
+    public class CustomerMasterBC
+    {
+        public ResponseCustomerMaster FetchCustomerMasterPageLoadBC()
+        {
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchCustomerMasterPageLoadDAL();
+            return response;
+        }
+        public ResponseCustomerMaster InsertCustomerMasterBC(RequestCustomerMaster request)
+        {
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertCustomerMasterDAL(request);
+            }
+            return response;
+
+        }
+        public ResponseCustomerMaster EditCustomerMasterbyBC(RequestCustomerMaster request)
+        {
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.EditCustomerMasterbyDAL(request);
+            return response;
+
+        }
+        public ResponseCustomerMaster UpdateCustomerMasterBC(RequestCustomerMaster request)
+        {
+            ResponseCustomerMaster response = new ResponseCustomerMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.UpdateCustomerMasterDAL(request);
+            }
+            return response;
+
+        }
+        public List<ErrorItem> Validate(RequestCustomerMaster request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestCustomerMaster.CUSTOMERCODE == "")
+                err.Add(new ErrorItem { DataItem = "Customer Code", ErrorNo = "SSB0009" });
+            if (request.requestCustomerMaster.CUSTOMERNAME == "")
+                err.Add(new ErrorItem { DataItem = "Customer Name", ErrorNo = "SSB0009" });
+            if (request.requestCustomerMaster.CUSTOMERADDRESS == "")
+                err.Add(new ErrorItem { DataItem = "Customer Address", ErrorNo = "SSB0009" });
+            if (request.requestCustomerMaster.CUSTOMERSTATUS == "")
+                err.Add(new ErrorItem { DataItem = "Customer Status", ErrorNo = "SSB0010" });
+
+
+
+            return err;
+        }
+    }
+}

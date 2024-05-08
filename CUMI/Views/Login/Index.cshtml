@@ -1,0 +1,109 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90680653-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-90680653-2');
+    </script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Meta -->
+    <meta name="description" content="Responsive Bootstrap 5 Dashboard Template">
+    <meta name="author" content="BootstrapDash">
+
+    <title>CUMI</title>
+
+    <!-- vendor css -->
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/fontawesome-free/css/all.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/ionicons/css/ionicons.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/typicons.font/typicons.css")" />
+
+    <!-- azia CSS -->
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/css/azia.css")" />
+
+</head>
+<body class="az-body layimage">
+    <div class="az-signin-wrapper">
+        <div class="az-card-signin" style=" border-radius: 10px;">
+            @*<h1 class="az-logo">az<span>i</span>a</h1>*@
+            @*<img src="~/Images/cumilogo.png" />*@
+            <img src="~/Images/cumilogo.png" class="logo-icon" alt="logo icon" style="height: 114px;width: 200px;align-self: center;">
+            <hr class="mg-y-30">
+            <div class="az-signin-header" style=" margin-top: -54px;">
+
+                <div class="content">
+                    <div class="form-group">
+                        <label style=" font-size: 14px;">Username</label>
+                        <input type="text" id="txtusername" class="form-control" placeholder="Enter your Username" autocomplete="off" autofocus value="" style="margin-top: 15px; border-radius: 5px;">
+                    </div><!-- form-group -->
+
+                    <div class="form-group">
+                        <label style="margin-top: 17px; font-size: 14px;">Password</label>
+                        <input type="password" id="txtpassword" class="form-control" autocomplete="off" placeholder="Enter your password" value="" style="margin-top: 15px; border-radius: 5px;">
+                    </div><!-- form-group -->
+                </div>
+                <hr class="mg-y-30">
+                <div class="footer" style="margin-top: -50px;text-align:center">
+                    <button class="btn btn-az-primary btn-block" id="btnlogin">
+                        <span class="icon">Login</span>
+                    </button>
+                </div>
+                @*<div style="background-color: white;">
+                <p style='text-align: center;vertical-align: middle;padding-top: 15px;padding-bottom: 15px;'><a href="../../app/CUMI_RMS.apk">Download</a> <span class='bk'>Latest App Version 1.1</span></p>
+
+            </div>*@
+            </div><!-- az-signin-header -->
+            <!-- az-signin-footer -->
+        </div><!-- az-card-signin -->
+
+    </div><!-- az-signin-wrapper -->
+    <div class="container-fluid" style="font-weight: 900; text-align: center;">
+        <span>&copy; 2023. All Rights Reserved.</span>
+    </div><!-- container -->
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ionicons/ionicons.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/azia.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/jquery-2.1.4.min.js")"></script>>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/parsleyjs/parsley.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net-dt/js/dataTables.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net-responsive/js/dataTables.responsive.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-ui/ui/widgets/datepicker.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery.maskedinput/jquery.maskedinput.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/spectrum-colorpicker/spectrum.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ion-rangeslider/js/ion.rangeSlider.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-simple-datetimepicker/jquery.simple-dtpicker.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/pickerjs/picker.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-steps/jquery.steps.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/quill/quill.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/perfect-scrollbar/perfect-scrollbar.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/lightslider/js/lightslider.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.js")"></script>
+    <script src="@Url.Content("~/FuctionScripts/Login.js")"></script>
+    <script>
+        $(function () {
+            'use strict'
+
+        });
+    </script>
+</body>
+</html>
+
+
+

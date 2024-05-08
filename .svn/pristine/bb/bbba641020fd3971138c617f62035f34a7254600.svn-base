@@ -1,0 +1,247 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseRackMaster FetchRackMasterPageLoadDAL()
+        {
+            ResponseRackMaster response = new ResponseRackMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[RackMaster_Fetch]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_RecordStatus = ds.Tables[0];
+                            response.JS_Locationdetails = ds.Tables[1];
+                            response.JS_RackMasterDetails = ds.Tables[2];  // get the User Creation Details
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRackMasterPageLoadDAL: " + "Method Name FetchRackMasterPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+
+            return response;
+        }
+
+        //Fetch User Details By User Code
+        public ResponseRackMaster FetchRackMasterbyRackCodeDAL(RequestRackMaster request)
+        {
+
+
+            ResponseRackMaster response = new ResponseRackMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[RackMaster_FetchRackbycode]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestRackMaster.RACKCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_RackMasterDetails = ds.Tables[0];// get the Shift Details
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRackMasterbyUserCodeDAL: " + "Method Name FetchRackMasterbyUserCodeDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+        //Insert 
+        public ResponseRackMaster InsertRackMasterDAL(RequestRackMaster request)
+        {
+
+            ResponseRackMaster response = new ResponseRackMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[RackMaster_Insert]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestRackMaster.RACKCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RACKNAME", request.requestRackMaster.RACKNAME.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestRackMaster.LOCATIONCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestRackMaster.RECORDSTATUS.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestRackMaster.USERCODE.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_RackMasterDetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestRackMaster.RACKCODE.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertRackMasterDAL: " + "Method Name InsertRackMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+        //Update 
+        public ResponseRackMaster UpdateRackMasterDAL(RequestRackMaster request)
+        {
+
+
+            ResponseRackMaster response = new ResponseRackMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[Masters].[RackMaster_Update]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestRackMaster.RACKCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RACKNAME", request.requestRackMaster.RACKNAME.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestRackMaster.LOCATIONCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestRackMaster.RECORDSTATUS.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestRackMaster.USERCODE.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_RackMasterDetails = ds.Tables[1];// get the Shift Details
+                            response.result = true;
+                        }
+                        response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestRackMaster.RACKCODE.ToUpper() });
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("UpdateRackMasterDAL: " + "Method Name UpdateRackMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+
+        ////Search 
+        //public ResponseRackMaster SearchRackMasterDAL(RequestRackMaster request)
+        //{
+
+        //    ResponseRackMaster response = new ResponseRackMaster();
+        //    response.ErrorContainer = new List<ErrorItem>();
+        //    try
+        //    {
+        //        using (TransactionScope scope = new TransactionScope())
+        //        {
+        //            using (SqlConnection con = new SqlConnection(connectionstring))
+        //            {
+        //                SqlCommand cmd = new SqlCommand("Masters.RackMaster_Search", con);
+        //                cmd.CommandType = CommandType.StoredProcedure;
+        //                cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestRackMaster.RackCode.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@RACKNAME", request.requestRackMaster.RackName.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestRackMaster.Locationcode.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestRackMaster.Recordstatus.Trim().ToUpper()));
+        //                con.Open();
+        //                SqlDataAdapter oda = new SqlDataAdapter(cmd);
+        //                DataSet ds = new DataSet();
+        //                oda.Fill(ds);
+        //                if (ds != null)
+        //                {
+        //                    response.JS_RackMasterDetails = ds.Tables[0];// get the Shift Details
+        //                    response.result = true;
+        //                }
+        //                scope.Complete();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+        //        string responselog = createlog("SearchRackMasterDAL: " + "Method Name SearchRackMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+        //        response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+        //        response.result = false;
+        //    }
+
+
+
+        //    return response;
+        //}
+    }
+}

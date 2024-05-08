@@ -1,0 +1,446 @@
+﻿/*body.light-login {
+    background: url('../../images/bg.jpg') !important;
+}
+.login-layout {
+    background-color: #E4E6E9 !important;
+}
+.login-layout .widget-box{
+    background-color:#fff !important;
+}
+.light-login .widget-box.login-box {
+    border: 1px solid rgba(147, 184, 189,0.8);
+    -webkit-box-shadow: 0pt 2px 5px rgba(105, 108, 109, 0.7), 0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
+    -moz-box-shadow: 0pt 2px 5px rgba(105, 108, 109, 0.7), 0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
+    box-shadow: 0pt 2px 5px rgba(105, 108, 109, 0.7), 0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
+    -webkit-box-shadow: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #FFF;
+}
+.light-login .widget-box.forgot-box{
+    border: 1px solid rgba(147, 184, 189,0.8);
+    -webkit-box-shadow: 0pt 2px 5px rgba(243, 205, 198, 0.7), 0px 0px 8px 5px rgba(243, 205, 198, 0.4) inset;
+    -moz-box-shadow: 0pt 2px 5px rgba(243, 205, 198, 0.7), 0px 0px 8px 5px rgba(243, 205, 198, 0.4) inset;
+    box-shadow: 0pt 2px 5px rgba(243, 205, 198, 0.7), 0px 0px 8px 5px rgba(243, 205, 198, 0.4) inset;
+    -webkit-box-shadow: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #FFF;
+}
+.widget-body {
+    background-color: transparent;
+}
+.login-layout .widget-box .widget-main {
+    padding: 16px 30px 30px;
+    background: none;
+}
+.header.red:after {
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 2px;
+    margin-top: 10px;
+    background: -moz-linear-gradient(left, rgba(243, 205, 198,0) 0%, rgba(243, 205, 198,0.8) 20%, rgba(243, 205, 198,1) 53%, rgba(243, 205, 198,0.8) 79%, rgba(243, 205, 198,0) 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(243, 205, 198,0)), color-stop(20%,rgba(243, 205, 198,0.8)), color-stop(53%,rgba(243, 205, 198,1)), color-stop(79%,rgba(243, 205, 198,0.8)), color-stop(100%,rgba(243, 205, 198,0)));
+    background: -webkit-linear-gradient(left, rgba(243, 205, 198,0) 0%,rgba(243, 205, 198,0.8) 20%,rgba(243, 205, 198,1) 53%,rgba(243, 205, 198,0.8) 79%,rgba(243, 205, 198,0) 100%);
+    background: -o-linear-gradient(left, rgba(243, 205, 198,0) 0%,rgba(243, 205, 198,0.8) 20%,rgba(243, 205, 198,1) 53%,rgba(243, 205, 198,0.8) 79%,rgba(243, 205, 198,0) 100%);
+    background: -ms-linear-gradient(left, rgba(243, 205, 198,0) 0%,rgba(243, 205, 198,0.8) 20%,rgba(243, 205, 198,1) 53%,rgba(243, 205, 198,0.8) 79%,rgba(243, 205, 198,0) 100%);
+    background: linear-gradient(left, rgba(243, 205, 198,0) 0%,rgba(243, 205, 198,0.8) 20%,rgba(243, 205, 198,1) 53%,rgba(243, 205, 198,0.8) 79%,rgba(243, 205, 198,0) 100%);
+}
+.header.red {
+    border-bottom-color: transparent;
+}
+.header.blue:after {
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 2px;
+    margin-top: 10px;
+    background: -moz-linear-gradient(left, rgba(147,184,189,0) 0%, rgba(147,184,189,0.8) 20%, rgba(147,184,189,1) 53%, rgba(147,184,189,0.8) 79%, rgba(147,184,189,0) 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(147,184,189,0)), color-stop(20%,rgba(147,184,189,0.8)), color-stop(53%,rgba(147,184,189,1)), color-stop(79%,rgba(147,184,189,0.8)), color-stop(100%,rgba(147,184,189,0)));
+    background: -webkit-linear-gradient(left, rgba(147,184,189,0) 0%,rgba(147,184,189,0.8) 20%,rgba(147,184,189,1) 53%,rgba(147,184,189,0.8) 79%,rgba(147,184,189,0) 100%);
+    background: -o-linear-gradient(left, rgba(147,184,189,0) 0%,rgba(147,184,189,0.8) 20%,rgba(147,184,189,1) 53%,rgba(147,184,189,0.8) 79%,rgba(147,184,189,0) 100%);
+    background: -ms-linear-gradient(left, rgba(147,184,189,0) 0%,rgba(147,184,189,0.8) 20%,rgba(147,184,189,1) 53%,rgba(147,184,189,0.8) 79%,rgba(147,184,189,0) 100%);
+    background: linear-gradient(left, rgba(147,184,189,0) 0%,rgba(147,184,189,0.8) 20%,rgba(147,184,189,1) 53%,rgba(147,184,189,0.8) 79%,rgba(147,184,189,0) 100%);
+}
+.header.blue {
+    border-bottom-color: transparent;
+}
+.login-box .toolbar {
+    color: #fff;
+    left: 0px;
+    text-align: right;
+    border-top: 1px solid rgb(219, 229, 232);
+    -webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    background: #428bca;
+   }
+.forgot-box .toolbar {
+    color: rgb(127, 124, 124);
+    left: 0px;
+    text-align: right;
+    border-top: 1px solid rgb(219, 229, 232);
+    -webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    background: #C16050;
+}
+.login-layout .widget-box .widget-body .toolbar>div>a {
+    font-size: 15px;
+    font-weight: 400;
+    text-shadow: none;
+}
+.forgot-box .back-to-login-link, .signup-box .back-to-login-link {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: none;
+}
+.login-box .forgot-password-link {
+    color: #fff;
+}
+input[type=email], input[type=url], input[type=search], input[type=tel], input[type=color], input[type=text], input[type=password], input[type=datetime], input[type=datetime-local], input[type=date], input[type=month], input[type=time], input[type=week], input[type=number], textarea{
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset !important;
+    -moz-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset !important;
+    box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6) inset !important;
+}
+.btn-block {
+    display: block;
+    width: 100% !important;
+}
+.header{
+    text-align:center;
+        font-weight: 500;
+}*/
+/*******************
+LOGIN FORM STYLESHEET
+by: Sudhakar Sukumar
+*******************/
+
+/*******************
+SELECTION STYLING
+*******************/
+
+::selection {
+	color: #fff;
+	background: #f676b2; /* Safari */
+}
+::-moz-selection {
+	color: #fff;
+	background: #f676b2; /* Firefox */
+}
+
+/*******************
+BODY STYLING
+*******************/
+
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body {
+
+    padding: 0;
+    height: 100%;
+    background-image: url(../../images/bg.jpg);
+    background-size: cover;
+
+
+ 
+}
+
+#wrapper {
+	/* Center wrapper perfectly */
+	width: 300px;
+	height: 400px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -150px;
+	margin-top: -200px;
+}
+
+/* Download Button (Demo Only) */
+.download {
+	display: block;
+	position: absolute;
+	float: right;
+	right: 25px;
+	bottom: 25px;
+	padding: 5px;
+	
+	font-weight: bold;
+	font-size: 11px;
+	text-align: right;
+	text-decoration: none;
+	color: rgba(0,0,0,0.5);
+	text-shadow: 1px 1px 0 rgba(256,256,256,0.5);
+}
+
+.download:hover {
+	color: rgba(0,0,0,0.75);
+	text-shadow: 1px 1px 0 rgba(256,256,256,0.5);
+}
+
+.download:focus {
+	bottom: 24px;
+}
+
+/*
+.gradient {
+	width: 600px;
+	height: 600px;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	margin-left: -300px;
+	margin-top: -300px;
+	
+	background: url(../images/gradient.png) no-repeat;
+}
+*/
+
+.gradient {
+	/* Center Positioning */
+	width: 600px;
+	height: 600px;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	margin-left: -300px;
+	margin-top: -300px;
+	
+	/* Fallback */ 
+	
+	
+	/* CSS3 Gradient */
+	/*background-image: -webkit-gradient(radial, 0% 0%, 0% 100%, from(rgba(213,246,255,1)), to(rgba(213,246,255,0))) !important;
+	background-image: -webkit-radial-gradient(50% 50%, 40% 40%, rgba(213,246,255,1), rgba(213,246,255,0)) !important;
+	background-image: -moz-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0)) !important;
+	background-image: -ms-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0)) !important;
+	background-image: -o-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0)) !important;*/
+}
+
+/*******************
+LOGIN FORM
+*******************/
+
+.login-form {
+    width: 300px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 5;
+    background: #f3f3f3;
+    border: 0px solid #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+
+
+/*******************
+HEADER
+*******************/
+
+.login-form .header {
+    background: #fff;
+    padding: 25px 30px 0px 30px;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+}
+
+
+.login-form .header h1 {
+    margin-top: 0px;
+    text-align: center;
+    
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 34px;
+    color: #414848;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 1);
+    margin-bottom: 10px;
+}
+
+.login-form .header span {
+	font-size: 11px;
+	line-height: 16px;
+	color: #678889;
+	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+}
+
+/*******************
+CONTENT
+*******************/
+
+.login-form .content {
+	padding: 15px;
+}
+
+/* Input field */
+.login-form .content .form-control {
+	width: 100% !important;
+	padding: 6px 12px !important;
+    height:auto !important;
+	font-size: 14px !important;
+	color: #9d9e9e !important;
+	text-shadow: 1px 1px 0 rgba(256,256,256,1.0) !important;
+	
+	background: #fff !important;
+	border: 1px solid #fff !important;
+	border-radius: 5px !important;
+	
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.50) !important;
+	-moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50) !important;
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50) !important;
+}
+
+/* Second input field */
+.login-form .content .password, .login-form .content .pass-icon {
+	margin-top: 25px;
+}
+
+.login-form .content .form-control:hover {
+	background: #dfe9ec !important;
+	color: #414848 !important;
+}
+
+.login-form .content .form-control:focus {
+	background: #dfe9ec !important;
+	color: #414848 !important;
+	
+	box-shadow: inset 0 1px 2px rgba(0,0,0,0.25) !important;
+	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25) !important;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25) !important;
+}
+
+.user-icon, .pass-icon {
+	width: 36px;
+	height: 36px;
+	display: none;
+	position: absolute;
+	left: 0px;
+	padding-right: 2px;
+	z-index: 3;
+	
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+}
+
+.user-icon {
+	top:195px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
+	background: rgb(11, 76, 159) url(../../images/user-icon.png) no-repeat center;	
+}
+
+.pass-icon {
+	top:255px;
+	background: rgb(11, 76, 159) url(../../images/pass-icon.png) no-repeat center;
+}
+
+/* Animation */
+.input, .user-icon, .pass-icon, .button, .register {
+	transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+}
+
+/*******************
+FOOTER
+*******************/
+
+.login-form .footer {
+	padding: 15px;
+	overflow: auto;
+	width:100%;
+    height:100%;
+	background: #d4dedf;
+	border-top: 1px solid #fff;
+	box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);
+	-moz-box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);
+	-webkit-box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);
+}
+
+/* Login button */
+.login-form .footer .button {
+	padding: 6px 12px;
+	
+	font-weight: 300;
+	font-size: 18px;
+	color: #fff;
+	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
+	width:100% !important;
+	background: #56c2e1;
+	border: 1px solid #46b3d3;
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
+	-moz-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
+	-webkit-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
+}
+
+.login-form .footer .button:hover {
+	background: #3f9db8;
+	border: 1px solid rgba(256,256,256,0.75);
+	
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.login-form .footer .button:focus {
+	position: relative;
+	bottom: -1px;
+	
+	background: #56c2e1;
+	
+	box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
+	-moz-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
+	-webkit-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
+}
+
+/* Register button */
+.login-form .footer .register {
+	display: block;
+	float: right;
+	padding: 10px;
+	margin-right: 20px;
+	
+	background: none;
+	border: none;
+	cursor: pointer;
+	
+	
+	font-weight: 300;
+	font-size: 18px;
+	color: #414848;
+	text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
+}
+
+.login-form .footer .register:hover {
+	color: #3f9db8;
+}
+
+.login-form .footer .register:focus {
+	position: relative;
+	bottom: -1px;
+}
+.login-form .help-block{
+    position: relative;
+    bottom: 3px;
+    text-align: right;
+    color: red;
+    height: 0px;
+    margin: 0;
+}
+.login-form .form-group{
+    margin-bottom:0px !important;
+}

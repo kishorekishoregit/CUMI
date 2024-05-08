@@ -1,0 +1,27 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class LocationStockReportBC
+    {
+        public ResponseLocationStockReport FetchLocationStockPageLoadBC()
+        {
+            ResponseLocationStockReport response = new ResponseLocationStockReport();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchLocationStockPageLoadDAL();
+            return response;
+        }
+        public ResponseLocationStockReport LocationStockDetailsBC(RequestLocationStockReport request)
+        {
+            ResponseLocationStockReport response = new ResponseLocationStockReport();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.LocationStockDetailsDAL(request);
+            return response;
+        }
+    }
+}

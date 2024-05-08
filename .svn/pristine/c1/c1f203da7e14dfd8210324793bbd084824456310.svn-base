@@ -1,0 +1,232 @@
+﻿jQuery(function ($) {
+    BindTable();
+
+    function BindTable() {
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetMaterialrequestPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result;
+                var batchnodts = JSON.parse(pageload);
+
+                $("#ddlbatchno").empty().append('<option value="">Select an Option</option>');
+                $.each(batchnodts, function () {
+                    $("#ddlbatchno").append($("<option></option>").val(this["BATCHNO"]).html(this["BATCHNO"]));
+                    $('#ddlbatchno').trigger("chosen:updated");
+                });
+
+
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+    $("#btnsubmit").click(function () {
+        var fileUpload = document.getElementById("hf");
+        var uploadFile = new FormData();
+        var files = $("#hf").get(0).files;
+        if (files.length > 0) {
+            uploadFile.append("CsvDoc", files[0]);
+            uploadFile.append('BATCHNO', $('#ddlbatchno').val());
+            $('.loadingGIF').show();
+            $.ajax({
+                url: 'InsertMaterialUploadDetails',
+                contentType: false,
+                processData: false,
+                data: uploadFile,
+                type: 'POST',
+                success: function (result) {
+                    var results = result.split('|');
+                    if (results[0] == 'True') {
+                        bootbox.alert({
+                            message: '<span class="text-success"><i class="ace-icon fa fa-check-circle fa-4x"></i><br>' + "File Upload Successfully" + '</span>',
+                            size: 'small',
+                            callback: function () {
+                                location.reload();
+                            }
+                        });
+                    }
+                    else {
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + results[1] + '</span>',
+                            size: 'small'
+
+                        });
+                    }
+
+                }
+            });
+        }
+        else {
+
+            bootbox.alert({
+                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + "Please Choose File" + '</span>',
+                size: 'small',
+
+            });
+        }
+    })
+
+    $('#btnupload').click(function (result) {
+        var fileUpload = document.getElementById("hf");
+        if (fileUpload.value != null) {
+            var uploadFile = new FormData();
+            var files = $("#hf").get(0).files;
+            // Add the uploaded file content to the form data collection
+            if (files.length > 0) {
+                uploadFile.append("CsvDoc", files[0]);
+                $('.loadingGIF').show();
+                $.ajax({
+                    url: 'MaterialEarningUploads',
+                    contentType: false,
+                    processData: false,
+                    data: uploadFile,
+                    type: 'POST',
+                    success: function (result) {
+                        var results = result.split('|');
+                        if (results[0] == 'True') {
+                            if ($('#actiontypeaddd').html() == "Update")
+                                $('#actiontypeaddd').html("Add");
+                            BindTab(JSON.parse(results[1]), '1');
+                        }
+                        else {
+                            bootbox.alert({
+                                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + results[1] + '</span>',
+                                size: 'small',
+                                callback: function () {
+                                    location.reload();
+                                }
+                            });
+                            //sweetAlert("", results[1].replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                        }
+                    }
+                });
+            }
+            else {
+                bootbox.alert({
+                    message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + "Please Choose File" + '</span>',
+                    size: 'small',
+                    callback: function () {
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+    });
+    function BindTab(ResData, type) {
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-tableChild > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-tableChild').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+                    //optionally do some type detection here for render function
+                });
+            });
+            $.each(cols, function (index, item) {
+                item.title, item.targets
+                cols1.push
+                    ({
+                        title: item.title,
+                        targets: index
+                    });
+                cols1DATA.push
+                    ({
+                        data: item.title,
+                    });
+                finalcolsresult += 'null' + ',';
+            });
+            $('#dynamic-tableChild').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bSort": false,
+                "bInfo": false,
+                "bFilter": false,
+                "aColumns": [
+                    finalcolsresult,
+                    { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+                columnDefs: cols1,
+                columns: [
+
+                    { 'data': 'SNO' },
+                    { 'data': 'PARTCODE' },
+                    { 'data': 'QUANTITY' },
+
+                ],
+            });
+        }
+        else {
+            $('#dynamic-tableChild tbody').remove();
+            $('#dynamic-tableChild thead').remove();
+            $('#dynamic-tableChild').dataTable({
+                "language": {
+                    "emptyTable": "GRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false }
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+        }
+    }
+
+
+
+
+    function Clear() {
+        location.reload();
+    };
+
+    $('#btnclear').click(Clear);
+});

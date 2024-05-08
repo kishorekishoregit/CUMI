@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class RMQualityEntity
+    {
+        public string ID { get; set; }
+        public string GRNNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string REJECTEDQUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string REMARKS { get; set; }
+        public string LOTSTATUS { get; set; }
+        public string USERCODE { get; set; }
+        public List<RMQualityDetailEntity> requestrmqualitydetails { get; set; }
+    }
+
+    public class RMQualityDetailEntity
+    {
+        public string ID { get; set; }
+        public string GRNNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string REJECTEDQUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string REMARKS { get; set; }
+        public string LOTSTATUS { get; set; }
+
+    }
+
+    public class RequestRMQuality
+    {
+        public RMQualityEntity requestRMQuality { get; set; }
+        public RMQualityDetailEntity Reqrmqualitydetails { get; set; }
+        public List<RMQualityDetailEntity> requestrmqualitydetails { get; set; }
+    }
+    public class ResponseRMQuality
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_RecordStatus { get; set; }
+        public DataTable JS_RMQualitydetails { get; set; }
+      
+    }
+}

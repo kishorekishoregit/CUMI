@@ -1,0 +1,198 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using System.Transactions;
+using System.Data.SqlClient;
+using System.Data;
+using System.Web.Script.Serialization;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseSupplierMaster FetchSupplierMasterPageLoadDAL()
+        {
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("Masters.SupplierMaster_Fetch", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+
+                            response.JS_RecordStatus = ds.Tables[0];
+                            response.JS_Supplierdetails = ds.Tables[1];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchSupplierMasterPageLoadDAL: " + "Method Name FetchSupplierMasterPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+        public ResponseSupplierMaster InsertSupplierMasterDAL(RequestSupplierMaster request)
+        {
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("Masters.SupplierMaster_Insert", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERCODE", request.requestSupplierMaster.SUPPLIERCODE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERNAME", request.requestSupplierMaster.SUPPLIERNAME.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERADDRESS", request.requestSupplierMaster.SUPPLIERADDRESS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERSTATUS", request.requestSupplierMaster.SUPPLIERSTATUS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestSupplierMaster.USERCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_Supplierdetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestSupplierMaster.SUPPLIERCODE });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertSupplierMasterDAL: " + "Method Name InsertSupplierMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+        public ResponseSupplierMaster EditSupplierMasterbyDAL(RequestSupplierMaster request)
+        {
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("Masters.SupplierMaster_EditSupplierDetails", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ID", request.requestSupplierMaster.HDSUP.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Supplierdetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("EditSupplierMasterbyDAL: " + "Method Name EditSupplierMasterbyDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+        public ResponseSupplierMaster UpdateSupplierMasterDAL(RequestSupplierMaster request)
+        {
+            ResponseSupplierMaster response = new ResponseSupplierMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("Masters.SupplierMaster_Update", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ID", request.requestSupplierMaster.HDSUP.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERCODE", request.requestSupplierMaster.SUPPLIERCODE.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERNAME", request.requestSupplierMaster.SUPPLIERNAME.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERADDRESS", request.requestSupplierMaster.SUPPLIERADDRESS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SUPPLIERSTATUS", request.requestSupplierMaster.SUPPLIERSTATUS.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestSupplierMaster.USERCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_Supplierdetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestSupplierMaster.SUPPLIERCODE });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("UpdateSupplierMasterDAL: " + "Method Name UpdateSupplierMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+    }
+}

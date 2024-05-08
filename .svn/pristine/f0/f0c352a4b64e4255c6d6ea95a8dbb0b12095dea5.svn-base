@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+  
+    public class PacketConversion
+    {
+        public string conversionno { get; set; }
+        public string conversiondate { get; set; }
+        public string itemcode { get; set; }
+        public string quantity { get; set; }
+        public string uom { get; set; }
+        public string citemcode { get; set; }
+        public string cquantity { get; set; }
+        public string cuom { get; set; }
+        public string remarks { get; set; }
+        public string usercode { get; set; }
+
+
+       
+
+    }
+
+    public class RequestPacketConversion
+    {
+        public List<PacketConversion> requestPacketConversionlist { get; set; }
+        public PacketConversion ReqPacketConversion { get; set; }
+        
+
+    }
+    public class ResponsePacketConversion
+    {
+
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable JS_PacketConversionDetails { get; set; }
+
+        public DataTable JS_Itemcode { get; set; }
+
+        public DataTable JS_CItemcode { get; set; }
+
+        public DataTable JS_UOM { get; set; }
+
+        public DataTable JS_CUOM { get; set; }
+
+
+
+    }
+}

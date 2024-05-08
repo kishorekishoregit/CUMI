@@ -1,0 +1,547 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @*<script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+
+            gtag('config', 'UA-90680653-2');
+        </script>*@
+
+    <!-- Required meta tags -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="overview &amp; stats">
+
+    <title>CUMI</title>
+    <link rel="shortcut icon" href="~/Images/cumi_small.png">
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/fontawesome-free/css/all.min.css")" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap-grid.min.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/ionicons/css/ionicons.min.css")" />
+    <!-- text fonts -->
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/typicons.font/typicons.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/lib/morris.js/morris.css")" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/ion-rangeslider/css/ion.rangeSlider.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/jquery-steps/jquery.steps.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/pickerjs/picker.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/ion-rangeslider/css/ion.rangeSlider.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/lightslider/css/lightslider.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/quill/quill.core.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/quill/quill.bubble.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/quill/quill.snow.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/flag-icon-css/css/flag-icon.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/jqvmap/jqvmap.min.css")" rel="stylesheet" />
+    @*<link href="@Url.Content("~/azia/v1.0.0/lib/spectrum-colorpicker/themes/sp-dark.css")" rel="stylesheet" />*@
+    <link href="@Url.Content("~/azia/v1.0.0/lib/spectrum-colorpicker/spectrum.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/datatables.net-dt/css/jquery.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/amazeui-datetimepicker/css/amazeui.datetimepicker.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/ionicons/css/ionicons.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/ionicons/css/ionicons-core.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/@fortawesome/fontawesome-free/css/fontawesome.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/@fortawesome/fontawesome-free/css/brands.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/jquery-ui-slider/jquery-ui.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/line-awesome/css/line-awesome.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/line-awesome/css/line-awesome-font-awesome.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/cryptofont/css/cryptofont.min.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("~/azia/v1.0.0/scss/bootstrap/_alerts.scss")" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap-grid.rtl.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap-utilities.rtl.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap.rtl.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/eva-icons/style/eva-icons.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap-grid.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/jquery-ui-slider/jquery-ui.structure.min.css")" rel="stylesheet" />
+    @*<link href="@Url.Content("~/azia/v1.0.0/lib/jquery-ui-slider/jquery-ui.theme.min.css")" rel="stylesheet" />*@
+    <link href="@Url.Content("~/azia/v1.0.0/lib/bootstrap/css/bootstrap-utilities.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/@fortawesome/fontawesome-free/css/regular.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/fullcalendar/fullcalendar.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/@fortawesome/fontawesome-free/css/solid.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/azia/v1.0.0/lib/select2/css/select2.min.css")" rel="stylesheet" />
+    <!-- azia CSS -->
+    <link href="" @Url.Content("~/azia/v1.0.0/lib/@fortawesome/fontawesome-free/css/all.min.css")  rel="stylesheet" />
+    <link rel="stylesheet" href="@Url.Content("../../azia/v1.0.0/css/azia.css")" />
+    <link href="@Url.Content("~/azia/v1.0.0/css/azia.min.css")" rel="stylesheet" />
+
+
+
+</head>
+<body class="az-body az-body-sidebar">
+
+    <div class="az-sidebar az-sidebar-sticky">
+        <div>
+            <img style="width: 170px;height: 100px;margin-left: 35px;margin-top: 25px;" src="~/Images/cumilogo.png" />
+        </div>
+        <div class="az-sidebar-body ps">
+            <ul class="nav">
+                <li class="nav-item" id="DASHBOARD">
+                    <a href="/Home" class="nav-link"><i class="typcn typcn-home"></i>Dashboard</a>
+                </li>
+
+                <li class="nav-item" id="USER">
+                    <a href="" class="nav-link with-sub"><i class="icon ion-ios-person"></i>Admin</a>
+                    <ul class="nav-sub">
+                        <li class="nav-sub-item" id="UAC001">
+                            <a href="../User/UserCreation" class="nav-sub-link">User Creation</a>
+                        </li>
+                        <li class="nav-sub-item" id="UAC002">
+                            <a href="../User/UserAuthentication" class="nav-sub-link">User Authentication</a>
+                        </li>
+
+                    </ul>
+                </li><!-- nav-item -->
+                <li class="nav-item" id="MASTER">
+                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i>Master</a>
+                    <ul class="nav-sub">
+
+                        <li class="nav-sub-item" id="MAS001">
+                            <a href="../Masters/PlantMaster" class="nav-sub-link">Plant Master</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="MAS002">
+                            <a href="../Masters/WarehouseMaster" class="nav-sub-link">Warehouse Master</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="MAS003">
+                            <a href="../Masters/WarehouseLocationMaster" class="nav-sub-link">Warehouse Location Master</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="MAS004">
+                            <a href="../Masters/FGPlantMaster" class="nav-sub-link">FG Master</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="MAS005">
+                            <a href="../Masters/MoldMaster" class="nav-sub-link">Mould Master</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="MAS006">
+                            <a href="../Masters/ChildPartMaster" class="nav-sub-link">Child Part Master</a>
+                        </li>
+                        <li class="nav-sub-item" id="MAS007">
+                            <a href="../Masters/BOMMaster" class="nav-sub-link">BOM Master</a>
+                        </li>
+                        <li class="nav-sub-item" id="MAS008">
+                            <a href="../Masters/SupplierMaster" class="nav-sub-link">Supplier Master</a>
+                        </li>
+                    </ul>
+                </li> @*nav-item*@
+                <li class="nav-item" id="TRANSACTION">
+                    <a href="" class="nav-link with-sub"><i class="typcn typcn-book"></i>Transaction</a>
+                    <ul class="nav-sub">
+                        <li class="nav-sub-item" id="TRA001">
+                            <a href="../Transaction/MoldRFIDAssignment" class="nav-sub-link">Mould RFID Assignment</a>
+                        </li>
+                        <li class="nav-sub-item" id="TRA002">
+                            <a href="../Transaction/ProductionOrderAssign" class="nav-sub-link">Mould Production Order</a>
+                        </li>
+                        <li class="nav-sub-item" id="TRA003">
+                            <a href="../Transaction/MoldIssueConfirmation" class="nav-sub-link">Mould Issue Confirmation</a>
+                        </li>
+                        <li class="nav-sub-item" id="TRA004">
+                            <a href="../Transaction/MoldShotCount" class="nav-sub-link">Mould Shot Count Entry</a>
+                        </li>
+                        <li class="nav-sub-item" id="TRA005">
+                            <a href="../Transaction/RDCPicklistAssign" class="nav-sub-link">RDC Picklist Assign</a>
+                        </li>
+                        <li class="nav-sub-item" id="TRA006">
+                            <a href="../Transaction/MoldReceiptRDC" class="nav-sub-link">Mould Receipt RDC</a>
+                        </li>
+                    </ul>
+                </li> @*nav-item*@
+                <li class="nav-item" id="UPLOADS">
+                    <a href="" class="nav-link with-sub"><i class="typcn typcn-document-text"></i>File Uploads</a>
+                    <ul class="nav-sub">
+                        <li class="nav-sub-item" id="FUP001">
+                            <a href="../Transaction/ProductionOrderFileUpload" class="nav-sub-link">Production Order FileUpload</a>
+                        </li>
+                        <li class="nav-sub-item" id="FUP002">
+                            <a href="../Transaction/MoldPressCountFileUpload" class="nav-sub-link">Mould Press Count FileUpload</a>
+                        </li>
+                        <li class="nav-sub-item" id="FUP003">
+                            <a href="../Transaction/RDCPicklistFileUpload" class="nav-sub-link">RDC Picklist FileUpload</a>
+                        </li>
+                    </ul>
+                </li> @*nav-item*@
+                <li class="nav-item" id="PRINT">
+                    <a href="" class="nav-link with-sub"><i class="typcn typcn-printer"></i>Print</a>
+                    <ul class="nav-sub">
+                        <li class="nav-sub-item" id="PRT001">
+                            <a href="../Print/MoldPicklistPrint" class="nav-sub-link">Mould Picklist Print</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" id="REPORT">
+                    <a href="" class="nav-link with-sub"><i class="icon ion-md-eye"></i>Report</a>
+                    <ul class="nav-sub">
+                        <li class="nav-sub-item" id="RPT001">
+                            <a href="../Report/MoldInwardOrInterlinkingReport" class="nav-sub-link">Mould Inward/Interlinking Report</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="RPT002">
+                            <a href="../Report/MoldPutAwayReport" class="nav-sub-link">Mould PutAway Report</a>
+                        </li>
+
+                        <li class="nav-sub-item" id="RPT003">
+                            <a href="../Report/LocationWiseMoldStockReport" class="nav-sub-link">Location Wise Mould Stock Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT004">
+                            <a href="../Report/WarehouseTransactionsReport" class="nav-sub-link">Warehouse Transactions Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT005">
+                            <a href="../Report/MoldScrappingReport" class="nav-sub-link">Mould Scrapping Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT006">
+                            <a href="../Report/MoldNearbyExpiryOrExpiredReport" class="nav-sub-link">Mould Nearby Expiry/Expired Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT007">
+                            <a href="../Report/MoldStockandHistoricalDataReport" class="nav-sub-link">Mould Stock and Historical Data Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT008">
+                            <a href="../Report/MoldStatusReport" class="nav-sub-link">Mould Status Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT009">
+                            <a href="../Report/ShotCountMoldReport" class="nav-sub-link">Mould Shot Count Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT010">
+                            <a href="../Report/PhysicalStockReport" class="nav-sub-link">Physical Stock Report</a>
+                        </li>
+                        <li class="nav-sub-item" id="RPT011">
+                            <a href="../Report/MoldReconditionReport" class="nav-sub-link">Mold Recondition Report</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div><!-- az-sidebar-body -->
+    </div><!-- az-sidebar -->
+
+
+    <div class="az-content az-content-dashboard-two">
+        <div class="az-header" style="margin-bottom: 20px;margin-left:10px">
+            <div class="container-fluid">
+                <div class="az-header-left">
+                    <a href="" id="azSidebarToggle" class="az-header-menu-icon"><span></span></a>
+                </div><!-- az-header-left -->
+
+
+                <div class="az-header-right">
+                    <div class="user-info ps-3">
+                        <p id="loginuser" class="user-name mb-0" style="font-weight: 900;" readonly></p>
+                    </div>
+                    <div class="dropdown az-profile-menu">
+                        <a href="" class="new"><i class="icon ion-ios-person" style="border:2px solid black"></i></a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
+                                <i class="typcn typcn-power-outline"> </i>
+                                Logout
+                                @using (Html.BeginForm("logoutnew", "Login", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+                                    //@Html.AntiForgeryToken()
+                                }
+
+                            </a>
+                        </div><!-- dropdown-menu -->
+                    </div>
+                </div><!-- az-header-right -->
+            </div><!-- container -->
+        </div><!-- az-header -->
+        <div class="az-content-body divscroll">
+            @RenderBody()
+        </div><!-- az-content-body -->
+
+    </div><!-- az-content -->
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script src="@Url.Content("~/azia/v1.0.0/js/jquery-2.1.4.min.js")"></script>
+    <!-- ace scripts -->
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery/jquery.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/select2/js/select2.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/bootstrap/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/select2/js/select2.full.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ionicons/ionicons.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/parsleyjs/parsley.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ionicons/ionicons/ionicons.esm.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/azia.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net/js/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net-dt/js/dataTables.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net-responsive/js/dataTables.responsive.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-ui/ui/widgets/datepicker.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery.maskedinput/jquery.maskedinput.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/spectrum-colorpicker/spectrum.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-ui-slider/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/jquery.inputlimiter.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ion-rangeslider/js/ion.rangeSlider.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/perfect-scrollbar/perfect-scrollbar.common.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-simple-datetimepicker/jquery.simple-dtpicker.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/pickerjs/picker.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery-steps/jquery.steps.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/quill/quill.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/perfect-scrollbar/perfect-scrollbar.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ionicons/ionicons/ionicons.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/ionicons/ionicons/ionicons.esm.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/lightslider/js/lightslider.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/morris.js/morris.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/chart.morris.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jqvmap/jquery.vmap.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/jquery.vmap.sampledata.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/raphael/raphael.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jqvmap/maps/jquery.vmap.canada.js")"></script>
+    <script src="@Url.Content("../../FuctionScripts/common.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery.flot/jquery.flot.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery.flot/jquery.flot.pie.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/jquery.flot/jquery.flot.resize.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/js/chart.flot.js")"></script>
+    @RenderSection("Scripts", required: false)
+    <script>
+        $(function () {
+            'use strict'
+
+            $('.az-sidebar .with-sub').on('click', function (e) {
+                e.preventDefault();
+                $(this).parent().toggleClass('show');
+                $(this).parent().siblings().removeClass('show');
+            })
+
+            $(document).on('click touchstart', function (e) {
+                e.stopPropagation();
+
+                // closing of sidebar menu when clicking outside of it
+                if (!$(e.target).closest('.az-header-menu-icon').length) {
+                    var sidebarTarg = $(e.target).closest('.az-sidebar').length;
+                    if (!sidebarTarg) {
+                        $('body').removeClass('az-sidebar-show');
+                    }
+                }
+            });
+
+
+            $('#azSidebarToggle').on('click', function (e) {
+                e.preventDefault();
+
+                if (window.matchMedia('(min-width: 992px)').matches) {
+                    $('body').toggleClass('az-sidebar-hide');
+                } else {
+                    $('body').toggleClass('az-sidebar-show');
+                }
+            })
+
+            /* ----------------------------------- */
+            /* Dashboard content */
+
+            $('#compositeline').sparkline('html', {
+                lineColor: '#cecece',
+                lineWidth: 2,
+                spotColor: false,
+                minSpotColor: false,
+                maxSpotColor: false,
+                highlightSpotColor: null,
+                highlightLineColor: null,
+                fillColor: '#f9f9f9',
+                chartRangeMin: 0,
+                chartRangeMax: 10,
+                width: '100%',
+                height: 20,
+                disableTooltips: true
+            });
+
+            $('#compositeline2').sparkline('html', {
+                lineColor: '#cecece',
+                lineWidth: 2,
+                spotColor: false,
+                minSpotColor: false,
+                maxSpotColor: false,
+                highlightSpotColor: null,
+                highlightLineColor: null,
+                fillColor: '#f9f9f9',
+                chartRangeMin: 0,
+                chartRangeMax: 10,
+                width: '100%',
+                height: 20,
+                disableTooltips: true
+            });
+
+            $('#compositeline3').sparkline('html', {
+                lineColor: '#cecece',
+                lineWidth: 2,
+                spotColor: false,
+                minSpotColor: false,
+                maxSpotColor: false,
+                highlightSpotColor: null,
+                highlightLineColor: null,
+                fillColor: '#f9f9f9',
+                chartRangeMin: 0,
+                chartRangeMax: 10,
+                width: '100%',
+                height: 20,
+                disableTooltips: true
+            });
+
+            $('#compositeline4').sparkline('html', {
+                lineColor: '#cecece',
+                lineWidth: 2,
+                spotColor: false,
+                minSpotColor: false,
+                maxSpotColor: false,
+                highlightSpotColor: null,
+                highlightLineColor: null,
+                fillColor: '#f9f9f9',
+                chartRangeMin: 0,
+                chartRangeMax: 10,
+                width: '100%',
+                height: 20,
+                disableTooltips: true
+            });
+
+
+            var morrisData = [
+                { y: 'Oct 01', a: 95000, b: 70000 },
+                { y: 'Oct 05', a: 75000, b: 55000 },
+                { y: 'Oct 10', a: 50000, b: 40000 },
+                { y: 'Oct 15', a: 75000, b: 65000 },
+                { y: 'Oct 20', a: 50000, b: 40000 },
+                { y: 'Oct 25', a: 80000, b: 90000 },
+                { y: 'Oct 30', a: 75000, b: 65000 }
+            ];
+
+            new Morris.Bar({
+                element: 'morrisBar1',
+                data: morrisData,
+                xkey: 'y',
+                ykeys: ['a', 'b'],
+                labels: ['Online', 'Offline'],
+                barColors: ['#560bd0', '#00cccc'],
+                preUnits: '$',
+                barSizeRatio: 0.55,
+                gridTextSize: 11,
+                gridTextColor: '#494c57',
+                gridTextWeight: 'bold',
+                gridLineColor: '#999',
+                gridStrokeWidth: 0.25,
+                hideHover: 'auto',
+                resize: true,
+                padding: 5
+            });
+
+            $('#vmap2').vectorMap({
+                map: 'usa_en',
+                showTooltip: true,
+                backgroundColor: '#fff',
+                color: '#60adff',
+                colors: {
+                    mo: '#9fceff',
+                    fl: '#60adff',
+                    or: '#409cff',
+                    ca: '#005cbf',
+                    tx: '#005cbf',
+                    wy: '#005cbf',
+                    ny: '#007bff'
+                },
+                hoverColor: '#222',
+                enableZoom: false,
+                borderWidth: 1,
+                borderColor: '#fff',
+                hoverOpacity: .85
+            });
+
+        });
+
+    </script>
+    <script type="text/javascript">
+
+        var loginUrl='@Url.Action("logoutnew", "Login")';
+        var extendMethodUrl='@Url.Action("ExtendSession","Home")';
+
+        $(document).ready(function(){
+            SessionTimeout.schedulePopup();
+
+        });
+
+        window.SessionTimeout = (function() {
+            var _timeLeft, _popupTimer, _countDownTimer;
+            var stopTimers = function() {
+                window.clearTimeout(_popupTimer);
+                //window.clearTimeout(_countDownTimer);
+            };
+            var updateCountDown = function() {
+                //var min = Math.floor(_timeLeft / 60);
+                //var sec = _timeLeft % 60;
+                //if(sec < 10)
+                //    sec = "0" + sec;
+
+                //document.getElementById("CountDownHolder").innerHTML = min + ":" + sec;
+
+                //if(_timeLeft > 0) {
+                //    _timeLeft--;
+                //    _countDownTimer = window.setTimeout(updateCountDown, 1000);
+                //} else  {
+                document.location = loginUrl;
+                //}
+            };
+            var showPopup = function() {
+                //$("#divPopupTimeOut").show();
+                //_timeLeft = 60;
+                updateCountDown();
+            };
+            var schedulePopup = function() {
+                //$("#divPopupTimeOut").hide();
+                stopTimers();
+                _popupTimer = window.setTimeout(showPopup, @PopupShowDelay);
+            };
+            var hidePopup=function(){
+                //$("#divPopupTimeOut").hide();
+                document.location = loginUrl;
+            };
+            //var sendKeepAlive = function() {
+            //    stopTimers();
+            //    $("#divPopupTimeOut").hide();
+            //    $.ajax({
+            //        type: "GET",
+            //        url: extendMethodUrl,
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        success: function successFunc(response) {
+            //            SessionTimeout.schedulePopup();
+            //        },
+            //        error:function(){
+            //        }
+            //    });
+            //};
+            return {
+                schedulePopup: schedulePopup,
+                //sendKeepAlive: sendKeepAlive,
+                hidePopup:hidePopup,
+                stopTimers:stopTimers,
+            };
+
+        })();
+
+    </script>
+    <style>
+        /*        .az-body{
+            overflow-y:hidden;
+        }*/
+    </style>
+</body>
+</html>
+@functions {
+    public int PopupShowDelay
+    {
+        get
+        {
+            return 1000 * (Convert.ToInt32(FormsAuthentication.Timeout.TotalSeconds) - 130);
+        }
+    }
+}
+
+
+
+
+

@@ -1,0 +1,366 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+using System.Data.SqlClient;
+using System.Data;
+using System.Web.Script.Serialization;
+using System.Globalization;
+
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseFormingPlanEntry PageloadFormingPlanDAL()
+        {
+
+            ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FORMINGPLANENTRY_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.FormingPlanHeader = ds.Tables[0];
+                            response.FormingDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("PageloadFormingPlanDAL: " + "Method Name PageloadFormingPlanDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+
+
+
+        public ResponseFormingPlanEntry FormingPlanItemnameFetchDAL(RequestFormingPlanEntry request)
+        {
+            ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FORMINGPLANENTRY_ITEMNAMEFETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqFormingPlanEntry.ITEMCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Itemdetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FormingItemnameFetchDAL: " + "Method Name FormingItemnameFetchDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+
+
+
+
+        public ResponseFormingPlanEntry FormingPlanInsertDAL(RequestFormingPlanEntry request)
+        {
+            ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int rowcount = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FORMINGENTRY_HEADERINSERT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@FORMINGPLANNO", request.ReqFormingPlanEntry.FormingPlantNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@FORMINGPLANDATE", request.ReqFormingPlanEntry.FormingPlantDate == "" ? null : Convert.ToDateTime(request.ReqFormingPlanEntry.FormingPlantDate).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                       
+                        cmd.Parameters.Add(new SqlParameter("@REMARKS", request.ReqFormingPlanEntry.Remarks.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.ReqFormingPlanEntry.USERCODE.Trim()));
+
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                            {
+                                foreach (FormingPlanDetailEntity det in request.FormingPlanDetailEntity)
+                                {
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[FORMINGENTRY_DETAILSINSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@FORMINGPLANNO", request.ReqFormingPlanEntry.FormingPlantNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+                                     cmd1.Parameters.Add(new SqlParameter("@WEIGHT", det.WEIGHT.Trim()));
+                                   
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.FormingPlanDetailEntity.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FormingPlanInsertDAL: " + "Method Name FormingPlanInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+
+        public ResponseFormingPlanEntry FormingPlanEditDtsDAL(RequestFormingPlanEntry request)
+        {
+            ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FORMINGPLANENTRY_EDIT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@FORMINGPLANNO", request.ReqFormingPlanEntry.FormingPlantNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.FormingPlanHeader = ds.Tables[0];
+                            response.FormingDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FormingPlanEditDtsDAL: " + "Method Name FormingPlanEditDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+        public ResponseFormingPlanEntry FormingplanUpdateDAL(RequestFormingPlanEntry request)
+        {
+            ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                int totalcount = 0;
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int barcode = 0;
+                        int rowcount = 0, rowcount1 = 0, totalqty = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FORMINGPLANENTRY_HEADERUPDATE]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@FORMINGPLANNO", request.ReqFormingPlanEntry.FormingPlantNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@FORMINGPLANDATE", request.ReqFormingPlanEntry.FormingPlantDate == "" ? null : Convert.ToDateTime(request.ReqFormingPlanEntry.FormingPlantDate).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                        cmd.Parameters.Add(new SqlParameter("@REMARKS", request.ReqFormingPlanEntry.Remarks.Trim()));
+                        
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.ReqFormingPlanEntry.USERCODE.Trim()));
+
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                            {
+                                foreach (FormingPlanDetailEntity det in request.FormingPlanDetailEntity)
+                                {
+                                    //totalqty += Convert.ToInt32(det.QUANTITY);
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[FORMINGENTRY_DETAILSINSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@FORMINGPLANNO", request.ReqFormingPlanEntry.FormingPlantNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@WEIGHT", det.WEIGHT.Trim()));
+                                   
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                        {
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.FormingPlanDetailEntity.Count == rowcount)
+                        {
+                            totalcount++;
+                        }
+                        if (request.FormingPlanDetailEntity.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FormingplanUpdateDAL: " + "Method Name FormingplanUpdateDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+
+
+        public ResponseFormingPlanEntry FPNViewDtsDAL(RequestFormingPlanEntry request)
+        {
+            ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FPNENTRY_VIEW]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@FPNNO", request.ReqFormingPlanEntry.FormingPlantNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.FormingDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FPNViewDtsDAL: " + "Method Name FPNViewDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+    }
+}

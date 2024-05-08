@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78FB399B-D77C-439F-BD69-820697083C48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JKWOODSBC</RootNamespace>
+    <AssemblyName>JKWOODSBC</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JKWOODSDAC">
+      <HintPath>..\JKWOODSDAC\bin\Debug\JKWOODSDAC.dll</HintPath>
+    </Reference>
+    <Reference Include="JKWOODSENTITY">
+      <HintPath>..\JKWOODSENTITY\bin\Debug\JKWOODSENTITY.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BinMasterBC.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="CustomerMasterBC.cs" />
+    <Compile Include="DispatchPlanEntryBC.cs" />
+    <Compile Include="EmployeeMasterBC.cs" />
+    <Compile Include="FGLabelPrintBC.cs" />
+    <Compile Include="FormingPlanBC.cs" />
+    <Compile Include="InvoiceCreationBC.cs" />
+    <Compile Include="InvoicePrintBC.cs" />
+    <Compile Include="LocationStockReportBC.cs" />
+    <Compile Include="PacketConversionBC.cs" />
+    <Compile Include="GRNEntryBC.cs" />
+    <Compile Include="GRNUploadBC.cs" />
+    <Compile Include="ItemMasterBC.cs" />
+    <Compile Include="LocationMasterBC.cs" />
+    <Compile Include="LoginBC.cs" />
+    <Compile Include="PastingProcessBC.cs" />
+    <Compile Include="PRNEntryBC.cs" />
+    <Compile Include="ProcessMasterBC.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QCEntryBC.cs" />
+    <Compile Include="RackMasterBC.cs" />
+    <Compile Include="REMIXBarcodelabelBC.cs" />
+    <Compile Include="RemixJobProcessBC.cs" />
+    <Compile Include="RemixQualityBC.cs" />
+    <Compile Include="RMPicklistPrintBC.cs" />
+    <Compile Include="RMLabelPrintBC.cs" />
+    <Compile Include="RMQualityBC.cs" />
+    <Compile Include="SRNEntryBC.cs" />
+    <Compile Include="StockAdjustmentBC.cs" />
+    <Compile Include="StockReportBC.cs" />
+    <Compile Include="SupplierMasterBC.cs" />
+    <Compile Include="UserAuthenticationBC.cs" />
+    <Compile Include="UserCreationBC.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

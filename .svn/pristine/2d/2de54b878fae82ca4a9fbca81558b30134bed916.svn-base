@@ -1,0 +1,205 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseREMIXBarcodeLabelPrint REMIXBarcodeLabelPrintDAL()
+        {
+
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[REMIXBARCODEPAGELOAD_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_JobProcessno = ds.Tables[0];
+                            response.JS_JobProcessdetails = ds.Tables[1];
+                            response.JS_REMIXLablePrintDetails = ds.Tables[2];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("REMIXBarcodeLabelPrintDAL: " + "Method Name REMIXBarcodeLabelPrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+
+        }
+        public ResponseREMIXBarcodeLabelPrint InsertTableREMIXMLabelPrintDAL(RequestREMIXBarcodeLabelPrint request)
+        {
+
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+
+                        foreach (REMIXBarcodelabelDetailEntity det in request.requestremixlabelprintdetails)
+                        {
+
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[REMIXBARCODE_INSERT]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@JOBPROCESSNO", det.JOBPROCESSNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTSERIALNO", det.SERIALNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", det.NETWEIGHT.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE.Trim().ToUpper()));
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            DataSet ds = new DataSet();
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+
+                                    rowcount++;
+                                }
+
+                            }
+                        }
+
+                        if (request.requestremixlabelprintdetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                        }
+
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertTableREMIXMLabelPrintDAL: " + "Method Name InsertTableREMIXMLabelPrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+        public ResponseREMIXBarcodeLabelPrint FetchREMIXLabelPrintGetHiddenValue(RequestREMIXBarcodeLabelPrint request)
+        {
+
+
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHREMIXLABELPRINT_HIDDENVALUE]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@JOBPROCCESSNO", request.ReqremixlabelprintHeader.JOBPROCESSNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqremixlabelprintHeader.ITEMCODE.Trim()));
+                       
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Hiddendetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchREMIXLabelPrintGetHiddenValue: " + "Method Name FetchREMIXLabelPrintGetHiddenValue" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+        }
+        public ResponseREMIXBarcodeLabelPrint FetchREMIXLabelPrintNobyJOBNODAL(RequestREMIXBarcodeLabelPrint request)
+        {
+
+
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHREMIXLABELPRINTJOBPROCESSNO]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@JOBPROCESSNO", request.ReqremixlabelprintHeader.JOBPROCESSNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_No = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchREMIXLabelPrintNobyJOBNODAL: " + "Method Name FetchREMIXLabelPrintNobyJOBNODAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+    }
+}

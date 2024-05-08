@@ -1,0 +1,243 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+
+        public ResponseLocationMaster FetchLocationMasterPageLoadDAL()
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("Masters.LocationMaster_Fetch", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+
+                            response.JS_RecordStatus = ds.Tables[0];
+                            response.JS_LocationDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchLocationMasterPageLoadDAL: " + "Method Name FetchLocationMasterPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+
+        public ResponseLocationMaster InsertLocationMasterDAL(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[LocationMaster_Insert]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestLocationMaster.LOCATIONCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONNAME", request.requestLocationMaster.LOCATIONNAME.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@CAPACITY", request.requestLocationMaster.CAPACITY.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestLocationMaster.RECORDSTATUS.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestLocationMaster.USERCODE.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_LocationDetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestLocationMaster.LOCATIONCODE.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertLocationMasterDAL: " + "Method Name InsertLocationMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+
+        public ResponseLocationMaster UpdateLocationMasterDAL(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[LocationMaster_Update]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestLocationMaster.LOCATIONCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONNAME", request.requestLocationMaster.LOCATIONNAME.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@CAPACITY", request.requestLocationMaster.CAPACITY.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestLocationMaster.RECORDSTATUS.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestLocationMaster.USERCODE.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_LocationDetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestLocationMaster.LOCATIONNAME.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("UpdateLocationMasterDAL: " + "Method Name UpdateLocationMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+
+        public ResponseLocationMaster EditLocationMasterbyLocationcodeDAL(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[locationMaster_EditLocationDetails]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestLocationMaster.LOCATIONCODE.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_LocationDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("EditLocationMasterbyLocationcodeDAL: " + "Method Name EditLocationMasterbyLocationcodeDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+        public ResponseLocationMaster GetLocationCodeprintDAL(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[LocationMaster_FetchLocationBycodePrint]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        //cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestLocationMaster.LocationCode.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_LocationDetails = ds.Tables[0];// get the Shift Details
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("GetLocationCodeprintDAL: " + "Method Name GetLocationCodeprintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+    }
+}

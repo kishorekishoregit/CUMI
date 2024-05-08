@@ -1,0 +1,35 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+namespace JKWOODSBC
+{
+    public class InvoiceUploadBC
+    {
+        public ResponseInvoiceUpload InvoiceUploadInsertBC(RequestInvoiceUpload request)
+        {
+            ResponseInvoiceUpload response = new ResponseInvoiceUpload();
+            try
+            {
+                response.error = ValidateInvoiceUpload(request);
+                if (response.error.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.InvoiceUploadInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+        }
+        public List<ErrorItem> ValidateInvoiceUpload(RequestInvoiceUpload request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestinvoiceuploaddetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+            return err;
+        }
+    }
+}

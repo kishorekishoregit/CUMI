@@ -1,0 +1,212 @@
+﻿@{
+    ViewBag.Title = "MoldPicklistPrint";
+}
+
+<div class="page-content">
+    <div class="row">
+        <div id="fuelux-wizard-container" class="no-steps-container">
+
+            <div class="card bd-0">
+
+                <div class="card-body bd bd-t-0">
+
+                    <div class="card-header tx-medium bd-0 tx-white bg-indigo">
+                        Mould Picklist Print
+
+                    </div><!-- card-header -->
+
+
+                    <div class="row row-sm" style=" margin-top: 25px;">
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <div id="slWrapper3" class="parsley-select">
+                                <label class="control-label" for="ddlstatus">Picklist No<span class="text-danger" tabindex="1">*</span>:</label>
+                                <select class="form-control select2" id="ddlmoldpicklistno" data-parsley-class-handler="#slWrapper3" data-parsley-errors-container="#slErrorContainer3" name="ddlmoldpicklistno" required>
+                                </select>
+                                <input type="hidden" id="hdautoid" />
+                            </div>
+                            <div id="slErrorContainer3"></div>
+                        </div>
+                    </div>
+
+                    <div class="wrapper">
+                        <table id="dynamic-table1" class="table table-striped table-bordered table-hover">
+                            <thead>
+
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="wizard-actions" style="text-align: center !important; margin-top: 50px; margin-bottom: 20px;">
+
+                        <button class="btn btn-az-secondary" id="btnsubmit" type="submit" title="Save" tabindex="7">
+                            <span id="actiontype">Generate</span>
+                            <i class="typcn typcn-bookmark icon-on-left"></i>
+                        </button>
+                        <a class="btn btn-danger btn-sm" id="btnclear" title="Clear" tabindex="8">
+                            <span id="actiontype">Clear</span>
+                            <i class="typcn typcn-social-at-circular icon-on-left"></i>
+                        </a>
+                        <button class="btn btn-dark" id="btnPrint" type="submit" title="print" tabindex="7">
+                            <span id="actiontype">Print</span>
+                            <i class="typcn typcn-printer icon-on-left"></i>
+                        </button>
+
+                    </div>
+
+                    <div class="card-header tx-medium bd-0 tx-white bg-indigo" style="border-radius: 5px;">
+                        Mould Picklist Print Details
+                    </div><!-- card-header -->
+
+                    <div id="dynamic-table_wrapper" class="dataTables_wrapper no-footer" style="margin-top: 20px;">
+                        <table id="dynamic-table" class="table table-striped table-bordered table-hover checkupload">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div><!-- card-body -->
+        <div class="widget-box1" style="margin-top: 25px;">
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div id="fuelux-wizard-container" class="no-steps-container">
+
+                        <div class="card-body table-border-style">
+                            <div style="background-color:white;margin-left: 10px;margin-right: 10px;" id="dvContents">
+                                <style>
+                                    table, td, th {
+                                        border: 1px solid black;
+                                    }
+
+                                    table {
+                                        border-collapse: collapse;
+                                        width: 100%;
+                                    }
+
+                                    th {
+                                        height: 50px;
+                                    }
+
+                                    div.bor > table > tbody > tr > td, div.bor > table > tbody > tr > th {
+                                        border: 1px solid transparent !important;
+                                    }
+                                </style>
+                                <table width="100%">
+                                    <tbody>
+                                        <tr>
+
+
+                                            <th style="border-right-color:#ffffff;"><img src="~/Images/cumi_small.png" style="width: 150px; height: 40px; margin-left:10px; " /></th>
+                                            <th style="height: 40px;text-align:center; border-right-color:#ffffff">
+                                                <h2 style="">&nbsp;<strong>Mould PickList</strong></h2>
+                                            </th>
+                                            <th style="border-right-color: #ffffff">&nbsp;Warehouse Picker:</th>
+                                            <th id="ptnwarehousepicker">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table style="height: 23px;" width="100%">
+                                    <tbody>
+                                        <tr>
+
+                                            <td>
+                                                <div class="bor">
+                                                    <table style="height: 62px;" width="100%">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>&nbsp;Picklist No:</th>
+                                                                <th id="ptnpicklistno">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                                <th>&nbsp;Picklist Date:</th>
+                                                                <th id="ptnPicklistDate">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                                                <th>&nbsp;Production Order No:</th>
+                                                                <th id="ptnproductionorderno">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+                                                            </tr>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table style="height: 21px;" width="100%">
+                                    <thead>
+                                        <tr style="text-align: center;">
+                                            <th style="text-align: center;" width="50px">SNO.</th>
+                                            <th style="text-align: center;" width="90px">Item Code</th>
+                                            <th style="text-align: center;" width="90px">Barcode</th>
+                                            <th style="text-align: center;" width="90px">Quantity</th>
+                                            <th style="text-align: center;" width="90px">Location</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rptgrid"></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div><!-- /.widget-main -->
+            </div><!-- /.widget-body -->
+        </div>
+    </div>
+</div>
+<div class="loadingGIF" align="center">
+    <img src="~/Content/spiral.gif" alt="" />
+</div>
+<link href="~/Content/AjaxLoader.css" rel="stylesheet" />
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTables
+            var dataTable = $('#exa').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Mould Master',
+                        text: '<img src="../../Images/excel.png" title="Excel" style="height: 25px;">',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<img src="../../Images/pdf.png" title="PDF" style="height: 25px;">',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'Child Part Master'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Child Part Master',
+                        text: '<img src="../../Images/print.png" title="Print" style="height: 25px;">',
+                        footer: false
+                    }
+                ]
+            });
+
+            // Call the function you want to execute when the screen is loaded
+            // functionToCall();
+        });
+    </script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.js")"></script>
+    <script src="@Url.Content("~/FuctionScripts/MoldPicklistReport.js")"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    @*<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>*@
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+}

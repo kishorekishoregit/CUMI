@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+
+namespace JKWOODSENTITY
+{
+   public class ProcessMasterEntity
+    {
+        public string AUTOID { get; set; }
+        public string PROCESSNAME { get; set; }
+        public string STATUS { get; set; }
+        public string USERCODE { get; set; }
+    }
+    public class RequestProcessMaster
+    {
+        public ProcessMasterEntity requestprocessmaster { get; set; }
+    }
+    public class ResponseProcessMaster
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable Recordstatus { get; set; }
+        public DataTable Processdetails { get; set; }
+
+    }
+}

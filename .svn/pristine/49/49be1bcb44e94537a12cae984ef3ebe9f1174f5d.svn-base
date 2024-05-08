@@ -1,0 +1,99 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseInvoiceUpload InvoiceUploadInsertDAL(RequestInvoiceUpload request)
+        {
+            ResponseInvoiceUpload response = new ResponseInvoiceUpload();
+            response.error = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection sqlcon = new SqlConnection(connectionstring))
+                    {
+                        sqlcon.Open();
+                        int rowcount = 0;
+                        foreach (InvoiceUploaddetailsEntity det in request.requestinvoiceuploaddetails)
+                        {
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[INVOICEUPLOAD_HEADERINSERT]",sqlcon);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@INVOICENO", det.INVOICENO.Trim()));
+                         //   cmd.Parameters.Add(new SqlParameter("@INVOICEDATE", det.INVOICEDATE.Trim()));
+                            cmd.Parameters.AddWithValue("@INVOICEDATE", string.IsNullOrEmpty(det.INVOICEDATE.ToString()) ? null : det.INVOICEDATE.ToString());
+                            // cmd.Parameters.Add(new SqlParameter("@INVOICEDATE", det.INVOICEDATE == "" ? null : Convert.ToDateTime(request.ReqInvoiceUpload.INVOICEDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                            cmd.Parameters.Add(new SqlParameter("@SUPPLIERNAME", det.SUPPLIERNAME.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@REFERENCENO", det.REFERENCENO.Trim()));
+
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                {
+                                    foreach (InvoiceUploaddetailsEntity det1 in request.requestinvoiceuploadinvdts)
+                                    {
+
+                                        SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[INVOICEUPLOAD_DETAILSINSERT]", sqlcon);
+                                        cmd1.CommandType = CommandType.StoredProcedure;
+                                        cmd1.Parameters.Add(new SqlParameter("@INVOICENO", ds.Tables[0].Rows[0][2]));
+                                        cmd1.Parameters.Add(new SqlParameter("@ITEMCODE", det1.ITEMCODE.Trim()));
+                                        cmd1.Parameters.Add(new SqlParameter("@QUANTITY", det1.QUANTITY));
+
+                                        SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                                        oda1.Fill(ds);
+                                        if (ds != null)
+                                        {
+                                            if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                            {
+                                                rowcount++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestinvoiceuploadinvdts.Count == rowcount)
+                            {
+                                scope.Complete();
+                                response.result = true;
+                                response.error.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                            }
+                            else
+                            {
+                                response.result = false;
+                                response.error.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InvoiceUploadInsertDAL: " + "Method Name InvoiceUploadInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.error.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+    }
+}

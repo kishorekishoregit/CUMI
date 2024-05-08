@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "EmployeeMaster";
+}
+
+<div class="row">
+    <div id="fuelux-wizard-container" class="no-steps-container">
+
+        <div class="card bd-0">
+
+            <div class="card-body bd bd-t-0">
+                <form class="form-horizontal clearfix" id="Employee-form" name="myform" action="@Url.Content("~/Masters/EmployeeMaster")" method="post">
+                    <div class="card-header tx-medium bd-0 tx-white bg-indigo">
+                        Employee Master
+
+                    </div><!-- card-header -->
+                    <div class="row row-sm" style=" margin-top: 25px;">
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Employee Code: <span class="tx-danger">*</span></label>
+                            <input id="txtemployeecode" class="form-control" name="txtemployeecode" placeholder="Employee Code" type="text" required="" autofocus maxlength="100" tabindex="1" autocomplete="off">
+                            <input type="hidden" id="hdautoid">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Employee Name: <span class="tx-danger">*</span></label>
+                            <input id="txtemployeename" class="form-control" name="txtemployeename" placeholder="Employee Name" type="text" required="" maxlength="100" tabindex="2">
+
+
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <div id="slWrapper2" class="parsley-select">
+                                <label class="control-label" for="ddlldepartment">Department<span class="text-danger">*</span>:</label>
+                                <select class="form-control select2" id="ddlldepartment" data-parsley-class-handler="#slWrapper2" data-parsley-errors-container="#slErrorContainer2" name="ddlldepartment" tabindex="3" required>
+                                </select>
+                            </div>
+                            <div id="slErrorContainer2"></div>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label">Email Id: <span class="tx-danger">*</span></label>
+                            <input id="txtmailid" class="form-control" name="txtmailid" placeholder="Email Id" type="email" required="" tabindex="4">
+                        </div>
+
+                    </div>
+
+                    <div class="row row-sm" style=" margin-top: 25px;">
+
+
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <label class="form-control-label" for="txtnumber">Contact No: <span class="tx-danger">*</span></label>
+                            <input id="txtnumber" class="form-control" name="txtnumber" placeholder="Contact No" type="number" required="" min="0" oninput="this.value = Math.abs(this.value)" tabindex="5">
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <div id="slWrapper1" class="parsley-select">
+                                <label class="control-label" for="ddlPlant">Plant<span class="text-danger">*</span>:</label>
+                                <select class="form-control select2" id="ddlPlant" data-parsley-class-handler="#slWrapper1" data-parsley-errors-container="#slErrorContainer1" name="ddlPlant" tabindex="6" required>
+                                </select>
+                                <div id="slErrorContainer1"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-lg-3 mg-t-20 mg-md-t-0">
+                            <div id="slWrapper3" class="parsley-select">
+                                <label class="control-label" for="ddlstatus">Employee Status<span class="text-danger" tabindex="7">*</span>:</label>
+                                <select class="form-control select2" id="ddlstatus" data-parsley-class-handler="#slWrapper3" data-parsley-errors-container="#slErrorContainer3" name="ddlstatus" required>
+                                </select>
+                            </div>
+                            <div id="slErrorContainer3"></div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="wizard-actions" style="text-align: center !important; margin-top: 50px; margin-bottom: 20px;">
+
+                        <button class="btn btn-az-secondary" id="btnsubmit" type="submit" tabindex="4">
+                            <span id="actiontype">Save</span>
+                            <i class="typcn typcn-bookmark icon-on-left"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" type="submit" id="btnclear" tabindex="5">
+                            <span id="actiontype">Clear</span>
+                            <i class="typcn typcn-social-at-circular icon-on-left"></i>
+                        </button>
+
+
+                    </div>
+                </form>
+                <div class="card-header tx-medium bd-0 tx-white bg-indigo" style="border-radius: 5px;">
+                    Employee Master Details
+                </div><!-- card-header -->
+
+                <div id="dynamic-table_wrapper" class="dataTables_wrapper no-footer" style="margin-top: 20px;">
+                    <table id="dynamic-table" class="table">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div><!-- card-body -->
+
+
+</div>
+
+@section Scripts
+{
+
+
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.js")"></script>
+    <script src="@Url.Content("~/FuctionScripts/EmployeeMaster.js")"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    @*<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>*@
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+}
+

@@ -1,0 +1,54 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class MaterialRequestUploadBC
+    {
+        public ResponseMaterialUpload PageloadMaterialRequestBC()
+        {
+            ResponseMaterialUpload response = new ResponseMaterialUpload();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PageloadMaterialRequestDAL();
+            return response;
+        }
+        public ResponseMaterialUpload MaterialUploadInsertBC(RequestMaterialUpload request)
+        {
+
+            ResponseMaterialUpload response = new ResponseMaterialUpload();
+            try
+            {
+                response.ErrorContainer = ValidateMaterialUpload(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.MaterialUploadInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+
+
+        public List<ErrorItem> ValidateMaterialUpload(RequestMaterialUpload request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if ((request.ReqMaterialUpload.BATCHNO == "") || request.ReqMaterialUpload.BATCHNO.Equals(null))
+                err.Add(new ErrorItem { DataItem = "Batch No.", ErrorNo = "SSB0009" });
+          
+            if (request.requestmaterialuploaddetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            return err;
+
+
+        }
+
+    }
+}

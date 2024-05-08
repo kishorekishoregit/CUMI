@@ -1,0 +1,150 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseRMQuality FetchRMQualityPageLoadDAL()
+        {
+            ResponseRMQuality response = new ResponseRMQuality();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[RMQUALITY_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_RMQualitydetails = ds.Tables[0];
+                           
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMQualityPageLoadDAL: " + "Method Name FetchRMQualityPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            
+            return response;
+        }
+        public ResponseRMQuality InsertRMQualityDAL(RequestRMQuality request)
+        {
+            ResponseRMQuality response = new ResponseRMQuality();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            DataSet ds = new DataSet();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        //SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[RMQuality_Insert]", con);
+                        //cmd.CommandType = CommandType.StoredProcedure;
+                        //cmd.Parameters.Add(new SqlParameter("@GRNNO", request.requestRMQuality.GRNNO.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.requestRMQuality.ITEMCODE.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@ITEMNAME", request.requestRMQuality.ITEMNAME.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@LOTNO", request.requestRMQuality.LOTNO.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@QUANTITY", request.requestRMQuality.QUANTITY.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@REJECTEDQUANTITY", request.requestRMQuality.REJECTEDQUANTITY.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", request.requestRMQuality.NETWEIGHT.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@GROSSWEIGHT", request.requestRMQuality.GROSSWEIGHT.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@REMARKS", request.requestRMQuality.REMARKS.Trim()));
+                        //cmd.Parameters.Add(new SqlParameter("@LOTSTATUS", request.requestRMQuality.LOTSTATUS.Trim()));
+                        //con.Open();
+                        //SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        //DataSet ds = new DataSet();
+                        //oda.Fill(ds);
+                        //if (ds != null)
+                        //{
+                        //    if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                        //        response.result = true;
+                        //    else
+                        //        response.result = false;
+
+                        //    response.JS_RMQualitydetails = ds.Tables[1];
+                        //    response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestRMQuality.LOTNO });
+                        //}
+
+                        foreach (RMQualityDetailEntity det in request.requestrmqualitydetails)
+                        {
+
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[RMQuality_Insert]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@ID", det.ID.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@GRNNO", det.GRNNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@REJECTEDQUANTITY", det.REJECTEDQUANTITY.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", det.NETWEIGHT.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@GROSSWEIGHT", det.GROSSWEIGHT.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@REMARKS", det.REMARKS.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTSTATUS", det.LOTSTATUS.Trim()));
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+                                    rowcount++;
+                                }
+                            }
+                        }
+                        if (ds != null)
+                        {
+                            if (request.requestrmqualitydetails.Count == rowcount)
+                            {
+                                scope.Complete();
+                                response.result = true;
+                            }
+                            else
+                            {
+                                response.result = false;
+                                //  response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestRMQuality.LOTNO });
+                            }
+                            response.JS_RMQualitydetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][1].ToString(), DataItem = request.requestRMQuality.LOTNO });
+                        }
+
+                    }
+                    //scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertRMQualityDAL: " + "Method Name InsertRMQualityDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            return response;
+
+        }
+
+    }
+}

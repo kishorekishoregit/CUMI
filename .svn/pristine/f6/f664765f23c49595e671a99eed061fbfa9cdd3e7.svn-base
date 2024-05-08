@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class ItemMasterEntity
+    {
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string UOM { get; set; }
+        public string CATEGORY { get; set; }
+        public String ITEMTYPE { get; set; }
+        public string SUBCATEGORY { get; set; }
+        public string EXIPRYDATE { get; set; }
+        public string WEIGHTPERITEM { get; set; }
+        public string RECORDSTATUS { get; set; }
+        public string AUTOID { get; set; }
+        public string USERCODE { get; set; }
+    }
+    public class RequestItemMaster
+    {
+        public ItemMasterEntity requestItemMaster { get; set; }
+    }
+    public class ResponseItemMaster
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_RecordStatus { get; set; }
+        public DataTable JS_Itemdetails { get; set; }
+        public DataTable JS_Itemcount { get; set; }
+        public DataTable JS_ItemUom { get; set; }
+        public DataTable JS_ItemCategory { get; set; }
+        public DataTable JS_ItemSubCategory { get; set; }
+        public DataTable JS_Expirydate { get; set; }
+        public DataTable JS_ItemType { get; set; }
+    }
+
+}

@@ -1,0 +1,21 @@
+﻿using Microsoft.CSharp.RuntimeBinder;
+using Newtonsoft.Json;
+using System;
+using System.Runtime.CompilerServices;
+using System.Web;
+using System.Web.Mvc;
+
+namespace JKWOODS.Controllers
+{
+
+     public class HomeController : Controller
+     {
+     public ActionResult Index()
+     {
+         
+
+         return View();
+     }
+     }
+}
+

@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "AssemblyDashboard";
+}
+<div class="row row-sm">
+    <!--<div class="col-6 col-lg-3" style="margin-top: 35px;">
+        <div class="infobox infobox-pink" style="background-color: #173985; border: #173985; border-radius: 6px; ">
+
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-shopping-cart"></i>
+            </div>
+
+
+            <div class="badge badge-pink">
+                <a href="" class="text-white">
+                    <div class="badge badge-pink" style="margin-left: 142px;">
+                        <p id="TotalRackAssembled" data-toggle="modal" data-target="#modalview" class="text-white" style="font-size: 30px; font-weight: bold;"></p>
+                    </div>
+                    <span id="TotalRackAssembled" data-plugin="counterup"></span>
+                </a>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number" id="pocount"></span>
+                <div class="infobox-content" style=" text-align: center; font-weight: 500; color: #fff; padding-bottom: 15px;">
+                    Total Rack Assembled
+                </div>
+            </div>
+        </div>
+
+
+    </div>--><!-- col -->
+    <!--<div class="col-6 col-lg-3" style="margin-top: 35px;">
+        <div class="infobox infobox-pink" style="background-color: #d14250; border: #d14250; border-radius: 6px; ">
+
+            <div class="infobox-icon">
+                <i class="ace-icon fa fa-shopping-cart"></i>
+            </div>
+
+
+            <div class="badge badge-pink">
+                <a href="" class="text-white">
+                    <div class="badge badge-pink" style="margin-left: 142px; ">
+                        <p id="TotalUsed" data-toggle="modal" data-target="#modalview" class="text-white" style="font-size: 30px; font-weight: bold;"></p>
+                    </div>
+                    <span id="TotalUsed" data-plugin="counterup"></span>
+                </a>
+            </div>
+            <div class="infobox-data">
+                <span class="infobox-data-number" id="pocount"></span>
+                <div class="infobox-content" style=" text-align: center; font-weight: 500; color: #fff; padding-bottom: 15px;">
+                    Today Assembled
+                </div>
+            </div>
+        </div>
+
+
+    </div>-->
+    <div class="col-lg-6">
+        <h5 class="form-control-label" style="text-align: center;">Rack Ready To Dispatch</h5>
+        <table id="dynamic-table" class="table table-striped table-bordered table-hover checkupload">
+            <thead>
+                <tr style="text-align: center;">
+                    <th rowspan="2" style="text-align: center;"><b>Rack Type</b></th>
+                    <th colspan="3" style="text-align: center;"><b>Taloja</b></th>
+                    <th colspan="3" style="text-align: center;"><b>Roorkee</b></th>
+                </tr>
+                <tr>
+                    <th style="text-align:center">T-Blue</th>
+                    <th style="text-align:center">T-Green</th>
+                    <th style="text-align:center">T-others</th>
+                    <th style="text-align:center">R-Blue</th>
+                    <th style="text-align:center">R-Green</th>
+                    <th style="text-align:center">R-Others</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div><!-- col -->
+    <div class="col-lg-6">
+        <h5 class="form-control-label" style="text-align: center;">A Frames Available In Plant To Be Assembled</h5>
+        <table id="dynamic-tableaframe" class="table table-striped table-bordered table-hover checkupload">
+            <thead>
+                <tr style="text-align: center;">
+                    <th rowspan="2" style="text-align: center;"><b>Rack Type</b></th>
+                    <th colspan="3" style="text-align: center;"><b>Taloja</b></th>
+                    <th colspan="3" style="text-align: center;"><b>Roorkee</b></th>
+                </tr>
+                <tr>
+                    <th style="text-align:center">T-Blue</th>
+                    <th style="text-align:center">T-Green</th>
+                    <th style="text-align:center">T-others</th>
+                    <th style="text-align:center">R-Blue</th>
+                    <th style="text-align:center">R-Green</th>
+                    <th style="text-align:center">R-Others</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div><!-- col -->
+</div>
+<!--<div class="row row-sm" style=" margin-top: 90px;">-->
+ 
+    @*<div class="col-lg-6">
+        <canvas id="myPieChart" style="margin-left: 180px;"></canvas>
+    </div>*@
+
+<!--</div>-->
+<div class="row row-sm" style=" margin-top: 90px;">
+    
+    <div class="col-lg-6">
+        <h5 class="form-control-label" style="text-align: center;">Daywise rack assembled for the week (Taloja)</h5>
+        <div id="RackAssemblyTal" class="morris-wrapper-demo"></div>
+    </div><!-- col-6 -->
+    <div class="col-lg-6">
+        <h5 class="form-control-label" style="text-align: center;">Daywise rack assembled for the week (Roorkee)</h5>
+        <div id="RackAssemblyRoor" class="morris-wrapper-demo"></div>
+    </div><!-- col-6 -->
+</div>
+@section Scripts
+    {
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/azia/v1.0.0/lib/Bootbox/bootbox.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+
+}

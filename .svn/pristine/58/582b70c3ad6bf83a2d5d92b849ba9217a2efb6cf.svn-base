@@ -1,0 +1,294 @@
+﻿
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseInvoicePrint PageloadGetInvoiceDAL()
+        {
+
+            ResponseInvoicePrint response = new ResponseInvoicePrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[INVOICEPRINT_GETINVOICENO]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Invoiceno = ds.Tables[0];
+                            response.JS_Quantity = ds.Tables[1];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("PageloadGRNDAL: " + "Method Name PageloadGRNDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+
+        public ResponseInvoicePrint PageloadGetItemNameDAL(RequestInvoicePrint request)
+        {
+            ResponseInvoicePrint response = new ResponseInvoicePrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[INVOICEPRINT_GETITEMNAME]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@INVOICENO", request.ReqInvoicePrint.INVOICENO.Trim()));
+
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.result = true;
+                            response.JS_ITEMNAME = ds.Tables[0];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.ReqInvoicePrint.INVOICENO });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertEmployeeMasterDAL: " + "Method Name InsertEmployeeMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+            return response;
+
+        }
+
+        public ResponseInvoicePrint PageloadGetQuantityDAL(RequestInvoicePrint request)
+        {
+            ResponseInvoicePrint response = new ResponseInvoicePrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[INVOICEPRINT_GETQUANTITY]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@INVOICENO", request.ReqInvoicePrint.INVOICENO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqInvoicePrint.ITEMCODE.Trim()));
+
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.result = true;
+                            response.JS_Quantity = ds.Tables[0];
+                            response.JS_BarcodeList = ds.Tables[1];
+                            response.JS_RejectedQty = ds.Tables[2];
+                            response.JS_ItemType = ds.Tables[3];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][0].ToString(), DataItem = request.ReqInvoicePrint.INVOICENO });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertEmployeeMasterDAL: " + "Method Name InsertEmployeeMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+            return response;
+
+        }
+
+        public ResponseInvoicePrint InsertInvoiceLabelPrintDAL(RequestInvoicePrint request)
+        {
+            ResponseInvoicePrint response = new ResponseInvoicePrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        foreach (InvoicePrintEntity req in request.requestInvoicePrintdetails)
+                        {
+                            SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[UPDATEINVOICEPRINT_BARCODEPRINTSTATUS]", con);
+                            cmd1.CommandType = CommandType.StoredProcedure;
+                            cmd1.Parameters.AddWithValue("@ITEMCODE", req.ITEMCODE);
+                            cmd1.Parameters.AddWithValue("@ITEMNAME", req.ITEMNAME);
+                            cmd1.Parameters.AddWithValue("@BARCODE", req.BARCODE);
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd1);
+                            oda.Fill(ds);
+                        }
+                        if (ds != null)
+                        {
+                           
+                                response.result = true;
+                       
+
+                           
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertInvoiceLabelPrintDAL: " + "Method Name InsertInvoiceLabelPrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+        }
+        public ResponseInvoicePrint InsertTempTableInvoicePrintDAL(RequestInvoicePrint request)
+        {
+            ResponseInvoicePrint response = new ResponseInvoicePrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+
+                        foreach (InvoicePrintDetailEntity det in request.requestinvoiceprintchilddetails)
+                        {
+
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[INVOICELABELPRINT_INSERT]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@INVOICENO", det.INVOICENO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@UOM", det.UOM.Trim().ToUpper()));
+
+                            cmd.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim().ToUpper()));
+
+
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            DataSet ds = new DataSet();
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+
+                                    rowcount++;
+                                }
+
+                            }
+                        }
+
+                        if (request.requestinvoiceprintchilddetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                        }
+
+
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertTempTableInvoicePrintDAL: " + "Method Name InsertTempTableInvoicePrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+        public ResponseInvoicePrint InvoiceViewDtsDAL(RequestInvoicePrint request)
+        {
+            ResponseInvoicePrint response = new ResponseInvoicePrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[INVOICEPRINT_VIEW]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@INVOICENO", request.ReqInvoicePrint.INVOICENO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@ITEMCODE", request.ReqInvoicePrint.ITEMCODE.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Invoiceno = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InvoiceViewDtsDAL: " + "Method Name InvoiceViewDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+            return response;
+
+        }
+    }
+}

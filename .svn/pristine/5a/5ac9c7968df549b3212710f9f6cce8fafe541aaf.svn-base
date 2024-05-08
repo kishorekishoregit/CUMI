@@ -1,0 +1,101 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace JKWOODSBC
+{
+    public class DispatchPlanBC
+    {
+        public ResponseDispatchplanEntry PageloadDispatchplanBC()
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PageloadDispatchPlanDAL();
+            return response;
+        }
+        public ResponseDispatchplanEntry DPNItemnameFetchBC(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.DPNItemnameFetchDAL(request);
+            return response;
+        }
+        public ResponseDispatchplanEntry DispatchPlanInsertBC(RequestDispatchplanEntry request)
+        {
+
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            try
+            {
+                response.ErrorContainer = ValidateDispatchplanInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.DispatchplanInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+        public List<ErrorItem> ValidateDispatchplanInsert(RequestDispatchplanEntry request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.ReqDispatchPlanEntry.DISPATCHNO == "")
+                err.Add(new ErrorItem { DataItem = "DISPATCH No.", ErrorNo = "SSB0009" });
+            if (request.ReqDispatchPlanEntry.DISPATCHDATE == "")
+                err.Add(new ErrorItem { DataItem = "DISPATCH Date", ErrorNo = "SSB0009" });
+            if (request.ReqDispatchPlanEntry.CUSTOMER == "")
+                err.Add(new ErrorItem { DataItem = "CUSTOMER", ErrorNo = "SSB0010" });
+            if (request.requestDispatchPlanEntrydetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            return err;
+
+
+        }
+        public ResponseDispatchplanEntry DPNEditDtsBC(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.DPNEditDtsDAL(request);
+            return response;
+        }
+
+
+        public ResponseDispatchplanEntry DispatchPlanUpdateBC(RequestDispatchplanEntry request)
+        {
+
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            try
+            {
+                response.ErrorContainer = ValidateDispatchplanInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.DispatchPlanUpdateDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+
+
+
+        public ResponseDispatchplanEntry DPNViewDtsBC(RequestDispatchplanEntry request)
+        {
+            ResponseDispatchplanEntry response = new ResponseDispatchplanEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.DPNViewDtsDAL(request);
+            return response;
+        }
+ }
+    
+}

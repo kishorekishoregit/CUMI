@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class InvoicePrintEntity
+    {
+        public string INVOICENO { get; set; }
+        public string USERCODE { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string QUANTITY { get; set; }
+        public string REJECTEDQUANTITY { get; set; }
+        public string SELECT { get; set; }
+
+        public string UOM { get; set; }
+
+        public string BARCODE { get; set; }
+
+        public List<InvoicePrintDetailEntity> requestinvoiceprintdetails { get; set; }
+    }
+    public class InvoicePrintDetailEntity
+    {
+        public string INVOICENO { get; set; }
+        public string USERCODE { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string QUANTITY { get; set; }
+        public string REJECTEDQUANTITY { get; set; }
+        public string SELECT { get; set; }
+
+        public string UOM { get; set; }
+        public string ACTUAL { get; set; }
+        public string BARCODE { get; set; }
+
+
+    }
+
+    public class RequestInvoicePrint
+    {
+        public InvoicePrintEntity ReqInvoicePrint { get; set; }
+        public List<InvoicePrintEntity> requestInvoicePrintdetails { get; set; }
+        public InvoicePrintDetailEntity Reqinvoiceprintdetails { get; set; }
+        public List<InvoicePrintDetailEntity> requestinvoiceprintchilddetails { get; set; }
+    }
+
+    public class ResponseInvoicePrint
+    {
+
+        public DataTable JS_Invoiceno { get; set; }
+        public DataTable JS_ITEMNAME { get; set; }
+        public DataTable JS_Quantity { get; set; }
+        public DataTable JS_BarcodeList { get; set; }
+        public DataTable JS_RejectedQty { get; set; }
+        public DataTable JS_ItemType { get; set; }
+        public DataTable RecordStatus { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+}

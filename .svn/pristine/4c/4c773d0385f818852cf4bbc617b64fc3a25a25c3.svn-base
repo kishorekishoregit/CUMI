@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class CustomerMasterEntity
+    {
+        public string HDCUS { get; set; }
+        public string CUSTOMERCODE { get; set; }
+        public string CUSTOMERNAME { get; set; }
+        public string CUSTOMERADDRESS { get; set; }
+        public string CUSTOMERSTATUS { get; set; }
+        public string USERCODE { get; set; }
+    }
+    public class RequestCustomerMaster
+    {
+        public CustomerMasterEntity requestCustomerMaster { get; set; }
+    }
+
+    public class ResponseCustomerMaster
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_RecordStatus { get; set; }
+        public DataTable JS_Customerdetails { get; set; }
+        public DataTable JS_Customercount { get; set; }
+    }
+}

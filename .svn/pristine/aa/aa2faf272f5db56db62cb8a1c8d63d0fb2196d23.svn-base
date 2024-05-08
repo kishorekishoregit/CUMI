@@ -1,0 +1,45 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+namespace JKWOODSBC
+{
+    public class REMIXBarcodelabelBC
+    {
+        public ResponseREMIXBarcodeLabelPrint FetchREMIXBarcodeLabe1PrintPageLoadBC()
+        {
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.REMIXBarcodeLabelPrintDAL();
+            return response;
+        }
+        public ResponseREMIXBarcodeLabelPrint InsertTempREMIXLabelPrintBC(RequestREMIXBarcodeLabelPrint request)
+        {
+
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.InsertTableREMIXMLabelPrintDAL(request);
+            return response;
+
+        }
+        public ResponseREMIXBarcodeLabelPrint FetchREMIXLabelPrintGetHdnValue(RequestREMIXBarcodeLabelPrint request)
+        {
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchREMIXLabelPrintGetHiddenValue(request);
+            return response;
+
+        }
+
+        public ResponseREMIXBarcodeLabelPrint FetchREMIXLabelPrintLotNobyJobnoBC(RequestREMIXBarcodeLabelPrint request)
+        {
+            ResponseREMIXBarcodeLabelPrint response = new ResponseREMIXBarcodeLabelPrint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchREMIXLabelPrintNobyJOBNODAL(request);
+            return response;
+
+        }
+    }
+}

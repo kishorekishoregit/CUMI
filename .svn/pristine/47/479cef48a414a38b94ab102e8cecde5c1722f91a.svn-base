@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class GRNEntryEntity
+    {
+        public string GRNNO { get; set; }
+        public string GRNDATE { get; set; }
+        public string SUPPLIER { get; set; }
+        public string REFERENCENO { get; set; }
+        public string USERCODE { get; set; }
+        public string ITEMCODE { get; set; }
+    }
+    public class GRNDetailEntity
+    {
+
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string PRICE { get; set; }
+
+
+    }
+    public class RequestGRNEntry
+    {
+        public GRNEntryEntity ReqGRNEntry { get; set; }
+        public List<GRNDetailEntity> requestGRNEntrydetails { get; set; }
+    }
+    public class ResponseGRNEntry
+    {
+        public DataTable JS_Supplierdetails { get; set; }
+        public DataTable RecordStatus { get; set; }
+        public DataTable JS_Itemdetails { get; set; }
+        public DataTable GRNHeader { get; set; }
+        public DataTable GRNDetails { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+}

@@ -1,0 +1,93 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace JKWOODSBC
+{
+    public class SRNEntryBC
+    {
+        public ResponseSRNEntry PageloadSRNBC()
+        {
+            ResponseSRNEntry response = new ResponseSRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PageloadSRNDAL();
+            return response;
+        }
+        public ResponseSRNEntry SRNItemnameFetchBC(RequestSRNEntry request)
+        {
+            ResponseSRNEntry response = new ResponseSRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.SRNItemnameFetchDAL(request);
+            return response;
+        }
+        public ResponseSRNEntry SRNInsertBC(RequestSRNEntry request)
+        {
+
+            ResponseSRNEntry response = new ResponseSRNEntry();
+            try
+            {
+                response.ErrorContainer = ValidateSRNInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.SRNInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+        public List<ErrorItem> ValidateSRNInsert(RequestSRNEntry request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.ReqSRNEntry.SRNNO == "")
+                err.Add(new ErrorItem { DataItem = "SRN No.", ErrorNo = "SSB0009" });
+            if (request.ReqSRNEntry.SRNDATE == "")
+                err.Add(new ErrorItem { DataItem = "SRN Date", ErrorNo = "SSB0010" });
+            if (request.requestSRNEntrydetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            return err;
+
+            
+        }
+        public ResponseSRNEntry SRNViewDtsBC(RequestSRNEntry request)
+        {
+            ResponseSRNEntry response = new ResponseSRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.SRNViewDtsDAL(request);
+            return response;
+        }
+        public ResponseSRNEntry SRNEditDtsBC(RequestSRNEntry request)
+        {
+            ResponseSRNEntry response = new ResponseSRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.SRNEditDtsDAL(request);
+            return response;
+        }
+        public ResponseSRNEntry SRNUpdateBC(RequestSRNEntry request)
+        {
+
+            ResponseSRNEntry response = new ResponseSRNEntry();
+            try
+            {
+                response.ErrorContainer = ValidateSRNInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.SRNUpdateDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+    }
+}

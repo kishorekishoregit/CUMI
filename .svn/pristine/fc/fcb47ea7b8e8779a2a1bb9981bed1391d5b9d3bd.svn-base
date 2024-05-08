@@ -1,0 +1,37 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class StockAdjustmentBC
+    {
+        public ResponseStockAdjustment FetchStockAdjustBC()
+        {
+            ResponseStockAdjustment response = new ResponseStockAdjustment();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchStockAdjustDAL();
+            return response;
+        }
+        public ResponseStockAdjustment FetchItemDetailsbyItemcodeBC(RequestStockAdjustment request)
+        {
+            ResponseStockAdjustment response = new ResponseStockAdjustment();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchItemDetailsbyItemcodeDAL(request);
+            return response;
+
+        }
+        public ResponseStockAdjustment InsertStockAdjustBC(RequestStockAdjustment request)
+        {
+
+            ResponseStockAdjustment response = new ResponseStockAdjustment();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.InsertStockAdjustDAL(request);
+            return response;
+
+        }
+    }
+}

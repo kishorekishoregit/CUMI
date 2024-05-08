@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class StockReportEntity
+    {
+        public string Usercode { get; set; }
+        public string subitemcategory { get; set; }
+        public string fromdate { get; set; }
+        public string todate { get; set; }
+    }
+    public class RequestStockReport
+    {
+        public StockReportEntity requestStockReport { get; set; }
+    }
+
+    public class ResponseStockReport
+    {
+        public bool result { get; set; }
+
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_SubCategoryDetails { get; set; }
+        public DataTable JS_StockReportDetails { get; set; }
+      
+    }
+}

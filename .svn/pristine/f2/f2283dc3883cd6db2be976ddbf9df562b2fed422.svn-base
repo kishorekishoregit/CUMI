@@ -1,0 +1,109 @@
+﻿<!--<style>
+    table, th, td {
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+</style>-->
+
+<div style="page-break-after:always; vertical-align:bottom;">
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2" style="vertical-align:middle; height:0.1in;max-height:0.1in;font-weight:600;">PART NO:<span style="font-size:10px;font-weight:900;">$PartNo$</span></td>
+            <td style="width:0.70in !important;font-weight:600;">QTY : <span style="font-weight:600;">$PartQty$</span></td>
+           
+        </tr>
+        <tr>
+            <td colspan="2" style="vertical-align:top; height:0.3in;max-height:0.3in;font-weight:600;">DESC: $PartDescription$</td>
+ <td rowspan="3" align="center" style="width:0.40in !important;">
+                <div id="$qrcode$"></div>
+            </td>
+        </tr>
+	<tr>
+            <td colspan="2">MFG. NAME: <span style="font-size:10px;">$ManufactureName$</span></td>
+        </tr>
+        <tr>
+            <td>GRN NO. :<span style="font-size:10px;"> $GRNNO$</span></td>
+            <td style="width:1in;">DT: $GRNDate$</td>
+
+        </tr>
+        
+        <tr>
+            <td colspan="2">MFG. P/N: $ManufacturePartNo$</td>
+            <td >MFG DATE: $ManufactureDate$</td>
+        </tr>
+        <tr>
+            <td colspan="2">LOT NO.:<span style="font-size:10px;font-weight:600;"> $StuffingLotNo$</span></td>
+            <td >EXP DATE: $ExpiryDate$</td>
+        </tr>
+        <tr>
+            <td>Sup. LOT No: $LotNo$</td>
+            <td>UOM:$UOM$</td>
+            <td>$CaseNo$</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+<!--<div style="page-break-after:always; vertical-align:bottom; ">
+    <table style="width: 100%;">
+
+        <tbody>
+            <tr>
+                <td style="width:1.65in;padding:0px !important;">
+                    <table style="width: 100%; border:0px;padding:0px !important;">
+                        <tbody>
+                            <tr style="height: 0.23in;">
+                                <td colspan="4" style="width:0.5in;">PART NO: $PartNo$</td>
+                                <td colspan="1" style="width:0.5in;">QTY : $PartQty$</td>
+                            </tr>
+                            <tr style="height: 0.23in;">
+                                <td colspan="4" style="width:0.5in;">DESC: $PartDescription$</td>
+                            </tr>
+                            <tr style="height: 0.23in;">
+                                <td colspan="4" style="width:0.5in;">GRN NO. : $GRNNO$</td>
+                                <td colspan="1" style="width:0.5in;">DT: $GRNDate$ </td>
+                            </tr>
+                            <tr style="height: 0.23in;">
+                                <td colspan="4" style="width:0.5in;">MFG. NAME: $ManufactureName$ </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td style="width:1in;">
+                    <table style="width: 100%; border:0px">
+                        <tr>
+                            <td style="width:1in;border: 0px !important;padding: 0px; height:0.80in;" align="center"><div id="$qrcode$"></div></td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+    <table style="width: 100%;" class="table2">
+        <style>
+            .table2 td {
+                padding: 1px;
+            }
+        </style>
+        <tbody>
+            <tr style="height: 0.23in;">
+                <td style="width:2in;" colspan="2" >MFG. P/N: $ManufacturePartNo$ </td>
+                <td style="width:1in;" colspan="2">MFG DATE: $ManufactureDate$</td>
+            </tr>
+            <tr style="height: 0.23in;">
+                <td style="width:2in;" colspan="2">LOT NO.: $StuffingLotNo$</td>
+                <td style="width:1in;" colspan="2">EXP DATE: $ExpiryDate$</td>
+            </tr>
+            <tr style="width: 100%;height: 0.23in;">
+                <td colspan="2" style="width:2in;">SUPPLIER LOT NO: $LotNo$ </td>
+                <td style="width:.75in;">UOM: $UOM$ </td>
+                <td style="width:.75in;">$CaseNo$</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>-->

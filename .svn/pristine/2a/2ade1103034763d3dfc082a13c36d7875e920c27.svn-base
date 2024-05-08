@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class SRNEntryEntity
+    {
+        public string SRNNO { get; set; }
+        public string SRNDATE { get; set; }
+        public string REMARKS { get; set; }
+        public string ITEMCODE { get; set; }
+        public string USERCODE { get; set; }
+    }
+    public class SRNDetailEntity
+    {
+
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string UOM { get; set; }
+        public string UOMCODE { get; set; }
+        public string QUANTITY { get; set; }
+        public string SPECS { get; set; }
+        public string PROJECT { get; set; }
+
+
+    }
+    public class RequestSRNEntry
+    {
+        public SRNEntryEntity ReqSRNEntry { get; set; }
+        public List<SRNDetailEntity> requestSRNEntrydetails { get; set; }
+    }
+    public class ResponseSRNEntry
+    {
+       
+        public DataTable JS_Itemdetails { get; set; }
+        public DataTable SRNHeader { get; set; }
+        public DataTable SRNDetails { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+}

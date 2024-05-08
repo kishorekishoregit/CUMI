@@ -1,0 +1,29 @@
+﻿<div style='page-break-after:always'>
+    <table style='width: 375px; margin-top:10px; margin-left:25px;'>
+        <tr>
+            <td text-align='left' style='width: 375px'>
+		<p style='margin-top:10px; margin-bottom:5px; font-size:20px; font-weight:700; font-family: Arial; font-stretch: condensed'>SANGSIN BRAKE INDIA PVT. LTD.</p>
+                <p style='margin-top:5px; margin-bottom:5px; font-size:20px; font-weight:700; font-family: Arial'>Item: $ITEMCODE$</p>
+                <p style='margin-top:5px; margin-bottom:5px; font-size:20px; font-weight:700; font-family: Arial; font-stretch: condensed'>Name: $ITEMNAME$</p>
+                <p style='margin-top:5px; margin-bottom:0px; font-size:20px; font-weight:700; font-family: Arial'>GRN No.: $GRNNO$</p>
+                <p style='margin-top:0px; margin-bottom:0px; font-weight:700; font-family: Arial; font-stretch: condensed'>
+                    <span style='font-size:25px;'>LOT NO.: </span>
+                    <span style='font-size:40px;'>$LOTNO$</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <table style='width: 375px; margin-left:25px;'>
+        <tr>
+            <td text-align='left' style='width: 200px; vertical-align:top;'>
+                <p style='margin-top:0px; margin-bottom:5px; font-size:20px; font-weight:700; font-family: Arial'>Quantity: $LOTQUANTITY$</p>
+                <p style='margin-top:5px; margin-bottom:5px; font-size:20px; font-weight:700; font-family: Arial'>Date: $GRNDATE$</p>
+                <p style='margin-top:5px; margin-bottom:5px; font-size:20px; font-weight:700; font-family: Arial'>Label Seq.: $LABELSEQ$</p>
+            </td>
+            <td align='center' style='width: 175px; vertical-align:middle;'>
+                <div style="margin: 10px;" id='$qrcode$'></div>
+            </td>
+        </tr>
+    </table>
+
+</div>

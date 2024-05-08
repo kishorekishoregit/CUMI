@@ -1,0 +1,297 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseBinMaster FetchBinMasterPageLoadDAL()
+        {
+            ResponseBinMaster response = new ResponseBinMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[Masters].[BinMaster_Fetch]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_RecordStatus = ds.Tables[0];
+                            response.JS_Locationdetails = ds.Tables[1];
+                            response.JS_BinMasterDetails = ds.Tables[2];  // get the User Creation Details
+                            response.JS_Rackdetails = ds.Tables[3];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchBinMasterPageLoadDAL: " + "Method Name FetchBinMasterPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+
+
+            return response;
+        }
+
+
+        ////Fetch Bin Details By Bin Code
+        public ResponseBinMaster FetchBinMasterbyBinCodeDAL(RequestBinMaster request)
+        {
+
+
+            ResponseBinMaster response = new ResponseBinMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[BinMaster_FetchBinbycode]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@BINCODE", request.requestBinMaster.BinCode.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_BinMasterDetails = ds.Tables[0];// get the Shift Details
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchBinMasterbyUserCodeDAL: " + "Method Name FetchBinMasterbyUserCodeDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+        ////Insert 
+        public ResponseBinMaster InsertBinMasterDAL(RequestBinMaster request)
+        {
+            ResponseBinMaster response = new ResponseBinMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[Masters].[BinMaster_Insert]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@BINCODE", request.requestBinMaster.BinCode.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@BINNAME", request.requestBinMaster.Binname.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestBinMaster.Locationcode.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestBinMaster.Rackcode.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestBinMaster.Recordstatus.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestBinMaster.Usercode.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_BinMasterDetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestBinMaster.BinCode.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertBinMasterDAL: " + "Method Name InsertBinMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+        
+          return response;
+
+       }
+        ////Update 
+        public ResponseBinMaster UpdateBinMasterDAL(RequestBinMaster request)
+        {
+
+
+            ResponseBinMaster response = new ResponseBinMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[Masters].[BinMaster_Update]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@BINCODE", request.requestBinMaster.BinCode.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@BINNAME", request.requestBinMaster.Binname.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestBinMaster.Locationcode.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestBinMaster.Rackcode.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestBinMaster.Recordstatus.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestBinMaster.Usercode.Trim().ToUpper()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.JS_BinMasterDetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestBinMaster.BinCode.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("UpdateBinMasterDAL: " + "Method Name UpdateBinMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+        ////Search 
+        //public ResponseBinMaster SearchBinMasterDAL(RequestBinMaster request)
+        //{
+
+        //    ResponseBinMaster response = new ResponseBinMaster();
+        //    response.ErrorContainer = new List<ErrorItem>();
+        //    try
+        //    {
+        //        using (TransactionScope scope = new TransactionScope())
+        //        {
+        //            using (SqlConnection con = new SqlConnection(connectionstring))
+        //            {
+        //                SqlCommand cmd = new SqlCommand("Masters.BinMaster_Search", con);
+        //                cmd.CommandType = CommandType.StoredProcedure;
+        //                cmd.Parameters.Add(new SqlParameter("@BINCODE", request.requestBinMaster.BinCode.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@BINNAME", request.requestBinMaster.Binname.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestBinMaster.Locationcode.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@RACKCODE", request.requestBinMaster.Rackcode.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@BINDESCRIPTION", request.requestBinMaster.Bindescription.Trim().ToUpper()));
+        //                cmd.Parameters.Add(new SqlParameter("@RECORDSTATUS", request.requestBinMaster.Recordstatus.Trim().ToUpper()));
+        //                con.Open();
+        //                SqlDataAdapter oda = new SqlDataAdapter(cmd);
+        //                DataSet ds = new DataSet();
+        //                oda.Fill(ds);
+        //                if (ds != null)
+        //                {
+        //                    response.JS_BinMasterDetails = ds.Tables[0];// get the Shift Details
+        //                    response.result = true;
+        //                }
+        //                scope.Complete();
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+        //        string responselog = createlog("SearchBinMasterDAL: " + "Method Name SearchBinMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+        //        response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+        //        response.result = false;
+        //    }
+
+
+
+        //    return response;
+        //}
+
+
+
+        ////Fetch Bin Details By Bin Code
+        public ResponseBinMaster FetchRackByLocationDAL(RequestBinMaster request)
+        {
+            ResponseBinMaster response = new ResponseBinMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[BinMaster_FetchRackbyLocationcode]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@LOCATIONCODE", request.requestBinMaster.Locationcode.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_Rackdetails = ds.Tables[0];// get the Shift Details
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchBinMasterbyUserCodeDAL: " + "Method Name FetchBinMasterbyUserCodeDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+    }
+}

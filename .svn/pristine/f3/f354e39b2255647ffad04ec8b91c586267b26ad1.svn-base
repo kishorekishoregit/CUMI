@@ -1,0 +1,602 @@
+﻿jQuery(function ($) {
+    $('#email').change(function () {
+        var email = $('#email').val();
+        var res = isValidEmailAddress(email);
+        if (!res) {
+            bootbox.alert({
+                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-2x"></i><br>' + 'Enter Valid email address !' + '</span>',
+                size: 'small'
+            });
+
+            $('#email').val('');
+            $('#email').focus()
+            return false;
+        }
+    });
+
+    function isValidEmailAddress(emailAddress) {
+        var pattern = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        return pattern.test(emailAddress);
+    };
+    $('[data-rel=tooltip]').tooltip();
+
+    //documentation : http://docs.jquery.com/Plugins/Validation/validate
+
+    $('#validation-form').validate({
+        errorElement: 'div',
+        errorClass: 'help-block',
+        focusInvalid: true,
+        ignore: "",
+        rules: {
+
+            employeecode: {
+                required: true
+            },
+            employeename: {
+                required: true
+            },
+            department: {
+                required: true
+            },
+            recordstatus: {
+                required: true
+            },
+            mobileno: {
+                required: true
+            }
+        },
+
+        messages: {
+            email: {
+                required: "Please provide a valid email.",
+                //email: "Please provide a valid email."
+
+            },
+            password: {
+                required: "Please specify a password.",
+                minlength: "Please specify a secure password."
+            },
+            department: "Please select Department",
+            phoneno: "Please select PhoneNo.",
+            recordstatus: "Please select RecordStatus",
+            username: "Please select RecordStatus",
+            subscription: "Please select at least one option",
+            gender: "Please choose gender",
+            agree: "Please accept our policy"
+        },
+
+
+        highlight: function (e) {
+            $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+        },
+
+        success: function (e) {
+            $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+            $(e).remove();
+        },
+
+        errorPlacement: function (error, element) {
+            if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                var controls = element.closest('div[class*="col-"]');
+                if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+            }
+            else if (element.is('.select2')) {
+                error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+            }
+            else if (element.is('.chosen-select')) {
+                error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+            }
+            else error.insertAfter(element.parent());
+        },
+
+        submitHandler: function (form) {
+        },
+        invalidHandler: function (form) {
+        }
+
+    });
+    //-----------------------------------------------------------------------------------------------Validation
+
+
+
+    ////-------------------------------------------------------------------------------------------Bind Pageload 
+    //Grid Bind Value
+    BindTable();
+
+    function BindTable() {
+
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetUserCreationPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+                var pageload = Result.split('|');
+                var Employee = JSON.parse(pageload[0]);
+
+                var recordstatus = JSON.parse(pageload[1]);
+                var resJ = JSON.parse(pageload[2]);
+                var process = JSON.parse(pageload[3]);
+
+                $("#ddlemployeecode").empty().append('<option value="">Select an Option</option>');
+                $.each(Employee, function () {
+                    $("#ddlemployeecode").append($("<option></option>").val(this["EMPLOYEECODE"]).html(this["EMPLOYEECODE"]));
+                    $('#ddlemployeecode').trigger("chosen:updated");
+                });
+
+
+                // $("#recordstatus").empty().append('<option value="">Select an Option</option>');
+                $.each(recordstatus, function () {
+                    $("#ddlstatus").append($("<option></option>").val(this["METASUBCODE"]).html(this["METADATADESCRIPTION"]));
+                    $('#ddlstatus').trigger("chosen:updated");
+                });
+                $("#ddlprocessname").empty().append('<option value="">Select an Option</option>');
+                $.each(process, function () {
+                    $("#ddlprocessname").append($("<option></option>").val(this["PROCESSNAME"]).html(this["PROCESSNAME"]));
+                    $('#ddlprocessname').trigger("chosen:updated");
+                });
+                BindTab(resJ, '1');
+               
+            }
+        });
+        $(".loader").hide("slow");
+    }
+    //-------------------------------------------------------------------------------------------Bind Table
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        // TABLE BIND     
+        if (type == '0') {
+            $('#dynamic-table').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table');
+
+            $('#dynamic-table').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bSort": false,
+                "info": false,
+                "ascrollX": "100%",
+                "language": { "search": "" },
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+              
+                'columnDefs': [
+                    { "width": "1%", "targets": 5 },{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+                }
+                ],
+
+                columnDefs: cols1,
+                //columns: cols1DATA,
+
+                columns: [
+
+                    { 'data': 'Sl No' },
+                    { 'data': 'Employee Code' },
+                    { 'data': 'Employee Name' },
+                    { 'data': 'User Name' },
+                    { 'data': 'Process Name' },
+                    { 'data': 'Record Status' },
+                    {
+
+                        'data': 'Edit',
+                        'render': function (data, type, full, meta) {
+
+                            return '<button type="button" class="btn btn-success btn-fab editdetails" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></button>'
+
+                        }
+                    },
+
+                ],
+
+                dom: 'Bfrtip',
+                buttons: [
+                    
+                    {
+                        extend: 'excelHtml5',
+                        title: 'User Details',
+                        text: '<img src="../../Images/excel.png" style="height: 25px;">',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+
+                        text: '<img src="../../Images/pdf.png" style="height: 25px;">',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'User Details'
+
+
+                    }, {
+                        extend: 'print',
+                        title: 'User Details',
+                        text: '<img src="../../Images/print.png" style="height: 25px;">',
+                        footer: false
+                    }
+                ]
+            });
+        }
+        else {
+            $('#dynamic-table tbody').remove();
+            $('#dynamic-table thead').remove();
+            $('#dynamic-table').dataTable({
+                "language": {
+                    "emptyTable": "No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "10%", bSearchable: false, bSortable: false },
+                          { sWidth: "10", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                              { sWidth: "10%", bSearchable: false, bSortable: false },
+                                { sWidth: "10%", bSearchable: false, bSortable: false },
+                                  { sWidth: "10%", bSearchable: false, bSortable: false }
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+
+        }
+        $(".loader").hide("slow");
+    }
+
+
+    $('#ddlemployeecode').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val().split('_')[0];
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'GetUserCreationByEmployeename',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'EmpCode': OValue },
+            success: function (data) {
+
+                var Res = data.split('|');
+                var EmpName = JSON.parse(Res[0]);
+
+                $.each(EmpName, function (i, item) {
+                    $("#txtemployeeame").val(EmpName[i].EMPLOYEENAME);
+
+                });
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+    $('#btnsubmit').click(function () {
+        // if (!$('#validation-form').valid()) e.preventDefault();
+
+        //else {
+
+        if (window.FormData !== undefined) {
+            $('.loadingGIF').show();
+            var systemselect = "", Systems = "";
+
+            jQuery("table.checkupload1 tbody > tr").each(function () {
+                if (jQuery('td:eq(0)', this).children('input.checkbox').is(':checked')) {
+                    systemselect += jQuery('td:eq(0)', this).children('input.checkbox').is(':checked') + "^";
+                    Systems += jQuery('td:eq(1)', this).text() + ",";
+
+
+                }
+            });
+
+            $.ajax({
+                url: 'InsertUserCreation',
+                dataType: "json",
+                type: "POST",
+                data: $.param({ 'Empcode': $('#ddlemployeecode').val().trim().split('_')[0] })
+                    + '&' + $.param({ 'EmpName': $('#txtemployeeame').val().trim() })
+                    + '&' + $.param({ 'UserName': $('#txtusername').val().trim() })
+                    + '&' + $.param({ 'Password': $('#txtpassword').val().trim() })
+                    + '&' + $.param({ 'ConfirmPassword': $('#txtconfirmpassword').val().trim() })
+                    + '&' + $.param({ 'ProcessName': $('#ddlprocessname').val().trim() })
+                    + '&' + $.param({ 'Status': $('#ddlstatus').val().trim() })                  
+                    + '&' + $.param({ 'actiontype': $("#actiontype").text() })
+                    + '&' + $.param({ 'Systems': Systems = Systems.substring(0, Systems.length - 1) }),
+                //  data:formData,
+                success: function (data) {
+                    var Res = data.split('|');
+                    var result = Res[0];
+                    var msg = Res[1];
+                    if (result.toUpperCase() == "TRUE") {
+                        $("form").trigger("reset");
+                        $("#actiontype").text("Save")
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "success");
+                        $('#ddlemployeecode').val("");
+                        $("#txtemployeeame").val("");
+                        $('#recordstatus').val("")
+                        $("#txtusername").val("");
+                        $("#txtpassword").val("");
+                        $("#txtconfirmpassword").val("");
+                        $("#ddlprocessname").val("");
+                        $('#ddlstatus').val("MDSUB_001_0001");                      
+                        ReBindTable();
+                        //   });
+                        $("#actiontype").text("Save");
+                        $('.loadingGIF').hide();
+                    }
+                    else {
+                        sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                        $('.loadingGIF').hide();
+                    }
+                }
+            });
+        }
+        // }
+
+
+    });
+
+
+
+
+
+    //-------------------------------------------------------------------------------------------Table Selected Index Change
+    //on Click table Row
+    //$(document).ready(function () {
+    $("#dynamic-table").on("click", ".editdetails", function () {
+     
+        var usercode = $(this).closest('tr').find('td:eq(1)').html();
+   
+        GetUserCreationDetailsByID(usercode)
+    });
+    // });
+    //-------------------------------------------------------------------------------------------Assign values table into TextBox (Controls)   
+    //get the Role Creation Details by ID
+    function GetUserCreationDetailsByID(usercode) {
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetUserCreationByID',
+            dataType: 'json',
+            type: 'POST',
+            data: { "usercode": usercode },
+
+            success: function (data) {
+                var Res = data.split('|');
+                var resJ = JSON.parse(Res[0]);
+                
+
+                $('#ddlemployeecode').val(resJ[0].EMPLOYEECODE);
+                
+                $('#ddlemployeecode').trigger("chosen:updated");
+                $("#txtemployeeame").val(resJ[0].EMPLOYEENAME);
+                $('#recordstatus').val(resJ[0].RECORDSTATUS)
+                $('#recordstatus').trigger("chosen:updated");
+                $("#txtusername").val(resJ[0].USERNAME);
+                $("#txtpassword").val(resJ[0].USERPASSWORD);
+                $("#txtconfirmpassword").val(resJ[0].CONFIRMPASSWORD);
+                $('#ddlprocessname').val(resJ[0].PROCESSNAME);
+                $('#ddlprocessname').trigger("chosen:updated");
+                $('#ddlstatus').val(resJ[0].RECORDSTATUS);
+                $('#ddlstatus').trigger("chosen:updated");               
+                //   });
+                $("#actiontype").text("Update");
+                $("#addtab").addClass("active");
+                $("#detailstab").removeClass("active");
+
+                $("#adduser").addClass("show active");
+                $("#adduserDetails").removeClass("show active");
+
+               
+            }
+
+        });
+
+        $(".loader").hide("slow");
+    }
+
+    //-------------------------------------------------------------------------------------------Clear
+    $('#btnclear').click(function () {
+        location.reload();
+    });
+
+    //-------------------------------------------------------------------------------------------EmployeeCode Text Chaged event
+    $('#employeecode').focusout(function () {
+
+        var empcode = $('#employeecode').val();
+        var btntext = $("#actiontype").text();
+
+        if (empcode && btntext.toUpperCase() != 'UPDATE') {
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'ExistEmployeeCode',
+                dataType: 'json',
+                type: 'POST',
+                data: { 'employeecode': $('#employeecode').val() },
+                success: function (data) {
+                    var resJ = JSON.parse(data);
+                    if (resJ == '0') {
+                        $("#employeecode").prop('readonly', true);
+                    }
+                    else {
+                        $('#employeecode').val('');
+                        $("#employeecode").prop('readonly', false);
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-2x"></i><br>' + 'EmployeeCode Already Exist!' + '</span>',
+                            size: 'small'
+                        });
+                        // alert('EmployeeCode Already Exist!')
+                    }
+                }
+            });
+            $(".loader").hide("slow");
+        }
+    });
+
+    //-------------------------------------------------------------------------------------------UserName Text Chaged event
+
+    $('#username').focusout(function () {
+        if ($('#username').val() != '') {
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'ExistUserName',
+                dataType: 'json',
+                type: 'POST',
+                data: { 'username': $('#username').val() },
+                success: function (data) {
+                    var resJ = JSON.parse(data);
+                    if (resJ == '0') {
+                        $("#username").prop('readonly', true);
+                    }
+                    else {
+                        $('#username').val('');
+                        $("#username").prop('readonly', false);
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-2x"></i><br>' + 'UserName Already Exist!' + '</span>',
+                            size: 'small'
+                        });
+
+                    }
+                }
+            });
+            $(".loader").hide("slow");
+        }
+    });
+    //-------------------------------------------------------------------------------------------Match password and confirmpassword
+    $('#confirmpassword').focusout(function () {
+        if ($('#password').val() != '') {
+            var pwd = $('#password').val();
+            var conpwd = $("#confirmpassword").val()
+            if (pwd != conpwd) {
+                bootbox.alert({
+                    message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-2x"></i><br>' + 'The passwords you entered did not match' + '</span>',
+                    size: 'small'
+                });
+
+                $("#confirmpassword").val("");
+            }
+        }
+        else {
+            bootbox.alert({
+                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-2x"></i><br>' + 'Please specify a secure password.' + '</span>',
+                size: 'small'
+            });
+            $("#confirmpassword").val("");
+
+        }
+    });
+
+  
+
+    function ReBindTable() {
+
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetUserCreationPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+                var pageload = Result.split('|');
+                var Employee = JSON.parse(pageload[0]);
+
+                var recordstatus = JSON.parse(pageload[1]);
+                var resJ = JSON.parse(pageload[2]);
+                var process = JSON.parse(pageload[3]);
+
+                $("#ddlemployeecode").empty().append('<option value="">Select an Option</option>');
+                $.each(Employee, function () {
+                    $("#ddlemployeecode").append($("<option></option>").val(this["EMPLOYEECODE"]).html(this["EMPLOYEECODE"]));
+                    $('#ddlemployeecode').trigger("chosen:updated");
+                });
+
+
+                // $("#recordstatus").empty().append('<option value="">Select an Option</option>');
+                $.each(recordstatus, function () {
+                    $("#ddlstatus").append($("<option></option>").val(this["METASUBCODE"]).html(this["METADATADESCRIPTION"]));
+                    $('#ddlstatus').trigger("chosen:updated");
+                });
+                $("#ddlprocessname").empty().append('<option value="">Select an Option</option>');
+                $.each(process, function () {
+                    $("#ddlprocessname").append($("<option></option>").val(this["PROCESSNAME"]).html(this["PROCESSNAME"]));
+                    $('#ddlprocessname').trigger("chosen:updated");
+                });
+                BindTab(resJ, '0');
+                
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+});

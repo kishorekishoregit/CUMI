@@ -1,0 +1,216 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>JK WOODS</title>
+    <meta name="description" content="User login page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="@Url.Content("~/Styles/css/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Styles/font-awesome/4.5.0/css/font-awesome.min.css")" />
+    <!-- text fonts -->
+    <link rel="stylesheet" href="@Url.Content("~/Styles/css/fonts.googleapis.com.css")" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="@Url.Content("~/Styles/css/ace.min.css")" />
+    <link rel="shortcut icon" href="~/Images/jksmalllogo.png">
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="assets/css/ace-part2.min.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="@Url.Content("~/Styles/css/ace-rtl.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Styles/css/login-custom.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Styles/css/sweetalert.css")">
+    <!--[if lte IE 9]>
+      <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <!--[if lte IE 8]>
+    <script src="assets/js/html5shiv.min.js"></script>
+    <script src="assets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login-layout ">
+    <div class="main-container">
+        <div class="main-content">
+            <!--WRAPPER-->
+            <div id="wrapper">
+                <!--SLIDE-IN ICONS-->
+                <div class="user-icon"></div>
+                <div class="pass-icon"></div>
+                <!--END SLIDE-IN ICONS-->
+                <!--LOGIN FORM-->
+                <div class="login-form">
+                    <!--HEADER-->
+                    <div class="header" style="background-color: #FFFFFF;">
+                        @*<div class="" style="
+                                position: absolute;
+                                top: -27px;
+                                border-radius: 5px;
+                                text-align: center;
+                                left: 21%;
+                                margin: auto;
+                                width: 170px;
+                                padding: 6px 0px;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+                                -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+                                -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+                                background:#e4dfdf;
+                            "><img src="" class="img-responsive" alt="MAPOL TSF" style="margin:auto"></div>*@
+                        <!--TITLE--><h1><img src="~/images/jkwoodslogo.png" class="img-center"></h1><!--END TITLE-->
+
+                    </div>
+                    <!--END HEADER-->
+                    <!--CONTENT-->
+                    <div class="content" style="background-color: #D1E36D;">
+                        <div class="form-group">
+                            <label class="control-label sr-only">Username</label>
+                            <!--USERNAME--><input name="Username" type="text" autofocus class="input username form-control" placeholder="Username" id="username"><!--END USERNAME-->
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label sr-only">Password</label>
+                            <!--PASSWORD--><input name="password" id="password" type="password" class="input password form-control" placeholder="Password"><!--END PASSWORD-->
+                        </div>
+                    </div>
+                    <!--END CONTENT-->
+                    <!--FOOTER-->
+                    <div class="footer">
+                        <button class="width-35 btn btn-sm btn-block btn-danger button" id="btnlogin">
+                            <span class="bigger-110">Login</span>
+                        </button>
+                    </div>
+                    <!--END FOOTER-->
+                </div>
+                <!--END LOGIN FORM-->
+            </div>
+            <!--END WRAPPER-->
+            <!--GRADIENT--><div class="gradient"></div><!--END GRADIENT-->
+            @*<div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                       <div class="login-container">
+                            <div class="center">
+                                <h1>
+                                    <img src="~/Images/mapol_logo.png" class="img-responsive" style="margin:auto" />
+                                </h1>
+                                <h3 style="color:#00026b"><b>TSF</b></h3>
+                            </div>
+                            <div class="space-6"></div>
+                            <div class="position-relative">
+                                <div id="login-box" class="login-box visible widget-box no-border">
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <h4 class="header blue lighter bigger">
+                                                <i class="ace-icon fa fa-paint-brush green"></i>
+                                                Please Enter Your Information
+                                            </h4>
+                                            <div class="space-6"></div>
+                                            <form id="frm_login" name="frm_login" action="@Url.Content("~/Login")" method="post">
+                                                <fieldset>
+                                                    <label class=" block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input type="text" class="form-control" placeholder="Username" name="Username" id="username" />
+                                                    <i class="ace-icon fa fa-user"></i>
+                                                </span>
+                                                </label>
+                                                <label class="block clearfix">
+                                                    <span class="block input-icon input-icon-right">
+                                                        <input type="password" class="form-control" placeholder="Password" name="password" id="password" />
+                                                        <i class="ace-icon fa fa-lock"></i>
+                                                    </span>
+                                                </label>
+                                                <div class="space"></div>
+                                                <div class="clearfix">
+                                                    <button class="width-35 btn btn-sm btn-block btn-success" id="btnlogin">
+                                                        <span class="bigger-110">Login</span>
+                                                    </button>
+                                                </div>
+                                                <div class="space-4"></div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            <div class="textfooter">
+                <div style="font-size:14px; color:white;text-align:center">© 2021. All Rights Reserved by ESS Matrix Infotech Pvt Ltd.</div>
+            </div>
+            <!--END FOOTE
+            </div><!-- /.main-content -->
+        </div>
+
+        <!-- basic scripts -->
+        <!--[if !IE]> -->
+        <script src="@Url.Content("~/Scripts/jquery-2.1.4.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/wizard.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery-additional-methods.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/bootbox.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.maskedinput.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/select2.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.dataTables.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.dataTables.bootstrap.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/dataTables.buttons.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/buttons.flash.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/buttons.html5.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/buttons.print.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/buttons.colVis.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/moment.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.knob.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/autosize.min.js")"></script>
+        <script src="@Url.Content("~/Scripts/jquery.inputlimiter.min.js")"></script>
+        <!-- <![endif]-->
+        <!--[if IE]>
+        <script src="assets/js/jquery-1.11.3.min.js"></script>
+        <![endif]-->
+        <script type="text/javascript">
+            if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+        </script>
+        <!-- inline scripts related to this page -->
+        <script type="text/javascript">
+            jQuery(function ($) {
+                $(document).on('click', '.toolbar a[data-target]', function (e) {
+                    e.preventDefault();
+                    var target = $(this).data('target');
+                    $('.widget-box.visible').removeClass('visible');//hide others
+                    $(target).addClass('visible');//show target
+                });
+            });
+
+        </script>
+        <script src="@Url.Content("~/Scripts/sweetalert.min.js")"></script>
+        <script src="@Url.Content("~/FuctionScripts/Login.js")"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".username").focus(function () {
+                    $(".user-icon").css("left", "-37px");
+                });
+                $(".username").blur(function () {
+                    $(".user-icon").css("left", "0px");
+                });
+                $(".password").focus(function () {
+                    $(".pass-icon").css("left", "-37px");
+                });
+                $(".password").blur(function () {
+                    $(".pass-icon").css("left", "0px");
+                });
+            });
+        </script>
+        <style>
+            .textfooter {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                color: white;
+                text-align: center;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+        </style>
+</body>
+</html>

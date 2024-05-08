@@ -1,0 +1,983 @@
+﻿jQuery(function ($) {
+    var printload = '';
+    BindTable();
+
+    function BindTable() {
+
+        var table = document.getElementById("dynamic-table-print");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+
+        var RoleDatatable = $('#dynamic-table-print');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetFGLabelPrintPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result.split('|');
+
+                var prnno = JSON.parse(pageload[0]);
+                var lotno = JSON.parse(pageload[1]);
+                var resJ = JSON.parse(pageload[2]);
+
+
+                $("#ddlprnno").empty().append('<option value="">Select an Option</option>');
+                $.each(prnno, function () {
+                    $("#ddlprnno").append($("<option></option>").val(this["PRNNO"]).html(this["PRNNO"]));
+                    $('#ddlprnno').trigger("chosen:updated");
+                });
+                //$("#ddllotno").empty().append('<option value="">Select an Option</option>');
+                //$.each(lotno, function () {
+                //    $("#ddllotno").append($("<option></option>").val(this["LOTNO"]).html(this["LOTNO"]));
+                //    $('#ddllotno').trigger("chosen:updated");
+                //});
+
+
+
+                BindTab(resJ, '1');
+            }
+        });
+        $(".loader").hide("slow");
+    }
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        // TABLE BIND     
+        if (type == '0') {
+            $('#dynamic-table-print').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table-print');
+
+            $('#dynamic-table-print').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bSort": false,
+                "info": false,
+                "ascrollX": "100%",
+                "aColumns": [
+                    finalcolsresult,
+                    { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    //'searchable': true,
+                    'orderable': false,
+                    'className': 'dt-body-center',
+                }],
+
+                columnDefs: cols1,
+                columns: [
+
+                    { 'data': 'PRN No' },
+
+                    { 'data': 'Lot No' },
+                    { 'data': 'Lot Serial No' },
+                    { 'data': 'Quantity' },
+                    { 'data': 'PRN Quantity' }
+
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        title: 'FGLabel Print',
+                        text: '<i class="fa fa-copy bigger-110 pink"></i> <span class="hidden">Copy to clipboard</span>',
+                        titleAttr: 'Copy',
+                        footer: false
+                    },
+
+                    {
+                        extend: 'excelHtml5',
+                        title: 'FGLabel Print',
+                        text: '<i class="fa fa-file-excel-o bigger-110 green"></i> <span class="hidden">Export to Excel</span>',
+                        titleAttr: 'Excel',
+                        footer: false
+                    },
+                    {
+                        extend: 'pdfHtml5',
+
+                        text: '<i class="fa fa-file-pdf-o bigger-110 red"></i> <span class="hidden">Export to PDF</span>',
+                        titleAttr: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        footer: false,
+                        title: 'FGLabel Print',
+
+
+                    }, {
+                        extend: 'print',
+                        title: 'FGLabel Print',
+                        text: '<i class="fa fa-print bigger-110 grey"></i> <span class="hidden">Print</span>',
+                        titleAttr: 'Print',
+                        footer: false
+                    }
+                ]
+            });
+        }
+        else {
+            $('#dynamic-table tbody').remove();
+            $('#dynamic-table thead').remove();
+            $('#dynamic-table-print').dataTable({
+                "language": {
+                    "emptyTable": "FGLabel No records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                    { sWidth: "10%", bSearchable: false, bSortable: false },
+                    { sWidth: "10%", bSearchable: false, bSortable: false },
+                    { sWidth: "10%", bSearchable: false, bSortable: false },
+                    { sWidth: "10%", bSearchable: false, bSortable: false },
+                    { sWidth: "10%", bSearchable: false, bSortable: false },
+                    { sWidth: "10%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+
+        }
+        $(".loader").hide("slow");
+    }
+    $('#btnadd').click(function (event) {
+        var errormessage = "";
+        if ($('#ddlprnno').val() == "") {
+            errormessage += "Please Select PRN No.</br>";
+        }
+        if ($('#ddllotno').val() == "") {
+            errormessage += "Please Select LOT No.</br>";
+        }
+        if ($('#txtquantity').val() <= 0 && $('#txtqty').val() != '') {
+            errormessage += "Please Enter Quantity.</br>"
+        }
+        if (errormessage.length == 0) {
+
+            if ($('#txtquantity').val() == "1") {
+
+                var action = $('#actiontypeadd').html();
+
+                $(".loader").show("slow");
+
+                if (window.FormData !== undefined) {
+
+                    var formData = new FormData();
+                    formData.append('prnno', $('#ddlprnno').val());
+                    formData.append('LotNo', $('#ddllotno').val());
+                    formData.append('Quantity', $('#txtquantity').val());
+                    formData.append('NetWeight', $('#hdnnetweight').val());
+                    formData.append('ItemCode', $('#hdnitemcode').val());
+                    formData.append('ItemName', $('#hdnitemname').val());
+                    formData.append('Prndate', $('#hdnprndate').val());
+                    // var asstype = $('#ddlgrnno option:selected').text();
+
+                    //  formData.append('GrnNo', asstype);
+
+                    formData.append('action', action);
+                    $.ajax({
+                        url: 'AddInventoryDetalis',
+                        type: "POST",
+                        contentType: false, // Not to set any content header  
+                        processData: false, // Not to process data  
+                        data: formData,
+                        success: function (result) {
+                            var results = result.split('|');
+                            printload = JSON.parse(results[1]);
+                            if (results[0] == 'true') {
+
+                                BindChildTab(printload, '1');
+                                reset();
+                            }
+                            else {
+                                sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+                            }
+                        },
+                        error: function (err) {
+                            //alert(err.statusText);
+                        }
+                    });
+                    //$('#ddlgrnno').prop('disabled', true);
+
+
+
+                }
+
+            } else {
+                var $row = $(this).closest("tr");
+                var $lotno = $("#ddllotno").val();
+                var $netweight = $("#hdnnetweight").val();
+                var $quantity = $("#txtquantity").val();
+
+                var $itemcode = $("#hdnitemcode").val();
+                var $itemname = $("#hdnitemname").val();
+                var $prndate = $("#hdnprndate").val();
+
+                $('#modalview').modal('show');
+                callpopup($lotno, $netweight, $quantity, $itemcode, $itemname, $prndate);
+            }
+
+
+
+        }
+
+
+        else {
+            sweetAlert("", errormessage.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+            $('.loadingGIF').hide();
+        }
+        //}
+        //else {
+        //    bootbox.alert({
+        //        message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + errormessage + '</span>',
+        //        size: 'small'
+        //    });
+        //}
+    });
+    function callpopup($lotno, $netweight, $quantity, $itemcode, $itemname, $prndate) {
+
+        $("#txtslotno").val($lotno);
+        $("#txtsnetweight").val($quantity);
+        $('#txtsquantityprn').val($netweight);
+        $('#txtsquantity').val($quantity);
+        $('#txtsitemcode').val($itemcode);
+        $('#txtsitemname').val($itemname);
+        $('#hdnpopprndate').val($prndate);
+    }
+    $('#btnpopupadd').click(function (event) {
+        var errormessage = "";
+        if ($('#txtsactualweight').val() <= 0 && $('#txtsactualweight').val() != '') {
+            errormessage += "Please Enter Actual Weight.</br>"
+        }
+        if (errormessage.length == 0) {
+
+            var action = $('#actiontypepopupaddd').html();
+
+            $(".loader").show("slow");
+
+            if (window.FormData !== undefined) {
+                var s = $('#txtsactualweight').val();
+                var formData = new FormData();
+                formData.append('prnno', $('#ddlprnno').val());
+                formData.append('LotNo', $('#txtslotno').val());
+                formData.append('Quantity', $('#txtsquantity').val());
+                formData.append('NetWeight', $('#txtsquantityprn').val());
+                formData.append('GrossWeight', $('#txtsquantity').val());
+                formData.append('ItemCode', $('#txtsitemcode').val());
+                formData.append('ItemName', $('#txtsitemname').val());
+                formData.append('Prndate', $('#hdnpopprndate').val());
+                formData.append('actual', $('#txtsactualweight').val());
+                formData.append('isauto', $("#IsAuto").is(':checked'));
+                //  formData.append('GrnNo', asstype);
+
+                formData.append('action', action);
+                $.ajax({
+                    url: 'AddPopupInventoryDetalis',
+                    type: "POST",
+                    contentType: false, // Not to set any content header  
+                    processData: false, // Not to process data  
+                    data: formData,
+                    success: function (result) {
+                        var results = result.split('|');
+                        // printload = JSON.parse(results[1]);
+                        var printload2 = JSON.parse(results[1]);
+                        if (results[0] == 'true') {
+
+                            BindPopupChildTab(printload2, '1');
+                            $('#txtsactualweight').val('');
+                        }
+                        else {
+                            bootbox.alert({
+                                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + 'Divide Lot Quantity' + '</span>',
+                                size: 'small'
+                            });
+                            BindPopupChildTab(printload2, '0');
+                        }
+                    },
+                    error: function (err) {
+                        //alert(err.statusText);
+                    }
+                });
+                //$('#ddlgrnno').prop('disabled', true);
+
+
+
+            }
+
+
+
+
+
+        }
+
+
+        else {
+            sweetAlert("", errormessage.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+            $('.loadingGIF').hide();
+        }
+        //}
+        //else {
+        //    bootbox.alert({
+        //        message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + errormessage + '</span>',
+        //        size: 'small'
+        //    });
+        //}
+    });
+    $('#btnpopupok').click(function (event) {
+
+        if (window.FormData !== undefined) {
+            var s = $('#txtsactualweight').val();
+            var formData = new FormData();
+            formData.append('NetWeight', $('#txtsquantityprn').val());
+            formData.append('Quantity', $('#txtsquantity').val());
+            formData.append('isauto', $("#IsAuto").is(':checked'));
+            $(".loader").show("slow");
+
+
+            $.ajax({
+                url: 'OkInventoryDetalis',
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data 
+                data: formData,
+                success: function (result) {
+                    var results = result.split('|');
+                    printload = JSON.parse(results[1]);
+                    var printload4 = JSON.parse(results[2]);
+                    if (results[0] == 'true') {
+                        BindChildTab(printload, '1');
+                        BindPopupChildTab(printload4, '1');
+                        $('#txtslotno').val('');
+                        $('#txtsquantity').val('');
+                        $('#txtsnetweight').val('');
+                        $('#txtsgrossweight').val('');
+                        $('#txtsactualweight').val('');
+                        $('#txtsitemcode').val('');
+                        $('#txtsitemname').val('');
+                        $('#hdnpopprndate').val('');
+                        $('#modalview').modal('hide');
+                        $('#IsAuto').attr("checked", false);
+                        reset();
+                    }
+                    else {
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + results[1] + '</span>',
+                            size: 'small'
+                        });
+                        BindPopupChildTab(printload4, '1');
+                    }
+                },
+                error: function (err) {
+                    //alert(err.statusText);
+                }
+            });
+            //$('#ddlgrnno').prop('disabled', true);
+
+
+
+        }
+
+
+    });
+    function BindChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-table-details > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-table-details').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-table-details').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bSort": false,
+                "bInfo": false,
+                "bFilter": false,
+                "aColumns": [
+                    finalcolsresult,
+                    { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                    { 'data': 'PRNNO' },
+                    { 'data': 'LOTNO' },
+                    { 'data': 'SERIALNO' },
+                    { 'data': 'QUANTITY' },
+                    //{ 'data': 'NETWEIGHT' },
+                    { 'data': 'ITEMCODE' },
+                    { 'data': 'ITEMNAME' },
+                    { 'data': 'PRNDATE' },
+
+                ],
+
+            });
+
+        }
+        else {
+            $('#dynamic-table-details tbody').remove();
+            $('#dynamic-table-details thead').remove();
+            $('#dynamic-table-details').dataTable({
+                "language": {
+                    "emptyTable": "PRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+
+
+    }
+    function BindPopupChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-popuptableDetails > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-popuptableDetails').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-popuptableDetails').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bSort": false,
+                "bInfo": false,
+                "bFilter": false,
+                "aColumns": [
+                    finalcolsresult,
+                    { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': false,
+                    'orderable': false,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                    { 'data': 'PRNNO' },
+                    { 'data': 'LOTNO' },
+                    { 'data': 'SERIALNO' },
+                    { 'data': 'QUANTITY' },
+                   // { 'data': 'NETWEIGHT' },
+                    { 'data': 'ITEMCODE' },
+                    { 'data': 'ITEMNAME' },
+                    { 'data': 'PRNDATE' },
+                    { 'data': 'ACTUAL' },
+
+                ],
+
+            });
+
+        }
+        else {
+            $('#dynamic-popuptableDetails tbody').remove();
+            $('#dynamic-popuptableDetails thead').remove();
+            $('#dynamic-popuptableDetails').dataTable({
+                "language": {
+                    "emptyTable": "PRN Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false },
+                   // { sWidth: "100%", bSearchable: false, bSortable: false },
+                    { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+
+
+    }
+
+    $("#btnprint").click(function () {
+
+        var prnno = "", lotno = "", serialno = "", quantity = "", netweight = "", grossweight = "", itemcode = "", itemname = "", prndate = "";
+        var intcount = 0;
+        jQuery("table.detailstable tbody > tr").each(function () {
+
+            intcount++;
+            prnno += jQuery('td:eq(0)', this).text() + "^";
+            lotno += jQuery('td:eq(1)', this).text() + "^";
+            serialno += jQuery('td:eq(2)', this).text() + "^";
+            quantity += jQuery('td:eq(3)', this).text() + "^";
+            netweight += "" + "^";
+            itemcode += jQuery('td:eq(4)', this).text() + "^";
+            itemname += jQuery('td:eq(5)', this).text() + "^";
+            prndate += jQuery('td:eq(6)', this).text() + "^";
+            //prndate += $('#hdnprndate').val() + "^";
+
+
+        });
+        if (intcount > 0) {
+            prnno = prnno.substring(0, prnno.length - 1);
+            lotno = lotno.substring(0, lotno.length - 1);
+            serialno = serialno.substring(0, serialno.length - 1);
+            quantity = quantity.substring(0, quantity.length - 1);
+            netweight = netweight.substring(0, netweight.length - 1);
+            itemcode = itemcode.substring(0, itemcode.length - 1);
+            itemname = itemname.substring(0, itemname.length - 1);
+            prndate = prndate.substring(0, prndate.length - 1);
+        }
+
+        var errormessage = "";
+        if (window.FormData !== undefined) {
+            $('.loadingGIF').show();
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'InsertFGLabelPrintDetails',
+                dataType: "json",
+                type: "POST",
+
+                //data: $("#validation-form").serialize() + '&' + $.param({ 'actiontype': $("#actiontype").text() }),
+
+                data: $.param({ 'prnno': prnno })
+                    + '&' + $.param({ 'lotno': lotno })
+                    + '&' + $.param({ 'serialno': serialno })
+                    + '&' + $.param({ 'quantity': quantity })
+                    + '&' + $.param({ 'netweight': netweight })
+                    + '&' + $.param({ 'itemcode': itemcode })
+                    + '&' + $.param({ 'itemname': itemname })
+                    + '&' + $.param({ 'prndate': prndate }),
+                //  data:formData,
+                success: function (resultjson) {
+                    var Res = resultjson.split('|');
+                    var result = Res[0];
+                    var printdata = Res[1];
+                    var barcodes = Res[2];
+                    if (result.toUpperCase() == "TRUE") {
+
+
+                        //BindTab(Res, '1');
+                        $("form").trigger("reset");
+
+
+                        $("#printable").html(printdata);
+
+                        //var barcodearr = barcodes.split("^");
+                        //var COUNT = 0;
+                        //for (var i = 0; i < barcodearr.length; i++) {
+                        //    //var ID = DetailsTable[i].BARCODE;
+                        //    var ID = barcodearr[i];
+                        //    QRCODEPRINT(COUNT, ID);
+                        //    COUNT++;
+
+                        //}
+
+                        setTimeout(function () {
+                            printableinner();
+                            location.reload();
+                        }, 20);
+
+                        //bootbox.alert({
+                        //    message: '<span class="text-success"><i class="ace-icon fa fa-check-circle fa-4x"></i><br>' + "RMLabel Print Saved Successfully" + '</span>',
+                        //    size: 'small',
+                        //    callback: function () {
+                        //        location.reload();
+                        //    }
+                        //});
+
+                        $('.loadingGIF').hide();
+                        //location.reload();
+
+                    }
+                    else {
+                        bootbox.alert({
+                            message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + msg + '</span>',
+                            size: 'small'
+                        });
+                        $('.loadingGIF').hide();
+                    }
+                }
+            });
+        }
+
+
+
+    });
+    function printableinner() {
+
+        var disp_setting = "toolbar=no,location=no,";
+        disp_setting += "directories=no,menubar=no,";
+        disp_setting += "scrollbars=yes";
+        var content_vlue = document.getElementById("printable").innerHTML;
+        var docprint = window.open("", "", disp_setting);
+        docprint.document.open();
+        docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+        docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+        docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+        docprint.document.write('<head>');
+        docprint.document.write('<style type="text/css">body{ border:0px solid #000;margin:0px;font-family:verdana,Arial;color:#000;font-family:Verdana, Geneva, sans-serif; font-size:8px;}a{color:#000;text-decoration:none;}*{font-size:8px;} small{font-size:30% !important;}table {border-collapse: collapse;}table, td, th {border: 1px solid black;padding:0.5rem 2px;}@page {size: 4in 2in;margin: 1mm;}div#printable {width: 4in;height: 2in;} .qr-panel img{width:50px;}</style> ');
+        docprint.document.write('</head><body onLoad="self.print()">');
+        docprint.document.write(content_vlue);
+        docprint.document.close();
+        docprint.focus();
+
+    }
+    $('#ddllotno').change(function () {
+
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'FetchFGbelPrintGetHiddenValuebyLotNO',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: $.param({ 'PrnNo': $("#ddlprnno").val() })
+                + '&' + $.param({ 'LotNo': $("#ddllotno").val() })
+                + '&' + $.param({ 'ItemCode': $("#ddlitemcode").val() }),
+
+            success: function (data) {
+                var Res = JSON.parse(data);
+            
+                $('#hdnnetweight').val(Res[0].NETWEIGHT);
+                $('#hdnprndate').val(Res[0].PRNDATE);
+             }
+        });
+        $(".loader").hide("slow");
+    });
+
+
+    $('#ddlitemcode').change(function () {
+       
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'FetchFGbelPrintGetHiddenValuebyPrnNO',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: $.param({ 'PrnNo': $("#ddlprnno").val() })
+                + '&' + $.param({ 'ItemCode': $("#ddlitemcode").val() }),
+
+            success: function (data) {
+                var Res = data.split('|');
+                var lotno = JSON.parse(Res[0]);
+                var itemname = JSON.parse(Res[1]);
+
+                $("#ddllotno").empty().append('<option value="">Select an Option</option>');
+                $.each(lotno, function () {
+                    $("#ddllotno").append($("<option></option>").val(this["LOTNO"]).html(this["LOTNO"]));
+                    $('#ddllotno').trigger("chosen:updated");
+                });
+             
+                $('#hdnitemcode').val($("#ddlitemcode").val());
+                $('#hdnitemname').val(itemname[0].ITEMNAME);
+               
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+    $('#ddlprnno').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+        //var OText = optionselected.find("option:selected").text();
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'FetchFGLabelPrintGetLotNoByPRNNo',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'PrnNo': OValue },
+            success: function (data) {
+
+                var Res = data.split('|');
+                var Item = JSON.parse(Res[0]);
+
+                //$("#ddllotno").empty().append('<option value="">Select an Option</option>');
+                //$.each(lotno, function () {
+                //    $("#ddllotno").append($("<option></option>").val(this["LOTNO"]).html(this["LOTNO"]));
+                //    $('#ddllotno').trigger("chosen:updated");
+                //});
+
+
+                $("#ddlitemcode").empty().append('<option value="">Select</option>');
+                $.each(Item, function () {
+                    $("#ListddlItem").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMNAME"]));
+                    $('#ListddlItem').trigger("chosen:updated");
+                });
+
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+
+    //function Clear() {
+    //    location.reload();
+    //};
+
+    function Clear() {
+        $.ajax({
+            url: 'ClearFGLabelprint',
+            type: "POST",
+            contentType: false, // Not to set any content header  
+            processData: false, // Not to process data  
+            success: function (result) {
+                //BindTable('0');
+                //$('#dynamic-table-details').dataTable().fnDestroy();
+                //$('#dynamic-table-details').empty();
+                location.reload();
+            },
+            error: function (err) {
+                //alert(err.statusText);
+            }
+        });
+    };
+
+    $('#btnclear').click(Clear);
+
+
+    function ClearPop() {
+        $.ajax({
+            url: 'ClearFGPopLabelprint',
+            type: "POST",
+            contentType: false, // Not to set any content header  
+            processData: false, // Not to process data  
+            success: function (result) {
+                var pageload = result;
+
+                var grnno = JSON.parse(pageload);
+
+                BindPopupChildTab(grnno, '1');
+
+            },
+            error: function (err) {
+                //alert(err.statusText);
+            }
+        });
+    };
+    $('#btnpopupitemclear').click(ClearPop);
+
+    function reset() {
+
+        $('#ddlprnno').val("");
+        $('#ddlprnno').trigger("chosen:updated");
+        $('#hdnitemcode').val("");
+        $('#hdnitemname').val("");
+        $('#ddllotno').val("");
+        $('#ddllotno').trigger("chosen:updated");
+        $('#txtquantity').val("");
+        $('#hdnnetweight').val("");
+        $('#hdnitemcode').val("");
+        $('#hdnitemname').val("");
+
+        $('#hdngrossweight').val("");
+        $('#hdnprndate').val("");
+
+
+    }
+
+
+
+
+        $('#IsAuto').click(function () {
+        if ($(this).is(':checked')) {
+            $('#IsAuto').attr("checked", true);
+            itemclear();
+
+        } else {
+            $('#IsAuto').attr("checked", false);
+            itemclear();
+        }
+    });
+
+    function itemclear() {
+        $('#txtsactualweight').val("");
+        
+        ClearPop();
+    }
+ 
+
+
+});

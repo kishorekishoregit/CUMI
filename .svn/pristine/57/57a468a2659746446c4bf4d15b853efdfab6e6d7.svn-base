@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+     public class REMIXBarcodelabelEntity
+    {
+          public string JOBPROCESSNO { get; set; }      
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+
+
+        public List<REMIXBarcodelabelDetailEntity> requestremixlabelprintdetails { get; set; }
+     
+    }
+     public class REMIXBarcodelabelDetailEntity
+    {
+
+         public string JOBPROCESSNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string SERIALNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string ACTUAL { get; set; }
+        public string BARCODE { get; set; }
+
+    }
+     public class RequestREMIXBarcodeLabelPrint
+     {
+         public REMIXBarcodelabelEntity ReqremixlabelprintHeader { get; set; }
+         public REMIXBarcodelabelDetailEntity Reqremixlabelprintdetails { get; set; }
+         public List<REMIXBarcodelabelEntity> requestremixlabelprintHeader { get; set; }
+         public List<REMIXBarcodelabelDetailEntity> requestremixlabelprintdetails { get; set; }
+     }
+     public class ResponseREMIXBarcodeLabelPrint
+     {
+
+         public bool result { get; set; }
+         public List<ErrorItem> ErrorContainer { get; set; }
+
+         public DataTable JS_JobProcessno { get; set; }
+
+         public DataTable JS_JobProcessdetails { get; set; }
+
+         public DataTable JS_Hiddendetails { get; set; }
+
+         public DataTable JS_REMIXLablePrintDetails { get; set; }
+
+         public DataTable JS_REMIXLablePrintTempDetails { get; set; }
+
+         public DataTable JS_No{ get; set; }
+
+
+     }
+
+    }
+

@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using JKWOODSDAC;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace JKWOODSBC
+{
+    public class GRNEntryBC
+    {
+        public ResponseGRNEntry PageloadGRNBC()
+        {
+            ResponseGRNEntry response = new ResponseGRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PageloadGRNDAL();
+            return response;
+        }
+        public ResponseGRNEntry GRNItemnameFetchBC(RequestGRNEntry request)
+        {
+            ResponseGRNEntry response = new ResponseGRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.GRNItemnameFetchDAL(request);
+            return response;
+        }
+        public ResponseGRNEntry GRNInsertBC(RequestGRNEntry request)
+        {
+
+            ResponseGRNEntry response = new ResponseGRNEntry();
+            try
+            {
+                response.ErrorContainer = ValidateGRNInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.GRNInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+        public List<ErrorItem> ValidateGRNInsert(RequestGRNEntry request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.ReqGRNEntry.GRNNO == "")
+                err.Add(new ErrorItem { DataItem = "GRN No.", ErrorNo = "SSB0009" });
+            if (request.ReqGRNEntry.GRNDATE == "")
+                err.Add(new ErrorItem { DataItem = "GRN Date", ErrorNo = "SSB0009" });
+            if (request.ReqGRNEntry.SUPPLIER == "")
+                err.Add(new ErrorItem { DataItem = "Supplier", ErrorNo = "SSB0010" });
+            if (request.requestGRNEntrydetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            return err;
+
+            
+        }
+        public ResponseGRNEntry GRNViewDtsBC(RequestGRNEntry request)
+        {
+            ResponseGRNEntry response = new ResponseGRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.GRNViewDtsDAL(request);
+            return response;
+        }
+        public ResponseGRNEntry GRNEditDtsBC(RequestGRNEntry request)
+        {
+            ResponseGRNEntry response = new ResponseGRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.GRNEditDtsDAL(request);
+            return response;
+        }
+        public ResponseGRNEntry GRNUpdateBC(RequestGRNEntry request)
+        {
+
+            ResponseGRNEntry response = new ResponseGRNEntry();
+            try
+            {
+                response.ErrorContainer = ValidateGRNInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.GRNUpdateDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+    }
+}

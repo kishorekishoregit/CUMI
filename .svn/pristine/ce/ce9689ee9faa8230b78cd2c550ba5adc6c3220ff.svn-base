@@ -1,0 +1,91 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+   public class BinMasterBC
+    {
+       public ResponseBinMaster FetchBinMasterPageLoadBC()
+       {
+           ResponseBinMaster response = new ResponseBinMaster();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.FetchBinMasterPageLoadDAL();
+           return response;
+       }
+
+       //Fetch Bin Details By Bin Code
+       public ResponseBinMaster FetchRackByLocationBC(RequestBinMaster request)
+       {
+           ResponseBinMaster response = new ResponseBinMaster();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.FetchRackByLocationDAL(request);
+           return response;
+
+       }
+
+
+       public ResponseBinMaster FetchBinMasterbyBinCodeBC(RequestBinMaster request)
+       {
+           ResponseBinMaster response = new ResponseBinMaster();
+           response.ErrorContainer = Validate(request);
+           if (response.ErrorContainer.Count == 0)
+           {
+               WMSDAL DAL = new WMSDAL();
+               response = DAL.FetchBinMasterbyBinCodeDAL(request);
+           }
+           return response;
+
+       }
+
+      
+
+       public ResponseBinMaster InsertBinMasterBC(RequestBinMaster request)
+       {
+           ResponseBinMaster response = new ResponseBinMaster();
+             response.ErrorContainer = Validate(request);
+             if (response.ErrorContainer.Count == 0)
+             {
+                 WMSDAL DAL = new WMSDAL();
+                 response = DAL.InsertBinMasterDAL(request);
+             }
+           return response;
+
+       }
+
+       public ResponseBinMaster UpdateBinMasterBC(RequestBinMaster request)
+       {
+
+           ResponseBinMaster response = new ResponseBinMaster();
+           response.ErrorContainer = Validate(request);
+           if (response.ErrorContainer.Count == 0)
+           {
+               WMSDAL DAL = new WMSDAL();
+               response = DAL.UpdateBinMasterDAL(request);
+           }
+           return response;
+
+       }
+
+       public List<ErrorItem> Validate(RequestBinMaster request)
+       {
+           List<ErrorItem> err = new List<ErrorItem>();
+           if (request.requestBinMaster.BinCode == "")
+               err.Add(new ErrorItem { DataItem = "Bin Code", ErrorNo = "SSB0009" });
+           if (request.requestBinMaster.Binname == "")
+               err.Add(new ErrorItem { DataItem = "Bin Name", ErrorNo = "SSB0009" });
+            if (request.requestBinMaster.Locationcode == "")
+                err.Add(new ErrorItem { DataItem = "Location Name", ErrorNo = "SSB0010" });
+            if ((request.requestBinMaster.Rackcode == "" ) || request.requestBinMaster.Rackcode == "null")
+               err.Add(new ErrorItem { DataItem = "Rack Name", ErrorNo = "SSB0010" });
+
+
+
+           return err;
+       }
+
+    }
+}

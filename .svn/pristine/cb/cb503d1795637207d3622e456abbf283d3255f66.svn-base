@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class QCEntryEntity
+    {
+		public string PRNNO { get; set; }
+		public string PARTNAME { get; set; }
+		public string CUSTOMER { get; set; }
+		public string MODEL { get; set; }
+		public string VARIANT { get; set; }
+		public string LOTNO { get; set; }
+	
+		public string QUANTITY { get; set; }
+		public string REJECTEDQUANTITY { get; set; }
+		public string REMARKS { get; set; }
+		public string LOTSTATUS { get; set; }
+		public string USERCODE { get; set; }
+		public string TYPE { get; set; }
+		public List<QCEntryDetailEntity> requestqcentrydetails { get; set; }
+	}
+	public class QCEntryDetailEntity
+	{
+		public string PRNNO { get; set; }
+		public string PARTNAME { get; set; }
+		public string CUSTOMER { get; set; }
+		public string MODEL { get; set; }
+		public string VARIANT { get; set; }
+		public string LOTNO { get; set; }
+
+		public string QUANTITY { get; set; }
+		public string REJECTEDQUANTITY { get; set; }
+		public string REMARKS { get; set; }
+		public string LOTSTATUS { get; set; }
+		public string USERCODE { get; set; }
+		public string TYPE { get; set; }
+
+	}
+	public class RequestQCEntry
+	{
+		public QCEntryEntity requestQCEntry { get; set; }
+		public QCEntryDetailEntity Reqqcentrydetails { get; set; }
+		public List<QCEntryDetailEntity> requestqcentrydetails { get; set; }
+	}
+	public class ResponseQCEntry
+	{
+		public bool result { get; set; }
+		public List<ErrorItem> ErrorContainer { get; set; }
+		public DataTable JS_RecordStatus { get; set; }
+		public DataTable JS_QCEntrydetails { get; set; }
+
+	}
+}

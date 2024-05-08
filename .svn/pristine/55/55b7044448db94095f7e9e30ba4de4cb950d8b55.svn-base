@@ -1,0 +1,55 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+   public class InvoicePrintBC
+    {
+       public ResponseInvoicePrint PageloadGetInvoiceBC()
+       {
+           ResponseInvoicePrint response = new ResponseInvoicePrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.PageloadGetInvoiceDAL();
+           return response;
+       }
+       public ResponseInvoicePrint PageloadGetItemNameBC(RequestInvoicePrint request)
+       {
+           ResponseInvoicePrint response = new ResponseInvoicePrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.PageloadGetItemNameDAL(request);
+           return response;
+       }
+       public ResponseInvoicePrint PageloadGetQuantityBC(RequestInvoicePrint request)
+       {
+           ResponseInvoicePrint response = new ResponseInvoicePrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.PageloadGetQuantityDAL(request);
+           return response;
+       }
+
+       public ResponseInvoicePrint InsertInvoiceLabelPrintBC(RequestInvoicePrint request)
+       {
+           ResponseInvoicePrint response = new ResponseInvoicePrint();
+           response.ErrorContainer = Validate(request);
+           if (response.ErrorContainer.Count == 0)
+           {
+               WMSDAL DAL = new WMSDAL();
+               response = DAL.InsertInvoiceLabelPrintDAL(request);
+           }
+           return response;
+
+       }
+
+       public List<ErrorItem> Validate(RequestInvoicePrint request)
+       {
+           List<ErrorItem> err = new List<ErrorItem>();
+           if (request.requestInvoicePrintdetails.Count == 0)
+               err.Add(new ErrorItem { DataItem = "Please Select Atleast One Barcode to Proceed to Print.", ErrorNo = "SSB0000" });
+           return err;
+       }
+    }
+}

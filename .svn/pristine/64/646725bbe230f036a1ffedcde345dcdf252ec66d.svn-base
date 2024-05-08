@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class FormingPlanEntity
+    {
+        public string FormingPlantNO { get; set; }
+        public string FormingPlantDate { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string Remarks { get; set; }
+        public string USERCODE { get; set; }
+
+
+
+        public List<FormingPlanDetailEntity> requestFormingPlantdetails { get; set; }
+
+    }
+
+    public class FormingPlanDetailEntity
+    {
+
+
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+
+        public string WEIGHT { get; set; }
+
+
+    }
+
+
+    public class RequestFormingPlanEntry
+    {
+        public FormingPlanEntity ReqFormingPlanEntry { get; set; }
+        public List<FormingPlanDetailEntity> FormingPlanDetailEntity { get; set; }
+    }
+    public class ResponseFormingPlanEntry
+    {
+        public DataTable JS_Supplierdetails { get; set; }
+        public DataTable RecordStatus { get; set; }
+        public DataTable JS_Itemdetails { get; set; }
+        public DataTable FormingPlanHeader { get; set; }
+        public DataTable FormingDetails { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+
+}

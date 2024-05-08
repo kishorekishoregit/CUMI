@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class LocationStockReportEntity
+    {
+        public string ITEMCODE { get; set; }
+    }
+    public class RequestLocationStockReport
+    {
+        public LocationStockReportEntity requestLocationStockReport { get; set; }
+    }
+
+    public class ResponseLocationStockReport
+    {
+        public bool result { get; set; }
+
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_ItemDetails { get; set; }
+        public DataTable JS_LocationStockDetails { get; set; }
+
+    }
+}

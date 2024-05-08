@@ -1,0 +1,76 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class PRNEntryBC
+    {
+        public ResponsePRNEntry PRNEntryPageLoadBC()
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PRNEntryPageLoadDAL();
+            return response;
+        }
+        public ResponsePRNEntry InsertPRNEntryBC(RequestPRNEntry request)
+        {
+
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            try
+            {
+
+                response.ErrorContainer = Validate(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAL = new WMSDAL();
+                    response = DAL.InsertPRNEntryDAL(request);
+                }
+
+            }
+            catch (Exception ex)
+            { }
+
+            return response;
+
+        }
+        public ResponsePRNEntry PRNViewDtsBC(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PRNViewDtsDAL(request);
+            return response;
+        }
+        public ResponsePRNEntry PRNEditDtsBC(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PRNEditDtsDAL(request);
+            return response;
+        }
+        public ResponsePRNEntry PRNUpdateBC(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PRNUpdateDAL(request);
+            return response;
+        }
+
+        public List<ErrorItem> Validate(RequestPRNEntry request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+
+
+            if (request.requestprnentrydetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please add atleast one item to Proceed.", ErrorNo = "SSB0000" });
+           
+
+            return err;
+        }
+
+
+    }
+}

@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class DispatchPlanEntryEntity
+    {
+        public string DISPATCHNO { get; set; }
+        public string DISPATCHDATE { get; set; }
+        public string CUSTOMER { get; set; }
+        public string REFERENCENO { get; set; }
+        public string REMARKS { get; set; }
+        public string USERCODE { get; set; }
+        public string ITEMCODE { get; set; }
+    }
+    public class DisaptchPlanDetailEntity
+    {
+
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+   
+        public string QUANTITY { get; set; }
+            
+        public string PRICE { get; set; }
+
+
+    }
+    public class RequestDispatchplanEntry
+    {
+        public DispatchPlanEntryEntity ReqDispatchPlanEntry { get; set; }
+        public List<DisaptchPlanDetailEntity> requestDispatchPlanEntrydetails { get; set; }
+    }
+    public class ResponseDispatchplanEntry
+    {
+        public DataTable JS_Customerdetails { get; set; }
+       
+        public DataTable JS_Itemdetails { get; set; }
+        public DataTable DispatchPlanHeader { get; set; }
+        public DataTable  DispatchPlanDetails { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+}

@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6FF75E79-6DF1-4DB1-9881-5376F03D0D33}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JKWOODSENTITY</RootNamespace>
+    <AssemblyName>JKWOODSENTITY</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BinMasterEntity.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="CustomerMasterEntity.cs" />
+    <Compile Include="DispatchPlanEntity.cs" />
+    <Compile Include="EmployeeMasterEntity.cs" />
+    <Compile Include="ErrorItem.cs" />
+    <Compile Include="FGLabelPrintEntity.cs" />
+    <Compile Include="GRNEntryEntity.cs" />
+    <Compile Include="GRNUploadEntity.cs" />
+    <Compile Include="InvoiceCreationEntity.cs" />
+    <Compile Include="InvoicePrintEntity.cs" />
+    <Compile Include="ItemMasterEntity.cs" />
+    <Compile Include="LocationMasterEntity.cs" />
+    <Compile Include="LocationStockReportEntity.cs" />
+    <Compile Include="LoginDetails.cs" />
+    <Compile Include="FormingPlanEntity.cs" />
+    <Compile Include="PacketConversion.cs" />
+    <Compile Include="PastingProcessEntity.cs" />
+    <Compile Include="PRNEntryEntity.cs" />
+    <Compile Include="ProcessMasterEntity.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QCEntryEntity.cs" />
+    <Compile Include="RackMasterEntity.cs" />
+    <Compile Include="REMIXBarcodelabelEntity.cs" />
+    <Compile Include="RemixjobProcessEntity.cs" />
+    <Compile Include="RemixQualityEntity.cs" />
+    <Compile Include="RMLabelPrintEntity.cs" />
+    <Compile Include="RMPicklistprintEntity.cs" />
+    <Compile Include="RMQualityEntity.cs" />
+    <Compile Include="SRNEntryEntity.cs" />
+    <Compile Include="SRNFileUploadEntity.cs" />
+    <Compile Include="StockAdjustmentEntity.cs" />
+    <Compile Include="StockReportEntity.cs" />
+    <Compile Include="SupplierMasterEntity.cs" />
+    <Compile Include="UserAuthenticationEntity.cs" />
+    <Compile Include="UserCreationEntity.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

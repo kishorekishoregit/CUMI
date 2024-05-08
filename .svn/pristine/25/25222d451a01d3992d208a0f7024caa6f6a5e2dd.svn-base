@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class BinMasterEntity
+    {
+        public string BinCode { get; set; }
+        public string Binname { get; set; }
+        public string Locationcode { get; set; }
+        public string Rackcode { get; set; }
+        public string Rackname { get; set; }
+        public string Recordstatus { get; set; }
+        public string Usercode { get; set; }
+    }
+
+    public class RequestBinMaster
+    {
+        public BinMasterEntity requestBinMaster { get; set; }
+    }
+
+    public class ResponseBinMaster
+    {
+        public bool result { get; set; }
+
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable JS_BinMasterDetails { get; set; }
+        public DataTable JS_RecordStatus { get; set; }
+        public DataTable JS_Locationdetails { get; set; }
+        public DataTable JS_Rackdetails { get; set; }
+    }
+}

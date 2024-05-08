@@ -1,0 +1,81 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class LocationMasterBC
+    {
+        public ResponseLocationMaster FetchLocationMasterPageLoadBC()
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchLocationMasterPageLoadDAL();
+            return response;
+        }
+
+        public ResponseLocationMaster InsertLocationMasterBC(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertLocationMasterDAL(request);
+            }
+            return response;
+
+        }
+
+        public ResponseLocationMaster UpdateLocationMasterBC(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.UpdateLocationMasterDAL(request);
+            }
+            return response;
+
+        }
+
+        public ResponseLocationMaster EditLocationMasterbyLocationCodeBC(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.EditLocationMasterbyLocationcodeDAL(request);
+            return response;
+
+        }
+
+
+        public ResponseLocationMaster GetLocationCodeprintBC(RequestLocationMaster request)
+        {
+            ResponseLocationMaster response = new ResponseLocationMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.GetLocationCodeprintDAL(request);
+
+            return response;
+
+        }
+
+        public List<ErrorItem> Validate(RequestLocationMaster request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestLocationMaster.LOCATIONCODE == "")
+                err.Add(new ErrorItem { DataItem = "Location Code", ErrorNo = "SSB0009" });
+            if (request.requestLocationMaster.LOCATIONNAME == "")
+                err.Add(new ErrorItem { DataItem = "Location Name", ErrorNo = "SSB0009" });
+            if (request.requestLocationMaster.CAPACITY == "")
+                err.Add(new ErrorItem { DataItem = "Capacity", ErrorNo = "SSB0009" });
+            if (request.requestLocationMaster.RECORDSTATUS == "")
+                err.Add(new ErrorItem { DataItem = "Status", ErrorNo = "SSB0010" });
+
+            return err;
+        }
+    }
+}

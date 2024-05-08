@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title>TSF</title>
+    <meta name="description" content="overview &amp; stats" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/bootstrap.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/font-awesome/4.5.0/css/font-awesome.min.css")" />
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/select2.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/jquery-ui.custom.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/chosen.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/bootstrap-datepicker3.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/bootstrap-timepicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/daterangepicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/bootstrap-datetimepicker.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/bootstrap-colorpicker.min.css")" />
+    <link href="@Url.Content("../../Scripts/NewFolder1/dataTables.tableTools.css")" rel="stylesheet" />
+    <!-- text fonts -->
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/fonts.googleapis.com.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/jquery-ui.custom.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/fullcalendar.min.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.Content("../../Styles/css/sweetalert.css")">
+    <!-- ace styles -->
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/ace.min.css")" class="ace-main-stylesheet" id="main-ace-style" />
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="~/Styles/css/ace-part2.min.css" class="ace-main-stylesheet" />
+    <![endif]-->
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/ace-skins.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/ace-rtl.min.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/custom.css")" />
+    <link rel="stylesheet" href="@Url.Content("../../Styles/css/TableTools.css")" />
+    <!--[if lte IE 9]>
+      <link rel="stylesheet" href="~/Styles/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="@Url.Content("../../Scripts/ace-extra.min.js")"></script>
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <!--[if lte IE 8]>
+    <script src="~/Scripts/html5shiv.min.js"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="no-skin">
+    <div id="loading">
+    </div>
+    <div id="navbar" class="navbar navbar-default ace-save-state navbar-fixed-top">
+        <div class="navbar-container ace-save-state" id="navbar-container">
+            <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                <span class="sr-only">Toggle sidebar</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="navbar-header pull-left">
+                <a href="@Url.Content("~/Home")" class="navbar-brand">
+                    <img src="~/Images/mapol_logo.png" class="img-responsive" />
+                </a>
+            </div>
+        </div><!-- /.navbar-container -->
+    </div>
+    <div class="main-container ace-save-state" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.loadState('main-container') } catch (e) { }
+        </script>
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div id="loadingid">
+                    <div class="loader-inner"><span class="top"><img src="~/Images/favicon.png"  /></span> <br />Please Wait</div>
+                </div>
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>                            
+                        </li>
+                        <li class="active"><span class="page-menu"></span></li>
+                        <li class="active"><span class="page-name"></span></li>
+                    </ul><!-- /.breadcrumb -->
+                </div>
+                @RenderBody()
+            </div>
+        </div><!-- /.main-content -->
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+    <div class="footer">
+        <div class="footer-inner">
+            <div class="footer-content">
+                <span class="bigger-120">
+                    Powered By
+                    <span class="blue bolder">Mapol Group</span> &copy; 2018
+                </span>
+            </div>
+        </div>
+    </div>
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script src="@Url.Content("../../Scripts/jquery-2.1.4.min.js")"></script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script src="~/Scripts/jquery-1.11.3.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        if ('ontouchstart' in document.documentElement) document.write("<script src='../../Scripts/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </script>
+    <script src="@Url.Content("../../Scripts/bootstrap.min.js")"></script>
+    <!--[if lte IE 8]>
+      <script src="Scripts/excanvas.min.js"></script>
+    <![endif]-->
+    <script src="@Url.Content("../../Scripts/jquery-ui.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/jquery-ui.custom.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/jquery.ui.touch-punch.min.js")"></script>
+    <!-- ace scripts -->
+    <script src="@Url.Content("../../Scripts/ace-elements.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/ace.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/newfilecommon.js")"></script>
+    <script src="@Url.Content("../../Scripts/sweetalert.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/jszip.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/pdfmake.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/vfs_fonts.js")"></script>
+    <script src="@Url.Content("../../Scripts/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("../../Scripts/dataTables.buttons.min.js")"></script>
+    @RenderSection("Scripts", required: false)
+    <!-- inline scripts related to this page -->
+</body>
+</html>

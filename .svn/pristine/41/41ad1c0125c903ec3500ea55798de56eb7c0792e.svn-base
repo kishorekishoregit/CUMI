@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class PRNEntryEntity
+    {
+        public string PRNNO { get; set; }
+        public string PRNDATE { get; set; }
+        public string PARTNAME { get; set; }
+        public string CUSTOMER { get; set; }
+        public string MODEL { get; set; }
+        public string VARIANT { get; set; }
+        public string LOTNO { get; set; }
+        //public string INNERQUANTITY { get; set; }
+        //public string OUTERQUANTITY { get; set; }
+        //public string LHQUANTITY { get; set; }
+        //public string RHQUANTITY { get; set; }
+        public string QUANTITY { get; set; }
+        public string REMARKS { get; set; }
+        public string USERCODE { get; set; }
+        public List<PRNEntryDetailEntity> requestprnentrydetails { get; set; }
+    }
+    public class PRNEntryDetailEntity
+    {
+        public string PARTNAME { get; set; }
+        public string CUSTOMER { get; set; }
+        public string MODEL { get; set; }
+        public string VARIANT { get; set; }
+        public string LOTNO { get; set; }
+        //public string INNERQUANTITY { get; set; }
+        //public string OUTERQUANTITY { get; set; }
+        //public string LHQUANTITY { get; set; }
+        //public string RHQUANTITY { get; set; }
+        public string QUANTITY { get; set; }
+        public string REMARKS { get; set; }
+
+    }
+    public class RequestPRNEntry
+    {
+        public PRNEntryEntity Reqprnentry { get; set; }
+        public PRNEntryDetailEntity Reqprnentrydetails { get; set; }
+        public List<PRNEntryEntity> requestprnentry { get; set; }
+        public List<PRNEntryDetailEntity> requestprnentrydetails { get; set; }
+
+    }
+    public class ResponsePRNEntry
+    {
+
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable JS_PartDetails { get; set; }
+
+        public DataTable JS_CustomerDetails { get; set; }
+
+        public DataTable JS_PrnentryDetails { get; set; }
+        public DataTable PrnDetails { get; set; }
+
+        public DataTable JS_Prnnoget { get; set; }
+
+
+    }
+
+}

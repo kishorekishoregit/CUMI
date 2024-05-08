@@ -1,0 +1,190 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using JKWOODSENTITY;
+using System.Transactions;
+using System.Data.SqlClient;
+using System.Data;
+using System.Web.Script.Serialization;
+
+namespace JKWOODSDAC
+{
+   public partial class WMSDAL
+    {
+        public ResponseProcessMaster FetchProcessMasterPageloadDAL()
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using(TransactionScope scope=new TransactionScope())
+                {
+                    using (SqlConnection sqlcon = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[PROCESSMASTER_PAGELOAD]",sqlcon);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        sqlcon.Open();
+                        SqlDataAdapter sqldap = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        sqldap.Fill(ds);
+                        if (ds != null)
+                        {
+
+                            response.Recordstatus = ds.Tables[0];
+                            response.Processdetails = ds.Tables[1];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchProcessMasterPageloadDAL: " + "Method Name FetchProcessMasterPageloadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            return response;
+        }
+        public ResponseProcessMaster InsertProcessMasterDAL(RequestProcessMaster request)
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection sqlcon = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[PROCESSMASTER_INSERT]", sqlcon);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PROCESSNAME", request.requestprocessmaster.PROCESSNAME.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@STATUS", request.requestprocessmaster.STATUS.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestprocessmaster.USERCODE.Trim().ToUpper()));
+                        sqlcon.Open();
+                        SqlDataAdapter sqldap = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        sqldap.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.Processdetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestprocessmaster.PROCESSNAME.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertProcessMasterDAL: " + "Method Name InsertProcessMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+        public ResponseProcessMaster EditProcessMasterDAL(RequestProcessMaster request)
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection sqlcon = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[PROCESSMASTER_EDIT]", sqlcon);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@AUTOID", request.requestprocessmaster.AUTOID.Trim().ToUpper()));
+                        sqlcon.Open();
+                        SqlDataAdapter sqldap = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        sqldap.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.Processdetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("EditProcessMasterDAL: " + "Method Name EditProcessMasterDALs" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+        public ResponseProcessMaster UpdateProcessMasterDAL(RequestProcessMaster request)
+        {
+            ResponseProcessMaster response = new ResponseProcessMaster();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection sqlcon = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[MASTERS].[PROCESSMASTER_UPDATE]", sqlcon);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PROCESSNAME", request.requestprocessmaster.PROCESSNAME.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@STATUS", request.requestprocessmaster.STATUS.Trim().ToUpper()));                      
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.requestprocessmaster.USERCODE.Trim().ToUpper()));
+                        cmd.Parameters.Add(new SqlParameter("@AUTOID", request.requestprocessmaster.AUTOID.Trim().ToUpper()));
+                        sqlcon.Open();
+                        SqlDataAdapter sqldap = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        sqldap.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                response.result = true;
+                            else
+                                response.result = false;
+
+                            response.Processdetails = ds.Tables[1];
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = request.requestprocessmaster.AUTOID.ToUpper() });
+                        }
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("UpdateProcessMasterDAL: " + "Method Name UpdateProcessMasterDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+    }
+}

@@ -1,0 +1,266 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponseRMLabelPrint FetchRMLabelPrintDAL()
+        {
+
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[RMLABELPRINTPAGELOAD_FETCH]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_GRNDetails = ds.Tables[0];
+                            response.JS_RMLablePrintDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMLabelPrintDAL: " + "Method Name FetchRMLabelPrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+
+        }
+
+        public ResponseRMLabelPrint FetchRMLabelPrintLotNobyGrnNoDAL(RequestRMLabelPrint request)
+        {
+
+
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHRMLABELPRINTLOTNOBYGRNNO]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@GRNNO", request.ReqtrmlabelprintHeader.GRNNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_LOTDetails = ds.Tables[0];
+                            response.JS_GRNDetails = ds.Tables[1];
+                            response.JS_HiddenDetails = ds.Tables[2];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMLabelPrintLotNobyGrnNoDAL: " + "Method Name FetchRMLabelPrintLotNobyGrnNoDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+
+        public ResponseRMLabelPrint FetchRMLabelPrintGetHiddenValuebyLotnoDAL(RequestRMLabelPrint request)
+        {
+
+
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[FETCHRMLABELPRINT_HIDDENVALUEBYLOTNO]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@GRNNO", request.ReqtrmlabelprintHeader.GRNNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@LOTNO", request.ReqtrmlabelprintHeader.LOTNO.Trim()));
+                      
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_HiddenDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMLabelPrintGetHiddenValuebyLotnoDAL: " + "Method Name FetchRMLabelPrintGetHiddenValuebyLotnoDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            return response;
+        }
+
+        public ResponseRMLabelPrint RMReprintDAL(RequestRMLabelPrint request)
+        {
+
+
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[RMLABELREPRINT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@GRNNO", request.ReqtrmlabelprintHeader.GRNNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@LOTNO", request.ReqtrmlabelprintHeader.LOTNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@SERIALNO", request.ReqtrmlabelprintHeader.SERIALNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_LOTDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("FetchRMLabelPrintLotNobyGrnNoDAL: " + "Method Name FetchRMLabelPrintLotNobyGrnNoDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+
+            return response;
+
+        }
+
+
+        public ResponseRMLabelPrint InsertTempTableRMLabelPrintDAL(RequestRMLabelPrint request)
+        {
+            ResponseRMLabelPrint response = new ResponseRMLabelPrint();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            try
+            {
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        
+                        foreach (RmLablePrintDetailEntity det in request.requestrmlabelprintdetails)
+                        {
+                           
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[RMLABELPRINT_INSERT]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@GRNNO", det.GRNNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMCODE", det.ITEMCODE.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@ITEMNAME", det.ITEMNAME.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@SERIALNO", det.SERIALNO.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@BARCODE", det.BARCODE));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@NETWEIGHT", det.NETWEIGHT.Trim().ToUpper()));
+                            cmd.Parameters.Add(new SqlParameter("@GROSSWEIGHT", det.GROSSWEIGHT.Trim().ToUpper()));
+
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            DataSet ds = new DataSet();
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+                                    
+                                    rowcount++;
+                                }
+
+                            }
+                        }
+
+                        if(request.requestrmlabelprintdetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                        }
+
+                        
+                    }
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertTempTableRMLabelPrintDAL: " + "Method Name InsertTempTableRMLabelPrintDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+
+
+            return response;
+
+        }
+
+
+
+
+
+    }
+}

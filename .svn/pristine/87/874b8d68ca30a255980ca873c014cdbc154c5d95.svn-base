@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class StockAdjustmentEntity
+    {
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string BARCODE { get; set; }
+        public string QUANTITY { get; set; }
+        public string ADJUSTQUANTITY { get; set; }
+        public string USERCODE { get; set; }
+        public List<StockAdjustmentDetailEntity> requeststockadjustdetails { get; set; }
+    }
+    public class StockAdjustmentDetailEntity
+    {
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string BARCODE { get; set; }
+        public string QUANTITY { get; set; }
+        public string ADJUSTQUANTITY { get; set; }
+        public string USERCODE { get; set; }
+
+    }
+    public class RequestStockAdjustment
+    {
+        public StockAdjustmentEntity Reqstockadjustment { get; set; }
+        public StockAdjustmentDetailEntity Reqstockadjustdetails { get; set; }
+        public List<StockAdjustmentDetailEntity> requeststockadjustdetails { get; set; }
+    }
+    public class ResponseStockAdjustment
+    {
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+        public DataTable JS_ItemDetails { get; set; }
+        public DataTable JS_LotDetails { get; set; }
+    }
+
+}

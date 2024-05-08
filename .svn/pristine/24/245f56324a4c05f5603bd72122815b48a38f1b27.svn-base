@@ -1,0 +1,53 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+   public class FGLabelPrintBC
+    {
+       public ResponseFGLabelPrint FetchFGLabe1PrintPageLoadBC()
+       {
+           ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.FetchFGLabelPrintPageLoad();
+           return response;
+       }
+       public ResponseFGLabelPrint InsertTempTableFGLabelPrintBC(RequestFGLabelPrint request)
+       {
+
+           ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.InsertTableFGLabelPrintDAL(request);
+           return response;
+
+       }
+       public ResponseFGLabelPrint FetchFGLabelPrintGetHdnValueByPrnNoBC(RequestFGLabelPrint request)
+       {
+           ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.FetchFGLabelPrintGetHiddenValuebyPrnnoDAL(request);
+           return response;
+
+       }
+       public ResponseFGLabelPrint FetchFGLabelPrintLotNobyPrnNoBC(RequestFGLabelPrint request)
+       {
+           ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+           WMSDAL DAL = new WMSDAL();
+           response = DAL.FetchFGLabelPrintLotNobyPrnNoDAL(request);
+           return response;
+
+       }
+        public ResponseFGLabelPrint FetchFGLabelPrintGetHiddenValuebyLotnoBC(RequestFGLabelPrint request)
+        {
+            ResponseFGLabelPrint response = new ResponseFGLabelPrint();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchFGLabelPrintGetHiddenValuebyLotnoDAL(request);
+            return response;
+
+        }
+    }
+}

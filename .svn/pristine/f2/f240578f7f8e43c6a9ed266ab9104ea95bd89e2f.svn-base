@@ -1,0 +1,554 @@
+﻿jQuery(function ($) {
+
+    var category = '';
+    function getmonth() {
+        var today = new Date();
+
+        var dd = today.getDate() > 9 ? today.getDate() : '0' + today.getDate();
+        var mm = today.getMonth(); //January is 0!
+        var months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        var yyyy = today.getFullYear();
+
+        var today = dd + '-' + months[mm] + '-' + yyyy;
+        $("#txtinvoicedate").val(today);
+    }
+
+
+    BindTable();
+
+    function BindTable() {
+        var table = document.getElementById("dynamic-table");
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        getmonth();
+        var RoleDatatable = $('#dynamic-table');
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetInvoicePageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result.split('|');
+                var Supplier = JSON.parse(pageload[0]);
+        
+
+                $("#ddlinvoiceno").empty().append('<option value="">Select an Option</option>');
+                $.each(Supplier, function () {
+                    $("#ddlinvoiceno").append($("<option></option>").val(this["INVOICENO"]).html(this["INVOICENO"]));
+                    $('#ddlinvoiceno').trigger("chosen:updated");
+                });
+
+            
+            }
+        });
+        $(".loader").hide("slow");
+    }
+
+    //-------------------------------------------------------------------------------------------------------Bind Table
+    function BindTab(ResData, type) {
+
+        var currentDate = new Date()
+        var day = currentDate.getDate()
+        var month = currentDate.getMonth() + 1
+        var year = currentDate.getFullYear()
+        var currentdate = day + "/" + month + "/" + year;
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+
+        var rcount = $("#dynamic-table-print > tbody > tr").length
+        if (rcount > 0) {
+            $('#dynamic-table-print').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            var dyTable = $('#dynamic-table-print');
+
+            $('#dynamic-table-print').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bSort": false,
+                "ascrollX": "100%",
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+                // columns: cols1DATA,
+                columns: [
+                     {'data':'Select'},
+                    { 'data': 'ITEMCODE' },
+                    { 'data': 'ITEMNAME' },
+                    { 'data': 'UOM' },
+                    { 'data': 'BARCODE' },
+                    
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+
+                    //{
+                    //    extend: 'excelHtml5',
+                    //    title: 'Invoice Details',
+                    //    text: '<img src="../../Images/excel.png" style="height: 25px;">',
+                    //    footer: false
+                    //},
+                    //{
+                    //    extend: 'pdfHtml5',
+
+                    //    text: '<img src="../../Images/pdf.png" style="height: 25px;">',
+                    //    orientation: 'landscape',
+                    //    pageSize: 'A4',
+                    //    footer: false,
+                    //    title: 'Invoice Details'
+
+
+                    //}, {
+                    //    extend: 'print',
+                    //    title: 'Invoice Details',
+                    //    text: '<img src="../../Images/print.png" style="height: 25px;">',
+                    //    footer: false
+                    //}
+                ]
+            });
+
+            $("#dynamic-table-print").on("click", ".searchdetails", function () {
+                var $text = $(this).closest('tr').find('td:eq(0)').html();
+                $('#modalview').modal('show');
+                callpopup($text);
+            });
+            $("#dynamic-table-print").on("click", ".edit", function () {
+                var $text = $(this).closest('tr').find('td:eq(0)').html();
+                searchbyGrnNo($text);
+            });
+
+
+        }
+        else {
+            $('#dynamic-table-print tbody').remove();
+            $('#dynamic-table-print thead').remove();
+            $('#dynamic-table-print').dataTable({
+                "language": {
+                    "emptyTable": "Invoice Creation records found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false },
+                            { sWidth: "10%", bSearchable: false, bSortable: false }
+
+                ],
+                "scrollCollapse": false,
+                "info": true,
+                "paging": true,
+                "searching": true
+            });
+
+
+        }
+        $(".loader").hide("slow");
+    }
+
+    $('#ddlinvoiceno').change(function () {
+        $("#txtSelectAllScreens").prop('checked', false);
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetItemNamebyInvoice',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'INVOICENO': OValue },
+            success: function (data) {
+
+                var Res = data.split('|');
+                var ITEMNAME = JSON.parse(Res[0]);
+
+                $("#ddlitemname").empty().append('<option value="">Select an Option</option>');
+                $.each(ITEMNAME, function () {
+                    $("#ddlitemname").append($("<option></option>").val(this["ITEMCODE"]).html(this["ITEMNAME"]));
+                    $('#ddlitemname').trigger("chosen:updated");
+                });
+
+
+            }
+        });
+        $(".loader").hide("slow");
+    });
+
+  
+    $('#ddlitemname').change(function () {
+
+        var optionselected = $(this);
+        var OValue = optionselected.val();
+
+        $(".loader").show("slow");
+        $.ajax({
+
+            url: 'GetQuantitybyItemName',
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            data: { 'ITEMCODE': OValue },
+            data: $.param({ 'ITEMCODE': $("#ddlitemname").val() })
+                + '&' + $.param({ 'INVOICENO': $("#ddlinvoiceno").val() }),
+            
+
+                success: function (data) {
+
+                    var pageload = data.split('|');
+                    var qty = JSON.parse(pageload[0])
+                    var blist = JSON.parse(pageload[1])
+                    //var Res = JSON.parse(qty);
+
+
+                    $("#txtquantity").val(qty[0].QUANTITY);
+
+                    BindTab(blist, '1');
+        
+                }
+            });
+    
+        $(".loader").hide("slow");
+     
+    });
+
+
+   
+
+
+    $('#btnclear').click(function () {
+        reset();
+    });
+
+    function BindChildTab(ResData, type) {
+
+        var cols = [];
+        var cols1 = [];
+        var cols1DATA = [];
+        var nullvalue;
+        var colsresult;
+        var finalcolsresult;
+        var elements = Array();
+        var exampleRecord = ResData[0];
+        var rcount = $("#dynamic-tableChild > tbody > tr").length
+        // TABLE BIND     
+        if (rcount > 0) {
+            $('#dynamic-tableChild').dataTable().fnDestroy();
+            cols.length = 0;
+            cols1.length = 0;
+        }
+        if (exampleRecord) {
+            //get keys in object. This will only work if your statement remains true that all objects have identical keys
+            var keys = Object.keys(exampleRecord);
+
+            //for each key, add a column definition
+            keys.forEach(function (k) {
+                cols.push({
+
+
+                    title: k,
+                    data: k,
+                    targets: k
+
+                    //optionally do some type detection here for render function
+                });
+            });
+
+            $.each(cols, function (index, item) {
+
+                item.title, item.targets
+
+                cols1.push({
+
+                    title: item.title,
+                    targets: index
+
+                });
+
+                cols1DATA.push({
+                    data: item.title,
+
+                });
+                finalcolsresult += 'null' + ',';
+
+            });
+
+            $('#dynamic-tableChild').dataTable({
+                data: ResData,
+                "bAutoWidth": false,
+                "bSort": false,
+                "ascrollX": "100%",
+                "bPaginate": false,
+                "bFilter": false,
+                "aColumns": [
+          finalcolsresult,
+          { "bSortable": false }
+                ],
+                "aSorting": [],
+                'columnDefs': [{
+                    'targets': 0,
+                    'searchable': true,
+                    'orderable': true,
+                    'className': 'dt-body-center'
+                }],
+
+                columnDefs: cols1,
+
+                columns: [
+
+                    { 'data': 'ItemCode' },
+                    { 'data': 'ItemName' },
+                    { 'data': 'Quantity' },
+                    {
+
+                        'data': 'Remove',
+                        'render': function (data, type, full, meta) {
+
+                            return '<button type="button" class="btn btn-danger btn-fab remove" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-trash" aria-hidden="true"></i></button>'
+
+                        }
+                    },
+
+
+                    {
+
+                        'data': 'Edit',
+                        'render': function (data, type, full, meta) {
+
+                            return '<button type="button" class="btn btn-success btn-fab edit" id="Edit" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></button>'
+
+                        }
+                    },
+
+                ],
+
+            });
+            $("#dynamic-tableChild").on("click", ".edit", function () {
+                var $row = $(this).closest("tr");    // Find the row
+                var $text = $row.find(".sorting_1").text(); // Find the text         
+                var Code = $(this).closest('tr').find('td:eq(0)').html();
+                var Name = $(this).closest('tr').find('td:eq(1)').html();
+                var Qty = $(this).closest('tr').find('td:eq(2)').html();
+
+
+                $('#ddlitemcode').val(Code);
+                $('#ddlitemcode').prop('disabled', true);
+                $('#ddlitemcode').trigger("chosen:updated");
+                $('#txtitemname').val(Name);
+                $('#txtquantity').val(Qty);
+                $('#actiontypeaddd').html("Update");
+
+            });
+        }
+        else {
+            $('#dynamic-tableChild tbody').remove();
+            $('#dynamic-tableChild thead').remove();
+            $('#dynamic-tableChild').dataTable({
+                "language": {
+                    "emptyTable": "Invoice Details No Records Found.."
+                },
+                'bSort': false,
+                'aoColumns': [
+                        { sWidth: "100%", bSearchable: false, bSortable: false },
+                         { sWidth: "100%", bSearchable: false, bSortable: false },
+                          { sWidth: "100%", bSearchable: false, bSortable: false },
+                          { sWidth: "100%", bSearchable: false, bSortable: false },
+                           { sWidth: "100%", bSearchable: false, bSortable: false }
+
+
+                ],
+                "scrollCollapse": false,
+                "info": false,
+                "paging": false,
+                "searching": true
+            });
+
+        }
+
+
+    }
+
+
+    function reset() {
+
+        $('#ddlinvoiceno').val("");
+        $('#ddlinvoiceno').prop('disabled', false);
+        $('#ddlinvoiceno').trigger("chosen:updated");
+        $('#ddlitemname').val("");
+        $('#ddlitemname').prop('disabled', false);
+        $('#ddlitemname').trigger("chosen:updated");
+        $('#txtquantity').val("");
+        $('#modalview').modal('hide');
+
+
+    }
+
+    $('#btnprint').click(function () {
+        $('.loadingGIF').show();
+        if (window.FormData !== undefined) {
+            var formData = new FormData();
+            formData.append('actiontype', $('#actiontype').text());
+            var count = 0;
+            var  SELECT = "", ITEMCODE = "", ITEMNAME = "", UOM = "", BARCODE = "";
+            jQuery("table.checkupload tbody > tr").each(function () {
+                if (jQuery('td:eq(0)', this).children('input.checkbox').is(':checked')) {
+                    SELECT += jQuery('td:eq(0)', this).children('input.checkbox').is(':checked') + "^";
+                    //INVOICENO += jQuery('td:eq(1)', this).text() + "^";
+                    ITEMCODE += jQuery('td:eq(1)', this).text() + "^";
+                    ITEMNAME += jQuery('td:eq(2)', this).text() + "^";
+                    UOM += jQuery('td:eq(3)', this).text() + "^";
+                    BARCODE += jQuery('td:eq(4)', this).text() + "^";
+                }
+            });
+           
+            formData.append('SELECT', SELECT = SELECT.substring(0, SELECT.length - 1));
+           // formData.append('INVOICENO', INVOICENO = INVOICENO.substring(0, INVOICENO.length - 1));
+            formData.append('ITEMCODE', ITEMCODE = ITEMCODE.substring(0, ITEMCODE.length - 1));
+            formData.append('ITEMNAME', ITEMNAME = ITEMNAME.substring(0, ITEMNAME.length - 1));
+            formData.append('UOM', UOM = UOM.substring(0, UOM.length - 1));
+            formData.append('BARCODE', BARCODE = BARCODE.substring(0, BARCODE.length - 1));
+            $(".loader").show("slow");
+            $.ajax({
+                url: 'InsertPOLabelPrint',
+                dataType: "json",
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data  
+                data: formData,
+                success: function (data) {
+                    var Res = data.split('|');
+                    var result = Res[0];
+                    var msg = Res[1];
+                    var barcodes = Res[2];
+                    if (result.toUpperCase() == "TRUE") {
+                        $("form").trigger("reset");
+                        $("#printable").html(msg);
+                        var barcodearr = barcodes.split("^");
+                        var COUNT = 0;
+                        for (var i = 0; i < barcodearr.length; i++) {
+                            var ID = barcodearr[i].replace(" ", "");
+                            QRCODEPRINT(COUNT, ID);
+                            COUNT++;
+                        }
+                        setTimeout(function () {
+                            printableinner();
+                            location.reload();
+                        }, 20);
+                        $("#actiontype").text("Save")
+                        $('.loadingGIF').hide();
+                    }
+                    else {
+                        $('.loadingGIF').hide();
+                        // sweetAlert("", msg.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+
+                    }
+                }
+            });
+        }
+    });
+    function QRCODEPRINT(COUNT, ID) {
+        var qrcode = new QRCode(document.getElementById("qrcode" + COUNT), {
+            width: 120,
+            height: 120
+        });
+        function makeCode() {
+            var elText = ID;
+            qrcode.makeCode(elText);
+        }
+        makeCode();
+    }
+
+    function printableinner() {
+        var disp_setting = "toolbar=no,location=no,";
+        disp_setting += "directories=no,menubar=no,";
+        disp_setting += "scrollbars=yes";
+        var content_vlue = document.getElementById("printable").innerHTML;
+        var docprint = window.open("", "", disp_setting);
+        docprint.document.open();
+        docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+        docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+        docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+        docprint.document.write('<head>');
+        docprint.document.write('<style type="text/css">body{ border:0px solid #000;margin:0px;font-family:verdana,Arial;color:#000;font-family:Verdana, Geneva, sans-serif; font-size:8px;}a{color:#000;text-decoration:none;}*{font-size:8px;} small{font-size:30% !important;}table {border-collapse: collapse;}table, td, th {border: 1px solid black;padding:0.5rem 2px;}@page {size: 4in 2in;margin: 1mm;}div#printable {width: 4in;height: 2in;} .qr-panel img{width:50px;}</style> ');
+        docprint.document.write('</head><body onLoad="self.print()">');
+        docprint.document.write(content_vlue);
+        docprint.document.close();
+        docprint.focus();
+    }
+
+    $('.checkbox').change(function () {
+        $(this).attr("value", "true");
+
+    });
+
+
+    $('input[type=checkbox]').click(function () {
+        var value = $("#ddlinvoiceno").val();
+        if (value != "") {
+            if ($(this).is(':checked')) {
+                $(".checkbox").prop('checked', true);
+            }
+            else {
+                $(".checkbox").prop('checked', false);
+            }
+        }
+        else {
+            //var isselect1 = "Please Select User Name to Proceed."
+            //alert(isselect1);
+
+            $("#txtSelectAllScreens").prop('checked', false);
+        }
+    });
+});

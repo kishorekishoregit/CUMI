@@ -1,0 +1,17 @@
+﻿<div style='page-break-after:always'>
+    <table style='width: 375px; margin-top:20px; margin-left:20px;'>
+        <tr>
+            <td text-align='left' style='width: 375px'>
+		<p style='margin-top:10px; margin-bottom:10px; font-size:17px; font-weight:700; font-stretch: ultra-condensed'>Item: $ITEMCODE$</p>
+		<p style='margin-top:10px; margin-bottom:10px; font-size:17px; font-weight:700; font-stretch: ultra-condensed'>Name: $ITEMNAME$</p>	    
+		<p style='margin-top:10px; margin-bottom:10px; font-weight:700; font-stretch: ultra-condensed'>
+		    <span style='font-size:20px;'>LOT NO.: </span>
+		    <span style='font-size:35px;'>$LOTNO$</span></p>
+		<p style='margin-top:10px; margin-bottom:10px; font-size:17px; font-weight:700; font-stretch: ultra-condensed'>Weight: $WEIGHT$</p>	    
+		<p style='margin-top:10px; margin-bottom:10px; font-size:17px; font-weight:700; font-stretch: ultra-condensed'>Date: $DATE$</p>	    
+		<p style='margin-top:10px; margin-bottom:10px; font-size:17px; font-weight:700; font-stretch: ultra-condensed'>Expiry Date: $EXPDATE$</p>	    
+		<p style='margin-top:10px; margin-bottom:10px; font-size:17px; font-weight:700; font-stretch: ultra-condensed'>Label Seq: $LABELSEQ$</p>	    
+	    </td>
+        </tr>
+    </table>
+</div>

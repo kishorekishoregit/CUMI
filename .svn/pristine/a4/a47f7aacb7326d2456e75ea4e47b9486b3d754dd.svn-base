@@ -1,0 +1,77 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+  
+    public partial class WMSDAL
+    {
+        public ResponseProductionPlanUpload ProductionPlanUploadInsertDAL(RequestProductionPlanUpload request)
+        {
+            ResponseProductionPlanUpload response = new ResponseProductionPlanUpload();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int rowcount = 0;
+                        foreach (ProductionPlanUploaddetailsEntity det in request.requestProductionPlanUploadetails)
+                        {
+                            SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[PRODUCTIONPLANUPLOAD_INSERT]", con);
+                            cmd1.CommandType = CommandType.StoredProcedure;
+                            cmd1.Parameters.Add(new SqlParameter("@CUSTOMERNAME", det.CUSTOMER.Trim()));
+                            cmd1.Parameters.Add(new SqlParameter("@BATCHNO", det.BATCHNUMBER.Trim()));
+                            cmd1.Parameters.Add(new SqlParameter("@PONUMBER", det.PONUMBER.Trim()));
+                            cmd1.Parameters.Add(new SqlParameter("@STARTDATE", det.STARTDATE.Trim()));
+                            cmd1.Parameters.Add(new SqlParameter("@ENDDATE", det.ENDDATE));
+                            cmd1.Parameters.Add(new SqlParameter("@WAREHOUSE", det.WAREHOUSE.Trim()));
+                            cmd1.Parameters.Add(new SqlParameter("@CARCASESHUTTER", det.CARCASE.Trim()));
+                            cmd1.Parameters.Add(new SqlParameter("@PANELCOUNT", det.PANELCOUNT.Trim()));
+                            SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+                            oda1.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[ds.Tables[0].Rows.Count - 1][0].ToString() == "SUCCESS")
+                                {
+                                    rowcount++;
+                                }
+                            }
+                        }
+                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS" && request.requestProductionPlanUploadetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("POUploadInsertDAL: " + "Method Name POUploadInsertDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            return response;
+
+        }
+    }
+}

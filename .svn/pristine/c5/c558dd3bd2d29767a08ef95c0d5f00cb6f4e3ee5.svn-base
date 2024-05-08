@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class RemixjobProcessEntity
+    {
+        public string JOBPROCESSNO { get; set; }
+        public string JOBPROCESSDATE { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string WEIGHT { get; set; }
+
+       
+    }
+    public class RemixJobProcessDetailEntity
+    {
+        public string JOBPROCESSNO { get; set; }
+        public string JOBPROCESSDATE { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string WEIGHT { get; set; }
+    }
+
+    public class RequestRemixJobProcess
+    {
+        public RemixjobProcessEntity ReqtRemixJobProcess { get; set; }
+        public List<RemixJobProcessDetailEntity> requestRemixJobProcessdetails { get; set; }
+    }
+
+    public class ResponseRemixJobProcess
+    {
+        public DataTable JS_RemixjobProcessdetails { get; set; }
+        public DataTable RecordStatus { get; set; }
+        public DataTable JS_Itemdetails { get; set; }
+        public DataTable JS_Itemname { get; set; }
+        public DataTable JS_jobprocessno { get; set; }
+        public DataTable RemixjobProcessHeader { get; set; }
+        public DataTable RemixjobProcessDetails { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+}

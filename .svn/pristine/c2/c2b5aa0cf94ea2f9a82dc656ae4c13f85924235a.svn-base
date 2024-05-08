@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class FGLabelPrintEntity
+    {
+        public string PRNNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string PRNDATE { get; set; }
+
+        public List<FGLablePrintDetailEntity> requestfglabelprintdetails { get; set; }
+
+    }
+    public class FGLablePrintDetailEntity
+    {
+
+        public string PRNNO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string LOTNO { get; set; }
+        public string SERIALNO { get; set; }
+        public string QUANTITY { get; set; }
+        public string NETWEIGHT { get; set; }
+        public string GROSSWEIGHT { get; set; }
+        public string PRNDATE { get; set; }
+        public string ACTUAL { get; set; }
+        public string BARCODE { get; set; }
+
+    }
+    public class RequestFGLabelPrint
+    {
+        public FGLabelPrintEntity ReqtfglabelprintHeader { get; set; }
+        public FGLablePrintDetailEntity Reqfglabelprintdetails { get; set; }
+        public List<FGLabelPrintEntity> requestfglabelprintHeader { get; set; }
+        public List<FGLablePrintDetailEntity> requestfglabelprintdetails { get; set; }
+
+    }
+    public class ResponseFGLabelPrint
+    {
+
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+
+        public DataTable JS_PRNDetails { get; set; }
+
+        public DataTable JS_LOTDetails { get; set; }
+
+        public DataTable JS_HiddenDetails { get; set; }
+
+        public DataTable JS_FGLablePrintDetails { get; set; }
+
+        public DataTable JS_FGLablePrintTempDetails { get; set; }
+
+        public DataTable JS_RecordStatus { get; set; }
+
+
+    }
+}

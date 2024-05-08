@@ -1,0 +1,700 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1897ED27-9EF8-4426-9312-4F4FBACF02CD}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JKWOODS</RootNamespace>
+    <AssemblyName>JKWOODS</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.94.2\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net20\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.6.0\lib\net35\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.3.0\lib\net40\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="JKWOODSBC">
+      <HintPath>..\JKWOODSBC\bin\Debug\JKWOODSBC.dll</HintPath>
+    </Reference>
+    <Reference Include="JKWOODSDAC">
+      <HintPath>..\JKWOODSDAC\bin\Debug\JKWOODSDAC.dll</HintPath>
+    </Reference>
+    <Reference Include="JKWOODSENTITY">
+      <HintPath>..\JKWOODSENTITY\bin\Debug\JKWOODSENTITY.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.2\lib\net40\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Pages\v2.0\Assemblies\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Pages\v2.0\Assemblies\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\Utility.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MastersController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\SessionAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="ErrorManager\ErrorMessage.Designer.cs" />
+    <Compile Include="ErrorManager\ManageError.cs" />
+    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExternalLogin.cs" />
+    <Compile Include="Models\LocalPasswordModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\RegisterExternalLoginModel.cs" />
+    <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\UserContext.cs" />
+    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Common\CustomerScript.js" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="ErrorManager\ErrorMessages.txt" />
+    <Content Include="FGLABEL.html" />
+    <Content Include="FuctionScripts\BinMaster.js" />
+    <Content Include="FuctionScripts\common.js" />
+    <Content Include="FuctionScripts\CustomerMaster.js" />
+    <Content Include="FuctionScripts\DispatchPlan.js" />
+    <Content Include="FuctionScripts\EmployeeMaster.js" />
+    <Content Include="FuctionScripts\FGLabelPrint.js" />
+    <Content Include="FuctionScripts\FormingPlan.js" />
+    <Content Include="FuctionScripts\GRNEntry.js" />
+    <Content Include="FuctionScripts\GRNUpload.js" />
+    <Content Include="FuctionScripts\InvoiceCreation.js" />
+    <Content Include="FuctionScripts\InvoicePrint.js" />
+    <Content Include="FuctionScripts\ItemMaster.js" />
+    <Content Include="FuctionScripts\LocationMaster.js" />
+    <Content Include="FuctionScripts\LocationWiseStockReport.js" />
+    <Content Include="FuctionScripts\Login.js" />
+    <Content Include="FuctionScripts\PastingProcess.js" />
+    <Content Include="FuctionScripts\PicklistPrint.js" />
+    <Content Include="FuctionScripts\PRNEntry.js" />
+    <Content Include="FuctionScripts\ProcessMaster.js" />
+    <Content Include="FuctionScripts\QCEntry.js" />
+    <Content Include="FuctionScripts\RackMaster.js" />
+    <Content Include="FuctionScripts\REMIXBarcodelabel.js" />
+    <Content Include="FuctionScripts\RemixJobProcess.js" />
+    <Content Include="FuctionScripts\RemixQuality.js" />
+    <Content Include="FuctionScripts\RMLabelprint.js" />
+    <Content Include="FuctionScripts\RMQuality.js" />
+    <Content Include="FuctionScripts\SRNEntry.js" />
+    <Content Include="FuctionScripts\SRNFileUpload.js" />
+    <Content Include="FuctionScripts\StockAdjustment.js" />
+    <Content Include="FuctionScripts\StockReport.js" />
+    <Content Include="FuctionScripts\SupplierMaster.js" />
+    <Content Include="FuctionScripts\UserAuthentication.js" />
+    <Content Include="FuctionScripts\UserCreation.js" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Images\31XKGoJg1iL.jpg" />
+    <Content Include="Images\accent.png" />
+    <Content Include="Images\avatars\avatar.png" />
+    <Content Include="Images\avatars\avatar1.png" />
+    <Content Include="Images\avatars\avatar2.png" />
+    <Content Include="Images\avatars\avatar3.png" />
+    <Content Include="Images\avatars\avatar4.png" />
+    <Content Include="Images\avatars\avatar5.png" />
+    <Content Include="Images\avatars\profile-pic.jpg" />
+    <Content Include="Images\avatars\user.jpg" />
+    <Content Include="Images\bg.jpg" />
+    <Content Include="Images\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="Images\bootstrap-colorpicker\alpha.png" />
+    <Content Include="Images\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="Images\bootstrap-colorpicker\hue.png" />
+    <Content Include="Images\bootstrap-colorpicker\saturation.png" />
+    <Content Include="Images\bullet.png" />
+    <Content Include="Images\delete.png" />
+    <Content Include="Images\email\email1.png" />
+    <Content Include="Images\email\email2.png" />
+    <Content Include="Images\email\email3.png" />
+    <Content Include="Images\email\email4.png" />
+    <Content Include="Images\excel.png" />
+    <Content Include="Images\favicon.ico" />
+    <Content Include="Images\favicon.png" />
+    <Content Include="Images\FirstEngineerinfullwms_logo.png" />
+    <Content Include="Images\FirstEngineeringLoginPage.jpg" />
+    <Content Include="Images\FirstEngineerinwms_logo.png" />
+    <Content Include="Images\FirstEngineerin_logo.png" />
+    <Content Include="Images\gallery\image-1.jpg" />
+    <Content Include="Images\gallery\image-2.jpg" />
+    <Content Include="Images\gallery\image-3.jpg" />
+    <Content Include="Images\gallery\image-4.jpg" />
+    <Content Include="Images\gallery\image-5.jpg" />
+    <Content Include="Images\gallery\image-6.jpg" />
+    <Content Include="Images\gallery\thumb-1.jpg" />
+    <Content Include="Images\gallery\thumb-2.jpg" />
+    <Content Include="Images\gallery\thumb-3.jpg" />
+    <Content Include="Images\gallery\thumb-4.jpg" />
+    <Content Include="Images\gallery\thumb-5.jpg" />
+    <Content Include="Images\gallery\thumb-6.jpg" />
+    <Content Include="Images\heroAccent.png" />
+    <Content Include="Images\jklogo.png" />
+    <Content Include="Images\jklogos.png" />
+    <Content Include="Images\jklogoss.jpg" />
+    <Content Include="Images\jksmalllogo.png" />
+    <Content Include="Images\jkwoodslogo.png" />
+    <Content Include="Images\loading-gears.gif" />
+    <Content Include="Images\mapol_logo.png" />
+    <Content Include="Images\orderedList0.png" />
+    <Content Include="Images\orderedList1.png" />
+    <Content Include="Images\orderedList2.png" />
+    <Content Include="Images\orderedList3.png" />
+    <Content Include="Images\orderedList4.png" />
+    <Content Include="Images\orderedList5.png" />
+    <Content Include="Images\orderedList6.png" />
+    <Content Include="Images\orderedList7.png" />
+    <Content Include="Images\orderedList8.png" />
+    <Content Include="Images\orderedList9.png" />
+    <Content Include="Images\paint_footer_image2.jpg" />
+    <Content Include="Images\pass-icon.png" />
+    <Content Include="Images\pdf.png" />
+    <Content Include="Images\placeholder\165x90.png" />
+    <Content Include="Images\placeholder\255x150.png" />
+    <Content Include="Images\placeholder\530x270.png" />
+    <Content Include="Images\placeholder\550x280.png" />
+    <Content Include="Images\print.png" />
+    <Content Include="Images\tree.png" />
+    <Content Include="Images\user-icon.png" />
+    <Content Include="LOCATIONLABEL.html" />
+    <Content Include="log\accesslogs_20190409.txt" />
+    <Content Include="MasterExcel\Employee\Employee.xlsx" />
+    <Content Include="MasterExcel\ItemMaster\PartMaster_DPAINT.xlsx" />
+    <Content Include="MasterExcel\Location\Location.xlsx" />
+    <Content Include="MasterExcel\Location\Location_Details.xlsx" />
+    <Content Include="MasterExcel\MachineMaster\MachineMaster_Details - line.xlsx" />
+    <Content Include="MasterExcel\MachineMaster\MachineMaster_Details - PAINT.xlsx" />
+    <Content Include="MasterExcel\MachineMaster\MachineMaster_Details.xlsx" />
+    <Content Include="InwardManualUpload\InwardUploadtemplate.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\123.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\GRN.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\HELLA.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford - - Copy.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford -.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 2.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 3.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 4.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 5.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 6.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 7.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 8.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW ford 9.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW PAINT.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INW PAINT1.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\Inward Stock Manual 123.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\Inward Stock Manual Upload Details.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\Inward Stock Manual Upload DetailsS.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\INWARD.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploa 2.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUpload.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUpload1.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadt3.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplat.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplat070818.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate  14.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate ..xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 1.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 11.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 12.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 123.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 13.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 15.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 16.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 5.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 7.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate 8.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate DD.xls" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate ROM.xls" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate Z4.xls" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate.xls" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate0708.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate1.xls" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate1.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate2.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate3.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate4.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplate5.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateB.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateBH.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateK.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateM.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateS.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateV.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\InwardUploadtemplateZ.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\New Microsoft Excel Worksheet.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\PAINT20082018.XLS.xlsx" />
+    <Content Include="InwardManualUpload\InwardUpload\PartMaster_Detail.xlsx" />
+    <Content Include="Downloads\ITEMMASTERS.xlsx" />
+    <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\SANGSINBREAK.pubxml" />
+    <Content Include="POBARCODELABEL.html" />
+    <Content Include="QRCODEBARCODE.html" />
+    <Content Include="QRCODEBARCODEnew.html" />
+    <Content Include="QRCODEBARCODEnew24.html" />
+    <Content Include="QRCODEBARCODEnew25.html" />
+    <Content Include="QRCODEBARCODE_OLD.html" />
+    <Content Include="QRCODEPRODUCTIONBARCODE.html" />
+    <Content Include="QRCODEPRODUCTIONBARCODE_13.html" />
+    <Content Include="QRCODEPRODUCTIONBARCODE_4_25_2018.html" />
+    <Content Include="QRCODEPROFG.html" />
+    <Content Include="QRCODEPROFG1.html.txt" />
+    <Content Include="QRCODEPROFG3.txt" />
+    <Content Include="QRCODEPROFG_2.html" />
+    <Content Include="QRCODEPROFG_21.txt" />
+    <Content Include="REMIXLABEL.html" />
+    <Content Include="RMLABEL.html" />
+    <Content Include="Scripts\ace-editable.min.js" />
+    <Content Include="Scripts\ace-elements.min.js" />
+    <Content Include="Scripts\ace-extra.min.js" />
+    <Content Include="Scripts\ace.min.js" />
+    <Content Include="Scripts\autosize.min.js" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootstrap-colorpicker.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-editable.min.js" />
+    <Content Include="Scripts\bootstrap-markdown.min.js" />
+    <Content Include="Scripts\bootstrap-multiselect.min.js" />
+    <Content Include="Scripts\bootstrap-tag.min.js" />
+    <Content Include="Scripts\bootstrap-timepicker.min.js" />
+    <Content Include="Scripts\bootstrap-wysiwyg.min.js" />
+    <Content Include="Scripts\bootstrap.min-2.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\buttons.colVis.min.js" />
+    <Content Include="Scripts\buttons.flash.min.js" />
+    <Content Include="Scripts\buttons.html5.min.js" />
+    <Content Include="Scripts\buttons.print.min.js" />
+    <Content Include="Scripts\calendar.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\dataTables.buttons.min.js" />
+    <Content Include="Scripts\dataTables.select.min.js" />
+    <Content Include="Scripts\date.format.js" />
+    <Content Include="Scripts\daterangepicker.min.js" />
+    <Content Include="Scripts\dropzone.min.js" />
+    <Content Include="Scripts\excanvas.min.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
+    <Content Include="Scripts\grid.locale-en.js" />
+    <Content Include="Scripts\grndetailsvalidation.js" />
+    <Content Include="Scripts\holder.min.js" />
+    <Content Include="Scripts\html5shiv.min.js" />
+    <Content Include="Scripts\jquery-1.11.3.min.js" />
+    <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.8.2.js" />
+    <Content Include="Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery-additional-methods.min.js" />
+    <Content Include="Scripts\jquery-barcode.js" />
+    <Content Include="Scripts\jquery-typeahead.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.js" />
+    <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery-ui.custom.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.bootstrap-duallistbox.min.js" />
+    <Content Include="Scripts\jquery.colorbox.min.js" />
+    <Content Include="Scripts\jquery.dataTables.bootstrap.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.datetimepicker.js" />
+    <Content Include="Scripts\jquery.easypiechart.min.js" />
+    <Content Include="Scripts\jquery.flot.min.js" />
+    <Content Include="Scripts\jquery.flot.pie.min.js" />
+    <Content Include="Scripts\jquery.flot.resize.min.js" />
+    <Content Include="Scripts\jquery.gritter.min.js" />
+    <Content Include="Scripts\jquery.hotkeys.index.min.js" />
+    <Content Include="Scripts\jquery.inputlimiter.min.js" />
+    <Content Include="Scripts\jquery.jqGrid.min.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.knob.min.js" />
+    <Content Include="Scripts\jquery.maskedinput.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.mobile.custom.min.js" />
+    <Content Include="Scripts\jquery.nestable.min.js" />
+    <Content Include="Scripts\jquery.raty.min.js" />
+    <Content Include="Scripts\jquery.sparkline.index.min.js" />
+    <Content Include="Scripts\jquery.ui.touch-punch.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jspdf.min.js" />
+    <Content Include="Scripts\jszip.min.js" />
+    <Content Include="Scripts\knockout-2.2.0.debug.js" />
+    <Content Include="Scripts\knockout-2.2.0.js" />
+    <Content Include="Scripts\loginvalidation.js" />
+    <Content Include="Scripts\markdown.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\newfilecommon.js" />
+    <Content Include="Scripts\NewFolder1\copy_csv_xls.swf" />
+    <Content Include="Scripts\NewFolder1\copy_csv_xls_pdf.swf" />
+    <Content Include="Scripts\NewFolder1\dataTables.tableTools.css" />
+    <Content Include="Scripts\NewFolder1\dataTables.tableTools.js" />
+    <Content Include="Scripts\NewFolder1\ExcelJavaScript.js" />
+    <Content Include="Scripts\NewFolder1\jquery.dataTables.js" />
+    <Content Include="Scripts\NewFolder1\jquery.dataTables.min.css" />
+    <Content Include="Scripts\NewFolder1\jquery.js" />
+    <Content Include="Scripts\NewFolder1\TableTools.js" />
+    <Content Include="Scripts\pdfmake.min.js" />
+    <Content Include="Scripts\prettify.min.js" />
+    <Content Include="Scripts\ProfilePage.js" />
+    <Content Include="Scripts\qrcode.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\rolecreationvalidation.js" />
+    <Content Include="Scripts\rolemappingdetailsvalidation.js" />
+    <Content Include="Scripts\select2.js" />
+    <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\spin.js" />
+    <Content Include="Scripts\spinbox.min.js" />
+    <Content Include="Scripts\sweetalert.min.js" />
+    <Content Include="Scripts\taxmastervalidation.js" />
+    <Content Include="Scripts\tree.min.js" />
+    <Content Include="Scripts\vfs_fonts.js" />
+    <Content Include="Scripts\wizard.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Styles\css\ace-ie.min.css" />
+    <Content Include="Styles\css\ace-part2.min.css" />
+    <Content Include="Styles\css\ace-rtl.min.css" />
+    <Content Include="Styles\css\ace-skins.min.css" />
+    <Content Include="Styles\css\ace.min.css" />
+    <Content Include="Styles\css\bootstrap-colorpicker.min.css" />
+    <Content Include="Styles\css\bootstrap-datepicker3.min.css" />
+    <Content Include="Styles\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="Styles\css\bootstrap-duallistbox.min.css" />
+    <Content Include="Styles\css\bootstrap-editable.min.css" />
+    <Content Include="Styles\css\bootstrap-multiselect.min.css" />
+    <Content Include="Styles\css\bootstrap-timepicker.min.css" />
+    <Content Include="Styles\css\bootstrap.min.css" />
+    <Content Include="Styles\css\bootstrap.min2.css" />
+    <Content Include="Styles\css\chosen.min.css" />
+    <Content Include="Styles\css\colorbox.min.css" />
+    <Content Include="Styles\css\custom.css" />
+    <Content Include="Styles\css\daterangepicker.min.css" />
+    <Content Include="Styles\css\dropzone.min.css" />
+    <Content Include="Styles\css\font-awesome.min.css" />
+    <Content Include="Styles\css\fonts.googleapis.com.css" />
+    <Content Include="Styles\css\fullcalendar.min.css" />
+    <Content Include="Styles\css\jquery-ui.custom.min.css" />
+    <Content Include="Styles\css\jquery-ui.min.css" />
+    <Content Include="Styles\css\jquery.datetimepicker.css" />
+    <Content Include="Styles\css\jquery.gritter.min.css" />
+    <Content Include="Styles\css\login-custom.css" />
+    <Content Include="Styles\css\prettify.min.css" />
+    <Content Include="Styles\css\select2.min.css" />
+    <Content Include="Styles\css\sweetalert.css" />
+    <Content Include="Styles\css\TableTools.css" />
+    <Content Include="Styles\css\ui.jqgrid.min.css" />
+    <Content Include="Styles\font-awesome\4.5.0\css\font-awesome.min.css" />
+    <Content Include="Styles\font-awesome\4.5.0\fonts\fontawesome-webfont.svg" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Styles\swf\flashExport.swf" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Profile.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Masters\CustomerMaster.cshtml" />
+    <Content Include="Views\Masters\EmployeeMaster.cshtml" />
+    <Content Include="Views\Masters\Index.cshtml" />
+    <Content Include="Views\Masters\LocationMaster.cshtml" />
+    <Content Include="Views\Masters\SupplierMaster.cshtml" />
+    <Content Include="Views\Shared\_LayoutImagefile.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\_VendorLayout.cshtml" />
+    <Content Include="UploadExcelFormat\Customer_Details.xlsx" />
+    <Content Include="UploadExcelFormat\Employee_Details.xlsx" />
+    <Content Include="UploadExcelFormat\Location_Details.xlsx" />
+    <Content Include="UploadExcelFormat\MachineMaster_Details.xlsx" />
+    <Content Include="UploadExcelFormat\PartMaster_Details.xlsx" />
+    <Content Include="UploadExcelFormat\Supplier_Details.xlsx" />
+    <Content Include="Styles\font-awesome\4.5.0\fonts\fontawesome-webfont.eot" />
+    <Content Include="Styles\font-awesome\4.5.0\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Styles\font-awesome\4.5.0\fonts\fontawesome-webfont.woff" />
+    <Content Include="Styles\font-awesome\4.5.0\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Styles\fonts\cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff" />
+    <Content Include="Styles\fonts\DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\UserCreation.cshtml" />
+    <Content Include="Views\User\UserAuthentication.cshtml" />
+    <Content Include="Views\Transaction\GRNEntry.cshtml" />
+    <Content Include="Views\Transaction\RMQuality.cshtml" />
+    <Content Include="Views\Transaction\RMLabelPrint.cshtml" />
+    <Content Include="Views\Masters\ItemMaster.cshtml" />
+    <Content Include="Views\Masters\BinMaster.cshtml" />
+    <Content Include="Views\Masters\RackMaster.cshtml" />
+    <Content Include="Views\Transaction\SRNEntry.cshtml" />
+    <Content Include="Views\Transaction\GRNUpload.cshtml" />
+    <Content Include="Views\Transaction\PRNEntry.cshtml" />
+    <Content Include="Views\Transaction\RemixJobProcess.cshtml" />
+    <Content Include="Views\Transaction\FormingPlan.cshtml" />
+    <Content Include="Views\Transaction\FGLabelPrint.cshtml" />
+    <Content Include="Views\Transaction\REMIXLabelPrint.cshtml" />
+    <Content Include="Views\Transaction\DispatchPlan.cshtml" />
+    <Content Include="Views\Report\RMPicklistPrint.cshtml" />
+    <Content Include="Views\Transaction\SRNUpload.cshtml" />
+    <Content Include="Views\Transaction\RemixQuality.cshtml" />
+    <Content Include="Views\Report\StockReport.cshtml" />
+    <Content Include="Views\Transaction\QCEntry.cshtml" />
+    <Content Include="Views\Transaction\REInspection.cshtml" />
+    <Content Include="Views\Transaction\StockAdjustment.cshtml" />
+    <Content Include="Views\Report\LocationWiseStockReport.cshtml" />
+    <Content Include="Views\Masters\ProcessMaster.cshtml" />
+    <Content Include="Views\Transaction\InvoiceCreation.cshtml" />
+    <Content Include="Views\Transaction\InvoicePrint.cshtml" />
+    <Content Include="Views\Transaction\PastingProcess.cshtml" />
+    <Content Include="Uploads\SRN &amp; Imported GRN file %281%29 - Copy.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ErrorManager\ErrorMessage.resx" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50550</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50550/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

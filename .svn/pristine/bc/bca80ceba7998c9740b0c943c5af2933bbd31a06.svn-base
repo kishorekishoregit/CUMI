@@ -1,0 +1,102 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class RemixJobProcessBC
+    {
+        public ResponseRemixJobProcess PageloadRemixJobProcessBC()
+        {
+            ResponseRemixJobProcess response = new ResponseRemixJobProcess();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PageloadRemixJobProcessDAL();
+            return response;
+        }
+
+        public ResponseRemixJobProcess RemixJobProcessItemnameFetchBC(RequestRemixJobProcess request)
+        {
+            ResponseRemixJobProcess response = new ResponseRemixJobProcess();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.RemixJobProcesstemnameFetchDAL(request);
+            return response;
+        }
+
+        public ResponseRemixJobProcess RemixJobProcessInsertBC(RequestRemixJobProcess request)
+        {
+
+            ResponseRemixJobProcess response = new ResponseRemixJobProcess();
+            try
+            {
+                response.ErrorContainer = ValidateRemixJobProcessInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.RemixJobProcessInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+
+        public ResponseRemixJobProcess RemixJobProcessUpdateBC(RequestRemixJobProcess request)
+        {
+
+            ResponseRemixJobProcess response = new ResponseRemixJobProcess();
+            try
+            {
+                response.ErrorContainer = ValidateRemixJobProcessInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.RemixJobProcessUpdateDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+
+        public ResponseRemixJobProcess RemixJobProcessViewDtsBC(RequestRemixJobProcess request)
+        {
+            ResponseRemixJobProcess response = new ResponseRemixJobProcess();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.RemixJobProcessViewDtsDAL(request);
+            return response;
+        }
+        public ResponseRemixJobProcess RemixJobProcessEditDtsBC(RequestRemixJobProcess request)
+        {
+            ResponseRemixJobProcess response = new ResponseRemixJobProcess();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.RemixJobProcessEditDtsDAL(request);
+            return response;
+        }
+
+
+
+
+        public List<ErrorItem> ValidateRemixJobProcessInsert(RequestRemixJobProcess request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.ReqtRemixJobProcess.JOBPROCESSNO == "")
+                err.Add(new ErrorItem { DataItem = "GRN No.", ErrorNo = "SSB0009" });
+            if (request.ReqtRemixJobProcess.JOBPROCESSNO == "")
+                err.Add(new ErrorItem { DataItem = "GRN Date", ErrorNo = "SSB0009" });
+            if (request.requestRemixJobProcessdetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            return err;
+
+
+        }
+
+
+
+    }
+}

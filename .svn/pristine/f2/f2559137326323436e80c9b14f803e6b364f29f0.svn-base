@@ -1,0 +1,128 @@
+﻿jQuery(function ($) {
+    BindTable();
+ 
+    function BindTable() {
+
+    
+        $(".loader").show("slow");
+        $.ajax({
+            url: 'GetRemixQualityPageLoad',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (Result) {
+
+                var pageload = Result;
+                var remixdetails = JSON.parse(pageload);
+                $("#ddllotno").empty().append('<option value="">Select an Option</option>');
+                $.each(remixdetails, function () {
+                    $("#ddllotno").append($("<option></option>").val(this["LOTNO"]).html(this["LOTNO"]));
+                    $('#ddllotno').trigger("chosen:updated");
+                });
+               
+            }
+        });
+        $(".loader").hide("slow");
+    }
+   
+    $("#btnprint").click(function () {
+
+        if ($('#ddllotno').val() !== "") {
+            var lotnosno = $('#ddllotno').val();
+            var lotarr = lotnosno.split('-');
+            var LOTNO = lotarr[0];
+            var LOTSERIALNO = lotarr[1];
+
+            var errormessage = "";
+            if (window.FormData !== undefined) {
+                $('.loadingGIF').show();
+                $(".loader").show("slow");
+                $.ajax({
+                    url: 'RemixQualityPrintDetails',
+                    dataType: "json",
+                    type: "POST",
+
+                    //data: $("#validation-form").serialize() + '&' + $.param({ 'actiontype': $("#actiontype").text() }),
+
+                    data: $.param({ 'LOTNO': LOTNO }) + '&' + $.param({ 'LOTSERIALNO': LOTSERIALNO }),
+                    //  data:formData,
+                    success: function (data) {
+
+                        var Res = data.split('|');
+                        var result = Res[0];
+                        var printdata = Res[1];
+                        var lotpageload = JSON.parse(Res[2]);
+
+                        if (result.toUpperCase() == "TRUE") {
+
+                            $("form").trigger("reset");
+
+
+                            $("#printable").html(printdata);
+
+
+
+                            setTimeout(function () {
+                                printableinner();
+                                $("#ddllotno").empty().append('<option value="">Select an Option</option>');
+                                $.each(lotpageload, function () {
+                                    $("#ddllotno").append($("<option></option>").val(this["LOTNO"]).html(this["LOTNO"]));
+                                    $('#ddllotno').trigger("chosen:updated");
+                                });
+
+
+                            }, 20);
+
+
+
+                            $('.loadingGIF').hide();
+
+                        }
+                        else {
+                            bootbox.alert({
+                                message: '<span class="text-danger"><i class="ace-icon fa fa-exclamation-triangle fa-4x"></i><br>' + result + '</span>',
+                                size: 'small'
+                            });
+                            $('.loadingGIF').hide();
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            var test = "Please Select LotNo";
+            $('.loadingGIF').hide();
+            sweetAlert("", test.replace(/&quot;/g, "").replace(/<Br \/>/g, "\n"), "error");
+        }
+
+        
+
+
+
+    });
+    
+    
+
+
+
+    function printableinner() {
+
+        var disp_setting = "toolbar=no,location=no,";
+        disp_setting += "directories=no,menubar=no,";
+        disp_setting += "scrollbars=yes";
+        var content_vlue = document.getElementById("printable").innerHTML;
+        var docprint = window.open("", "", disp_setting);
+        docprint.document.open();
+        docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+        docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+        docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+        docprint.document.write('<head>');
+        docprint.document.write('<style type="text/css">body{ border:0px solid #000;margin:0px;font-family:verdana,Arial;color:#000;font-family:Verdana, Geneva, sans-serif; font-size:8px;}a{color:#000;text-decoration:none;}*{font-size:8px;} small{font-size:30% !important;}table {border-collapse: collapse;}table, td, th {border: 1px solid black;padding:0.5rem 2px;}@page {size: 4in 2in;margin: 1mm;}div#printable {width: 4in;height: 2in;} .qr-panel img{width:50px;}</style> ');
+        docprint.document.write('</head><body onLoad="self.print()">');
+        docprint.document.write(content_vlue);
+        docprint.document.close();
+        docprint.focus();
+
+    }
+
+
+});

@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSENTITY
+{
+    public class PastingProcessEntity
+    {
+        public string BARCODE { get; set; }
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string USERCODE { get; set; }
+    }
+
+    public class PastingProcessDetailsEntity
+    {
+
+        public string ITEMCODE { get; set; }
+        public string ITEMNAME { get; set; }
+        public string BARCODE { get; set; }
+
+    }
+
+    public class RequestPastingProcess
+    {
+        public PastingProcessEntity ReqPastingProcess { get; set; }
+        public List<PastingProcessDetailsEntity> requestPastingProcessdetails { get; set; }
+    }
+
+    public class ResponsePastingProcess
+    {
+
+        public DataTable JS_barcodedetails { get; set; }
+        public DataTable JS_Labelprintingbarcode { get; set; }
+        public DataTable RecordStatus { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> ErrorContainer { get; set; }
+    }
+}

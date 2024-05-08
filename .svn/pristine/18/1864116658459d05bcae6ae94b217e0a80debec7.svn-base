@@ -1,0 +1,27 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class QCEntryBC
+    {
+        public ResponseQCEntry FetchQCEntryPageLoadBC()
+        {
+            ResponseQCEntry response = new ResponseQCEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchQCEntryPageLoadDAL();
+            return response;
+        }
+        public ResponseQCEntry InsertQCEntryBC(RequestQCEntry request)
+        {
+            ResponseQCEntry response = new ResponseQCEntry();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.InsertQCEntryDAL(request);
+            return response;
+        }
+    }
+}

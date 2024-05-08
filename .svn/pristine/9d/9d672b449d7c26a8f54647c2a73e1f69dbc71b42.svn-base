@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+
+
+namespace JKWOODSENTITY
+{
+   public class InvoiceUploadEntity
+    {
+        public string INVOICENO { get; set; }
+        public string INVOICEDATE { get; set; }
+        public string SUPPLIERNAME { get; set; }
+        public string REFERENCENO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string QUANTITY { get; set; }
+        public List<InvoiceUploaddetailsEntity> requestinvoiceuploaddetails { get; set; }
+    }
+    public class InvoiceUploaddetailsEntity
+    {
+        public string INVOICENO { get; set; }
+        public string INVOICEDATE { get; set; }
+        public string SUPPLIERNAME { get; set; }
+        public string REFERENCENO { get; set; }
+        public string ITEMCODE { get; set; }
+        public string QUANTITY { get; set; }
+    }
+    public class RequestInvoiceUpload
+    {
+        public InvoiceUploadEntity ReqInvoiceUpload { get; set; }
+        public InvoiceUploaddetailsEntity ReqInvoiceUploaddetails { get; set; }
+        public List<InvoiceUploaddetailsEntity> requestinvoiceuploaddetails { get; set; }
+        public List<InvoiceUploaddetailsEntity> requestinvoiceuploadinvdts { get; set; }
+    }
+    public class ResponseInvoiceUpload
+    {
+        public DataTable JS_InvoiceUploaddetails { get; set; }
+        public bool result { get; set; }
+        public List<ErrorItem> error { get; set; }
+    }
+        
+}

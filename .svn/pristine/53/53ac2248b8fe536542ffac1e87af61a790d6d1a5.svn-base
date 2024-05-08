@@ -1,0 +1,101 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class InvoiceCreationBC
+    {
+        public ResponseInvoiceCreation PageloadInvoiceBC()
+        {
+            ResponseInvoiceCreation response = new ResponseInvoiceCreation();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.PageloadInvoiceCreationDAL();
+            return response;
+        }
+
+        public ResponseInvoiceCreation INVOICEItemnameFetchBC(RequestInvoiceCreation request)
+        {
+            ResponseInvoiceCreation response = new ResponseInvoiceCreation();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.InvoiceItemnameFetchDAL(request);
+            return response;
+        }
+
+        public ResponseInvoiceCreation INVOICEInsertBC(RequestInvoiceCreation request)
+        {
+
+            ResponseInvoiceCreation response = new ResponseInvoiceCreation();
+            try
+            {
+                response.ErrorContainer = ValidateInvoiceInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.INVOICEInsertDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+
+
+        public ResponseInvoiceCreation INVOICEUpdateBC(RequestInvoiceCreation request)
+        {
+
+            ResponseInvoiceCreation response = new ResponseInvoiceCreation();
+            try
+            {
+                response.ErrorContainer = ValidateInvoiceInsert(request);
+                if (response.ErrorContainer.Count == 0)
+                {
+                    WMSDAL DAC = new WMSDAL();
+                    return DAC.INVOICEUpdateDAL(request);
+                }
+            }
+            catch (Exception ex)
+            { }
+            return response;
+
+        }
+
+
+        public List<ErrorItem> ValidateInvoiceInsert(RequestInvoiceCreation request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.ReqINVOICEEntry.INVOICENO == "")
+                err.Add(new ErrorItem { DataItem = "INVOICE No.", ErrorNo = "SSB0009" });
+            if (request.ReqINVOICEEntry.INVOICEDATE == "")
+                err.Add(new ErrorItem { DataItem = "INVOICE Date", ErrorNo = "SSB0009" });
+            if (request.ReqINVOICEEntry.SUPPLIER == "")
+                err.Add(new ErrorItem { DataItem = "Supplier", ErrorNo = "SSB0010" });
+            if (request.requestINVOICEdetails.Count == 0)
+                err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            return err;
+
+
+        }
+
+        public ResponseInvoiceCreation INVOICEViewDtsBC(RequestInvoiceCreation request)
+        {
+            ResponseInvoiceCreation response = new ResponseInvoiceCreation();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.INVOICEViewDtsDAL(request);
+            return response;
+        }
+        public ResponseInvoiceCreation INVOICEEditDtsBC(RequestInvoiceCreation request)
+        {
+            ResponseInvoiceCreation response = new ResponseInvoiceCreation();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.INVOICEEditDtsDAL(request);
+            return response;
+        }
+        
+    }
+}

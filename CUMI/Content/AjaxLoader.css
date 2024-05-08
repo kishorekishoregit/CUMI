@@ -1,0 +1,22 @@
+﻿   .modalwindow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #ffffff;
+        z-index: 99;
+        opacity: 0.8;
+        filter: alpha(opacity=30);
+        -moz-opacity: 0.8;
+        min-height: 100%;
+        width: 100%;
+    }
+ 
+    .loadingGIF {
+        font-family: Arial;
+        font-size: 10pt;
+        font-weight:bolder;
+        color:#343d46;
+        display: none;
+        position: fixed;
+        z-index: 999;
+    }

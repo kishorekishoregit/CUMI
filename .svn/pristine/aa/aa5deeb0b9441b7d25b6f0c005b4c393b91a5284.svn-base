@@ -1,0 +1,93 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class RackMasterBC
+    {
+
+        public ResponseRackMaster FetchRackMasterPageLoadBC()
+        {
+            ResponseRackMaster response = new ResponseRackMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchRackMasterPageLoadDAL();
+
+
+            return response;
+        }
+        //Fetch User Details By User Code
+        public ResponseRackMaster FetchRackMasterbyRackCodeBC(RequestRackMaster request)
+        {
+
+
+            ResponseRackMaster response = new ResponseRackMaster();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchRackMasterbyRackCodeDAL(request);
+
+
+            return response;
+
+        }
+        //Insert 
+        public ResponseRackMaster InsertRackMasterBC(RequestRackMaster request)
+        {
+
+            ResponseRackMaster response = new ResponseRackMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.InsertRackMasterDAL(request);
+            }
+
+            return response;
+
+        }
+        //Update 
+        public ResponseRackMaster UpdateRackMasterBC(RequestRackMaster request)
+        {
+
+
+            ResponseRackMaster response = new ResponseRackMaster();
+            response.ErrorContainer = Validate(request);
+            if (response.ErrorContainer.Count == 0)
+            {
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.UpdateRackMasterDAL(request);
+
+            }
+            return response;
+
+        }
+        ////Search 
+        //public ResponseRackMaster SearchRackMasterBC(RequestRackMaster request)
+        //{
+
+        //    ResponseRackMaster response = new ResponseRackMaster();
+        //    WMSDAL DAL = new WMSDAL();
+        //    response = DAL.SearchRackMasterDAL(request);
+
+
+        //    return response;
+        //}
+
+        public List<ErrorItem> Validate(RequestRackMaster request)
+        {
+            List<ErrorItem> err = new List<ErrorItem>();
+            if (request.requestRackMaster.RACKCODE == "")
+                err.Add(new ErrorItem { DataItem = "Rack Code", ErrorNo = "SSB0009" });
+            if (request.requestRackMaster.RACKNAME == "")
+                err.Add(new ErrorItem { DataItem = "Rack Name", ErrorNo = "SSB0009" });
+            if (request.requestRackMaster.LOCATIONCODE == "")
+                err.Add(new ErrorItem { DataItem = "Location Name", ErrorNo = "SSB0010" });
+
+
+
+            return err;
+        }
+    }
+}

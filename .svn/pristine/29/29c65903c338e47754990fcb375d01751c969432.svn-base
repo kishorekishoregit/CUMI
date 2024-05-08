@@ -1,0 +1,27 @@
+﻿using JKWOODSDAC;
+using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace JKWOODSBC
+{
+    public class RemixQualityBC
+    {
+        public ResponseRemixQuality FetchRemixQualityPageLoadBC()
+        {
+            ResponseRemixQuality response = new ResponseRemixQuality();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.FetchRemixQualityPageLoadDAL();
+            return response;
+        }
+        public ResponseRemixQuality RemixQualityPrintBC(RequestRemixQuality request)
+        {
+            ResponseRemixQuality response = new ResponseRemixQuality();
+            WMSDAL DAL = new WMSDAL();
+            response = DAL.RemixQualityPrintDAL(request);
+            return response;
+        }
+    }
+}

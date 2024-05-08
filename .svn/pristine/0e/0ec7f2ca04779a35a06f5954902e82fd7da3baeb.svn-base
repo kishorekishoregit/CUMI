@@ -1,0 +1,116 @@
+﻿
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using JKWOODSENTITY;
+    using JKWOODSDAC;
+    using System.Data.SqlClient;
+    using System.Data;
+
+    namespace JKWOODSBC
+    {
+        public class FormingPlanEntryBC
+        {
+            public ResponseFormingPlanEntry PageloadFormingplanBC()
+            {
+                ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.PageloadFormingPlanDAL();
+                return response;
+            }
+            public ResponseFormingPlanEntry FormingplanItemnameFetchBC(RequestFormingPlanEntry request)
+            {
+                ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.FormingPlanItemnameFetchDAL(request);
+                return response;
+            }
+            public ResponseFormingPlanEntry FormingPlanInsertBC(RequestFormingPlanEntry request)
+            {
+
+                ResponseFormingPlanEntry response = new ResponseFormingPlanEntry ();
+                try
+                {
+                    response.ErrorContainer = ValidateFormingPlanInsert(request);
+                    if (response.ErrorContainer.Count == 0)
+                    {
+                        WMSDAL DAC = new WMSDAL();
+                        return DAC.FormingPlanInsertDAL(request);
+                    }
+                }
+                catch (Exception ex)
+                { }
+                return response;
+
+            }
+            //public List<ErrorItem> ValidateFormingPlanInsert(RequestFormingPlanEntry request)
+            //{
+            //    List<ErrorItem> err = new List<ErrorItem>();
+            //    if (request.ReqFormingPlanEntry.FormingPlantNO == "")
+            //        err.Add(new ErrorItem { DataItem = "Forming No.", ErrorNo = "SSB0009" });
+            //    if (request.ReqFormingPlanEntry.FormingPlantDate == "")
+            //        err.Add(new ErrorItem { DataItem = "Forming Date", ErrorNo = "SSB0009" });
+            //    if (request.ReqFormingPlanEntry.Remarks == "")
+            //        err.Add(new ErrorItem { DataItem = "Remarks", ErrorNo = "SSB0010" });
+            //    if (request.FormingPlanDetailEntity.Count == 0)
+            //        err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+            //    return err;
+
+
+            //}
+            public ResponseFormingPlanEntry FPNViewDtsBC(RequestFormingPlanEntry request)
+            {
+                ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.FPNViewDtsDAL(request);
+                return response;
+            }
+            public ResponseFormingPlanEntry FormingPlanEditDtsBC(RequestFormingPlanEntry request)
+            {
+                ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+                WMSDAL DAL = new WMSDAL();
+                response = DAL.FormingPlanEditDtsDAL(request);
+                return response;
+            }
+            public ResponseFormingPlanEntry FormingPlanUpdateBC(RequestFormingPlanEntry request)
+            {
+
+                ResponseFormingPlanEntry response = new ResponseFormingPlanEntry();
+                try
+                {
+                    response.ErrorContainer = ValidateFormingPlanInsert(request);
+                    if (response.ErrorContainer.Count == 0)
+                    {
+                        WMSDAL DAC = new WMSDAL();
+                        return DAC.FormingplanUpdateDAL(request);
+                    }
+                }
+                catch (Exception ex)
+                { }
+                return response;
+
+            }
+
+
+
+            public List<ErrorItem> ValidateFormingPlanInsert(RequestFormingPlanEntry request)
+            {
+                List<ErrorItem> err = new List<ErrorItem>();
+                if (request.ReqFormingPlanEntry.FormingPlantNO == "")
+                    err.Add(new ErrorItem { DataItem = "Forming No.", ErrorNo = "SSB0009" });
+                if (request.ReqFormingPlanEntry.FormingPlantDate == "")
+                    err.Add(new ErrorItem { DataItem = "Forming Date", ErrorNo = "SSB0009" });
+                
+                if (request.FormingPlanDetailEntity.Count == 0)
+                    err.Add(new ErrorItem { DataItem = "Please, Atleast one data detail to proceed!!!", ErrorNo = "SSB0000" });
+
+                return err;
+
+
+            }
+        }
+    }
+
+

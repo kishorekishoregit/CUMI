@@ -1,0 +1,302 @@
+﻿using JKWOODSENTITY;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Transactions;
+
+namespace JKWOODSDAC
+{
+    public partial class WMSDAL
+    {
+        public ResponsePRNEntry PRNEntryPageLoadDAL()
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PRNENTRY_PAGELOAD]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_PartDetails = ds.Tables[0];
+                            response.JS_CustomerDetails = ds.Tables[1];
+                            response.JS_PrnentryDetails = ds.Tables[2];
+                            response.JS_Prnnoget = ds.Tables[3];
+                            response.result = true;
+                        }
+                        scope.Complete();
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("PRNEntryPageLoadDAL: " + "Method Name PRNEntryPageLoadDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            
+            return response;
+        }
+        public ResponsePRNEntry InsertPRNEntryDAL(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            int rowcount = 0;
+            DataSet ds = new DataSet();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+
+                        foreach (PRNEntryDetailEntity det in request.requestprnentrydetails)
+                        {
+
+                            SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PRNENTRY_INSERT]", con);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.Add(new SqlParameter("@PRNNO", request.Reqprnentry.PRNNO.Trim() ));
+                            cmd.Parameters.Add(new SqlParameter("@PRNDATE", request.Reqprnentry.PRNDATE == "" ? null : Convert.ToDateTime(request.Reqprnentry.PRNDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                            cmd.Parameters.Add(new SqlParameter("@PARTNAME", det.PARTNAME.Trim() ));
+                            cmd.Parameters.Add(new SqlParameter("@CUSTOMER", det.CUSTOMER.Trim() ));
+                            cmd.Parameters.Add(new SqlParameter("@MODEL", det.MODEL.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@VARIANT", det.VARIANT.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim() ));
+                            //cmd.Parameters.Add(new SqlParameter("@INNERQUANTITY", det.INNERQUANTITY.Trim() ));
+                            //cmd.Parameters.Add(new SqlParameter("@OUTERQUANTITY", det.OUTERQUANTITY.Trim() ));
+                            //cmd.Parameters.Add(new SqlParameter("@LHQUANTITY", det.LHQUANTITY.Trim()));
+                            //cmd.Parameters.Add(new SqlParameter("@RHQUANTITY", det.RHQUANTITY.Trim()));
+                            cmd.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim() ));
+                            cmd.Parameters.Add(new SqlParameter("@REMARKS", det.REMARKS.Trim() ));
+                            cmd.Parameters.Add(new SqlParameter("@USERCODE", request.Reqprnentry.USERCODE.Trim() ));
+
+                            SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                            
+                            oda.Fill(ds);
+                            if (ds != null)
+                            {
+                                if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                {
+                                    response.result = true;
+                                    rowcount++;
+                                }
+                            }
+                        }
+                        if (request.requestprnentrydetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        
+                    }
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("InsertPRNEntryDAL: " + "Method Name InsertPRNEntryDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            
+            return response;
+
+        }
+        public ResponsePRNEntry PRNViewDtsDAL(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PRNENTRY_VIEW]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRNNO", request.Reqprnentry.PRNNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_PrnentryDetails = ds.Tables[0];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("GRNViewDtsDAL: " + "Method Name GRNViewDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            
+            return response;
+
+        }
+        public ResponsePRNEntry PRNEditDtsDAL(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PRNENTRY_PRNNOEDIT]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRNNO", request.Reqprnentry.PRNNO.Trim()));
+                        con.Open();
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+                        DataSet ds = new DataSet();
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            response.JS_PartDetails = ds.Tables[0];
+                            response.PrnDetails = ds.Tables[1];
+                            response.result = true;
+                        }
+
+                    }
+                    scope.Complete();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("GRNEditDtsDAL: " + "Method Name GRNEditDtsDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+
+            }
+            
+            return response;
+
+        }
+        public ResponsePRNEntry PRNUpdateDAL(RequestPRNEntry request)
+        {
+            ResponsePRNEntry response = new ResponsePRNEntry();
+            response.ErrorContainer = new List<ErrorItem>();
+            try
+            {
+                DataSet ds = new DataSet();
+
+                int totalcount = 0;
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    using (SqlConnection con = new SqlConnection(connectionstring))
+                    {
+                        con.Open();
+                        int barcode = 0;
+                        int rowcount = 0, rowcount1 = 0, totalqty = 0;
+                        SqlCommand cmd = new SqlCommand("[TRANSACTIONS].[PRNENTRY_UPDATE]", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add(new SqlParameter("@PRNNO", request.Reqprnentry.PRNNO.Trim()));
+                        cmd.Parameters.Add(new SqlParameter("@PRNDATE", request.Reqprnentry.PRNDATE == "" ? null : Convert.ToDateTime(request.Reqprnentry.PRNDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+
+                        cmd.Parameters.Add(new SqlParameter("@USERCODE", request.Reqprnentry.USERCODE.Trim()));
+
+                        SqlDataAdapter oda = new SqlDataAdapter(cmd);
+
+                        oda.Fill(ds);
+                        if (ds != null)
+                        {
+                            if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                            {
+                                foreach (PRNEntryDetailEntity det in request.requestprnentrydetails)
+                                {
+
+                                    SqlCommand cmd1 = new SqlCommand("[TRANSACTIONS].[PRNENTRY_INSERT]", con);
+                                    cmd1.CommandType = CommandType.StoredProcedure;
+                                    cmd1.Parameters.Add(new SqlParameter("@PRNNO", request.Reqprnentry.PRNNO.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@PRNDATE", request.Reqprnentry.PRNDATE == "" ? null : Convert.ToDateTime(request.Reqprnentry.PRNDATE).ToString("MM/dd/yyyy", new CultureInfo("en-US"))));
+                                    cmd1.Parameters.Add(new SqlParameter("@PARTNAME", det.PARTNAME.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@CUSTOMER", det.CUSTOMER.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@MODEL", det.MODEL.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@VARIANT", det.VARIANT.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@LOTNO", det.LOTNO.Trim()));
+                                    //cmd1.Parameters.Add(new SqlParameter("@INNERQUANTITY", det.INNERQUANTITY.Trim()));
+                                    //cmd1.Parameters.Add(new SqlParameter("@OUTERQUANTITY", det.OUTERQUANTITY.Trim()));
+                                    //cmd1.Parameters.Add(new SqlParameter("@LHQUANTITY", det.LHQUANTITY.Trim()));
+                                    //cmd1.Parameters.Add(new SqlParameter("@RHQUANTITY", det.RHQUANTITY.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@QUANTITY", det.QUANTITY.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@REMARKS", det.REMARKS.Trim()));
+                                    cmd1.Parameters.Add(new SqlParameter("@USERCODE", request.Reqprnentry.USERCODE.Trim()));
+
+                                    SqlDataAdapter oda1 = new SqlDataAdapter(cmd1);
+
+                                    oda1.Fill(ds);
+                                    if (ds != null)
+                                    {
+                                        if (ds.Tables[0].Rows[0][0].ToString() == "SUCCESS")
+                                        {
+                                            response.result = true;
+                                            rowcount++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (request.requestprnentrydetails.Count == rowcount)
+                        {
+                            scope.Complete();
+                            response.result = true;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                        else
+                        {
+                            response.result = false;
+                            response.ErrorContainer.Add(new ErrorItem { ErrorNo = ds.Tables[0].Rows[0][1].ToString(), DataItem = ds.Tables[0].Rows[0][2].ToString() });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                string responsetime = DateTime.Now.ToString("yyyy MM dd hh:mm:ss.fff tt");
+                string responselog = createlog("GRNUpdateDAL: " + "Method Name GRNUpdateDAL" + " -- " + ex.StackTrace + "-- " + ex.Source + " -- " + ex.Message);
+                response.ErrorContainer.Add(new ErrorItem { DataItem = responselog, ErrorNo = "LWMS00000" });
+                response.result = false;
+            }
+            
+            return response;
+
+        }
+
+
+
+    }
+}

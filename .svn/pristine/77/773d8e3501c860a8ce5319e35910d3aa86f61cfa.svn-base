@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<repositories>
+  <repository path="..\FIRST_ENGGWEB\packages.config" />
+  <repository path="..\FirstEngg_DAC\packages.config" />
+  <repository path="..\JKWOODS\packages.config" />
+  <repository path="..\SANGSINBRAKE\packages.config" />
+</repositories>
