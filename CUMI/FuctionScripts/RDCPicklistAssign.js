@@ -26,6 +26,7 @@
                 var supplier = JSON.parse(pageload[2]);
                 var table = JSON.parse(pageload[3]);
                 var ERPdts = JSON.parse(pageload[4]);
+                var test = 'ets.'
 
                 $("#ddlwarehousepicker").empty().append('<option value="">Select an Option</option>');
                 $.each(warehouse, function () {
